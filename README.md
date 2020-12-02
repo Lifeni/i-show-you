@@ -4,8 +4,7 @@
 
 <h1 align="center">I Show You</h1>
 <p align="center">A self-hosted web application for data presentation and sharing</p>
-
->  Language: English | [中文](README.zh-CN.md)
+<p align="center">English | <a href="README.zh-CN.md">中文</a></p>
 
 ## Introduction
 
@@ -18,8 +17,6 @@
 // TODO
 
 ## Documentation
-
-// TODO
 
 See https://lifeni.github.io/i-show-you/ .
 
