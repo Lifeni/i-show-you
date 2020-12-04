@@ -1,0 +1,4 @@
+@import '../node_modules/@carbon/themes/scss/themes';
+$carbon--theme: $carbon--theme--g10;
+@include carbon--theme();
+@import '../node_modules/carbon-components/scss/globals/scss/styles.scss';
