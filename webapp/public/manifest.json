@@ -8,27 +8,27 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo64.png",
+      "src": "assets/logo_64x64.png",
       "type": "image/png",
       "sizes": "64x64"
     },
     {
-      "src": "logo128.png",
+      "src": "assets/logo_128x128.png",
       "type": "image/png",
       "sizes": "128x128"
     },
     {
-      "src": "logo192.png",
+      "src": "assets/logo_192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo256.png",
+      "src": "assets/logo_256x256.png",
       "type": "image/png",
       "sizes": "256x256"
     },
     {
-      "src": "logo512.png",
+      "src": "assets/logo_512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
