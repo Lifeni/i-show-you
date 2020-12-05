@@ -1,0 +1,16 @@
+.fix-icon-position {
+  padding: 12px;
+}
+
+.menu-item a {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item span {
+  padding: 0.8rem;
+}
+
+.menu-item span.danger {
+  color: #fa4d56;
+}
