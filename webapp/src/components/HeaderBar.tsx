@@ -31,7 +31,7 @@ import {
 } from '@carbon/icons-react'
 import styled from 'styled-components'
 
-import './HeaderBar.css'
+import '../styles/HeaderBar.css'
 
 const StyledHeaderPanel = styled(HeaderPanel)`
   height: fit-content;

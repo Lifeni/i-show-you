@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { Button, TextInput } from 'carbon-components-react'
 import {
@@ -10,7 +10,8 @@ import {
 
 import styled from 'styled-components'
 
-import './TextEditor.css'
+import '../styles/TextEditor.css'
+import { findLanguage } from '../utils/identify-file-type'
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -43,8 +44,14 @@ const ToolBarRightWrapper = styled.div`
 `
 
 const TextEditor = () => {
-  const [type, setType] = useState('Markdown')
+  const [type, setType] = useState({ id: -1, name: 'Text', slug: 'text' })
   const [mobile, setMobile] = useState(false)
+
+  const editorRef = useRef()
+
+  function handleEditorDidMount(_: any, editor: any) {
+    editorRef.current = editor
+  }
 
   const checkMobile = () => {
     if (window.innerWidth < 720) {
@@ -60,13 +67,28 @@ const TextEditor = () => {
     window.requestAnimationFrame(checkMobile)
   })
 
+  const changeLanguage = (e: { target: { value: string } }) => {
+    const arr = e.target.value.split('.')
+    if (e.target.value.includes('.') && arr.length > 0) {
+      const lang = findLanguage(arr[arr.length - 1])
+      setType(lang)
+    }
+  }
+
+  const focusEditor = (e: { code: string }) => {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      // @ts-ignore
+      editorRef.current?.focus()
+    }
+  }
+
   return (
     <Wrapper>
       <ToolBarWrapper>
         <ToolBarLeftWrapper className="fixed-width">
           {!mobile && (
             <Button kind="ghost" size="field">
-              Local File in Browser
+              {type.id === -1 ? 'Local File' : type.name}
             </Button>
           )}
 
@@ -94,6 +116,8 @@ const TextEditor = () => {
           <TextInput
             labelText=""
             placeholder="Untitled"
+            onChange={changeLanguage}
+            onKeyPress={focusEditor}
             id="editor-file-name"
           />
         </ToolBarCenterWrapper>
@@ -124,13 +148,12 @@ const TextEditor = () => {
           )}
         </ToolBarRightWrapper>
       </ToolBarWrapper>
-
       <Editor
         width="100%"
         height="calc(100vh - 88px)"
         className="editor"
         theme="light"
-        language={type.toLowerCase()}
+        language={type.slug}
         options={{
           fontFamily:
             "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
@@ -146,6 +169,7 @@ const TextEditor = () => {
             maxColumn: 150,
           },
         }}
+        editorDidMount={handleEditorDidMount}
       />
     </Wrapper>
   )
