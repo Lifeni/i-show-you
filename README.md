@@ -8,8 +8,10 @@
 
 ## Introduction
 
-- [ ] Self-hosted
-- [ ] Modern UI
+- [x] 💻 Modern UI, based on IBM's Carbon design system.
+- [ ] 🚀 Self-hosted, use docker-compose to build your own application.
+- [ ] 📱 Mobile friendly, responsive UI interface and PWA support.
+- [ ] 🌐 Internationalization support, support Chinese, English and Emoji.
 - [ ] // TODO
 
 ## Quick Start
@@ -17,6 +19,8 @@
 // TODO
 
 ## Documentation
+
+The documentation is being written.
 
 See https://lifeni.github.io/i-show-you/ .
 
@@ -30,7 +34,38 @@ See https://lifeni.github.io/i-show-you/ .
 
 ### Prerequisites
 
-// TODO
+- Frontend: Node 14+, Yarn
+- Backend: Go 1.15+, MongoDB
+
+### Setting Up
+
+#### Frontend
+
+Enter the folder and install dependencies:
+
+```shell script
+cd webapp && yarn
+```
+
+Start the development server:
+
+```shell script
+yarn start
+```
+
+#### Docs
+
+Enter the folder and install dependencies:
+
+```shell script
+cd docs && yarn
+```
+
+Start the development server:
+
+```shell script
+yarn docs:dev
+```
 
 ## License
 
