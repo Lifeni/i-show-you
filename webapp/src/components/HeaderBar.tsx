@@ -1,4 +1,13 @@
-import React, { useState } from 'react'
+import {
+  AppSwitcher20,
+  BookmarkFilled16,
+  CloseFilled16,
+  Document16,
+  FlagFilled16,
+  InformationFilled16,
+  LogoGithub16,
+  Translate20,
+} from '@carbon/icons-react'
 
 import {
   Header,
@@ -18,17 +27,7 @@ import {
   SwitcherDivider,
   SwitcherItem,
 } from 'carbon-components-react'
-
-import {
-  AppSwitcher20,
-  BookmarkFilled16,
-  CloseFilled16,
-  Document16,
-  FlagFilled16,
-  InformationFilled16,
-  LogoGithub16,
-  Translate20,
-} from '@carbon/icons-react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import '../styles/HeaderBar.css'
