@@ -127,13 +127,6 @@ const fileMap = [
   },
 ]
 
-interface IFileMap {
-  id: number
-  name: string
-  slug: string
-  ext?: Array<string>
-}
-
 const findLanguage = (ext: string): IFileMap => {
   for (let lang of fileMap) {
     if (lang.ext.includes(ext)) {

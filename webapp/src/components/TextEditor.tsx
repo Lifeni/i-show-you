@@ -1,46 +1,14 @@
-import React, { useRef, useState } from 'react'
 import Editor from '@monaco-editor/react'
-import { Button, TextInput } from 'carbon-components-react'
-import {
-  Link20,
-  RecentlyViewed20,
-  SettingsAdjust20,
-  TrashCan20,
-} from '@carbon/icons-react'
+import { Loading } from 'carbon-components-react'
+import React, { useRef, useState } from 'react'
 
 import styled from 'styled-components'
 
 import '../styles/TextEditor.css'
-import { findLanguage } from '../utils/identify-file-type'
+import ToolBar from './ToolBar'
 
 const Wrapper = styled.div`
   overflow: hidden;
-`
-
-const ToolBarWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
-const ToolBarLeftWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-`
-
-const ToolBarCenterWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-`
-
-const ToolBarRightWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 `
 
 const TextEditor = () => {
@@ -67,93 +35,23 @@ const TextEditor = () => {
     window.requestAnimationFrame(checkMobile)
   })
 
-  const changeLanguage = (e: { target: { value: string } }) => {
-    const arr = e.target.value.split('.')
-    if (e.target.value.includes('.') && arr.length > 0) {
-      const lang = findLanguage(arr[arr.length - 1])
-      setType(lang)
-    }
-  }
-
-  const focusEditor = (e: { code: string }) => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-      // @ts-ignore
-      editorRef.current?.focus()
-    }
-  }
-
   return (
     <Wrapper>
-      <ToolBarWrapper>
-        <ToolBarLeftWrapper className="fixed-width">
-          {!mobile && (
-            <Button kind="ghost" size="field">
-              {type.id === -1 ? 'Local File' : type.name}
-            </Button>
-          )}
-
-          <Button
-            hasIconOnly
-            renderIcon={SettingsAdjust20}
-            tooltipAlignment="center"
-            tooltipPosition="bottom"
-            iconDescription="Options"
-            kind="ghost"
-            size="field"
-          />
-
-          <Button
-            hasIconOnly
-            renderIcon={RecentlyViewed20}
-            tooltipAlignment="center"
-            tooltipPosition="bottom"
-            iconDescription="History"
-            kind="ghost"
-            size="field"
-          />
-        </ToolBarLeftWrapper>
-        <ToolBarCenterWrapper>
-          <TextInput
-            labelText=""
-            placeholder="Untitled"
-            onChange={changeLanguage}
-            onKeyPress={focusEditor}
-            id="editor-file-name"
-          />
-        </ToolBarCenterWrapper>
-        <ToolBarRightWrapper className="fixed-width">
-          <Button
-            hasIconOnly
-            renderIcon={TrashCan20}
-            tooltipAlignment="center"
-            tooltipPosition="bottom"
-            iconDescription="Remove File"
-            kind="ghost"
-            size="field"
-          />
-          {mobile ? (
-            <Button
-              hasIconOnly
-              renderIcon={Link20}
-              tooltipAlignment="center"
-              tooltipPosition="bottom"
-              iconDescription="Get Share Link"
-              kind="primary"
-              size="field"
-            />
-          ) : (
-            <Button kind="primary" size="field" renderIcon={Link20}>
-              Get Share Link
-            </Button>
-          )}
-        </ToolBarRightWrapper>
-      </ToolBarWrapper>
+      <ToolBar
+        mobile={mobile}
+        editor={editorRef}
+        type={type}
+        setType={setType}
+      />
       <Editor
         width="100%"
         height="calc(100vh - 88px)"
         className="editor"
         theme="light"
         language={type.slug}
+        loading={
+          <Loading description="Editor Loading ..." withOverlay={false} />
+        }
         options={{
           fontFamily:
             "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
@@ -164,7 +62,7 @@ const TextEditor = () => {
             bottom: 16,
           },
           minimap: {
-            enabled: true,
+            enabled: !mobile,
             scale: 1,
             maxColumn: 150,
           },
