@@ -14,3 +14,15 @@
 .menu-item span.danger {
   color: #fa4d56;
 }
+
+.bx--header-panel {
+  width: 16rem;
+  height: 0;
+  padding: 0;
+  transition: height 0.11s;
+}
+
+.bx--header-panel--expanded {
+  height: 205px;
+  padding-bottom: 12px;
+}

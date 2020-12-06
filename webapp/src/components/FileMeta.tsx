@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const TooltipWrapper = styled.div`
-  padding: 0 16px;
+  padding: 0 18px;
   font-size: 1rem;
 `
 

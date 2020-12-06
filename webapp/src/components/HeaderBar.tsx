@@ -27,18 +27,16 @@ const HeaderBar = () => {
         <StyledHeader aria-label="Header of I Show You">
           <SkipToContent />
           <HeaderMenuButton
-            aria-label="Open menu"
+            aria-label="Open Menu"
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
           />
-          <HeaderName href="/" prefix="I Show You">
-            Memo
-          </HeaderName>
-          <HeaderNavigation aria-label="Your Pages">
+          <HeaderName prefix="I Show">You</HeaderName>
+          <HeaderNavigation aria-label="Your Files">
             <HeaderFileTab />
           </HeaderNavigation>
           <SideNav
-            aria-label="Side navigation"
+            aria-label="Side Navigation"
             expanded={isSideNavExpanded}
             isPersistent={false}
           >

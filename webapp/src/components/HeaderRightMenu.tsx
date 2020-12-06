@@ -1,11 +1,11 @@
 import {
-  AppSwitcher20,
   BookmarkFilled16,
   Close20,
   CloseFilled16,
   FlagFilled16,
   InformationFilled16,
   LogoGithub16,
+  Switcher20,
 } from '@carbon/icons-react'
 import {
   HeaderGlobalAction,
@@ -15,12 +15,6 @@ import {
   SwitcherItem,
 } from 'carbon-components-react'
 import React, { useState } from 'react'
-import styled from 'styled-components'
-
-const StyledHeaderPanel = styled(HeaderPanel)`
-  height: fit-content;
-  padding-bottom: 1rem;
-`
 
 const HeaderRightMenu = () => {
   const [switcher, setSwitcher] = useState(false)
@@ -33,9 +27,9 @@ const HeaderRightMenu = () => {
         isActive={switcher}
         className="fix-icon-position"
       >
-        {switcher ? <Close20 /> : <AppSwitcher20 />}
+        {switcher ? <Close20 /> : <Switcher20 />}
       </HeaderGlobalAction>
-      <StyledHeaderPanel aria-label="Header Panel" expanded={switcher}>
+      <HeaderPanel aria-label="Header Panel" expanded={switcher}>
         <Switcher aria-label="Switcher Container">
           <SwitcherItem
             aria-label="Documentation"
@@ -77,7 +71,7 @@ const HeaderRightMenu = () => {
             <span className="danger">Clear All Data</span>
           </SwitcherItem>
         </Switcher>
-      </StyledHeaderPanel>
+      </HeaderPanel>
     </>
   )
 }

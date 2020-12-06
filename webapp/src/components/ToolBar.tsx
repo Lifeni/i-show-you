@@ -1,5 +1,4 @@
-import { Link20 } from '@carbon/icons-react'
-import { Button, TextInput } from 'carbon-components-react'
+import { TextInput } from 'carbon-components-react'
 import React, { MutableRefObject } from 'react'
 import styled from 'styled-components'
 import { findLanguage } from '../utils/identify-file-type'
@@ -8,6 +7,7 @@ import FileMeta from './FileMeta'
 import FileOption from './FileOption'
 import RemoveFile from './RemoveFile'
 import RunFile from './RunFile'
+import ShareFile from './ShareFile'
 
 const ToolBarWrapper = styled.div`
   width: 100%;
@@ -64,7 +64,7 @@ const ToolBar = (props: {
         <FileMeta mobile={mobile} type={type} />
         <FileOption />
         <FileHistory />
-        <RunFile mobile={mobile} type={type} />
+        <RemoveFile />
       </ToolBarLeftWrapper>
       <ToolBarCenterWrapper>
         <TextInput
@@ -78,22 +78,8 @@ const ToolBar = (props: {
         />
       </ToolBarCenterWrapper>
       <ToolBarRightWrapper className="fixed-width">
-        <RemoveFile />
-        {mobile ? (
-          <Button
-            hasIconOnly
-            renderIcon={Link20}
-            tooltipAlignment="center"
-            tooltipPosition="bottom"
-            iconDescription="Get Share Link"
-            kind="primary"
-            size="field"
-          />
-        ) : (
-          <Button kind="primary" size="field" renderIcon={Link20}>
-            Get Share Link
-          </Button>
-        )}
+        <RunFile mobile={mobile} type={type} />
+        <ShareFile mobile={mobile} />
       </ToolBarRightWrapper>
     </ToolBarWrapper>
   )

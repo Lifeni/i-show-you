@@ -1,27 +1,42 @@
-import { Document16 } from '@carbon/icons-react'
+import { Add20 } from '@carbon/icons-react'
 import {
+  Button,
   HeaderMenuItem,
   SideNavItems,
   SideNavLink,
 } from 'carbon-components-react'
-import React from 'react'
+import React, { forwardRef } from 'react'
+import '../styles/FileTab.css'
 
-const HeaderFileTab = () => {
+const HeaderFileTab = forwardRef((_, ref) => {
   return (
     <>
-      <HeaderMenuItem isCurrentPage href="#">
-        New Memo
+      <HeaderMenuItem ref={ref} isCurrentPage>
+        Untitled File
       </HeaderMenuItem>
+      <Button
+        hasIconOnly
+        renderIcon={Add20}
+        tooltipAlignment="center"
+        tooltipPosition="bottom"
+        iconDescription="New Tab"
+        kind="ghost"
+        size="field"
+        className="new-tab"
+      />
     </>
   )
-}
+})
 
 const SideNavFileTab = () => {
   return (
     <>
       <SideNavItems>
-        <SideNavLink renderIcon={Document16} href="/" large aria-current="page">
-          Untitled Memo
+        <SideNavLink large aria-current="page">
+          Untitled File
+        </SideNavLink>
+        <SideNavLink renderIcon={Add20} large>
+          New Tab
         </SideNavLink>
       </SideNavItems>
     </>
