@@ -4,12 +4,12 @@ import React from 'react'
 
 const canRunList = ['HTML', 'JavaScript']
 
-const RunFile = (props: { mobile: boolean; type: IFileMap }) => {
-  const { mobile, type } = props
+const RunFile = (props: { type: IFileMap }) => {
+  const { type } = props
 
   return (
     <>
-      {!mobile && canRunList.includes(type.name) && (
+      {canRunList.includes(type.name) && (
         <Button
           hasIconOnly
           renderIcon={Play20}

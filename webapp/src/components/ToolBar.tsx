@@ -61,10 +61,10 @@ const ToolBar = (props: {
   return (
     <ToolBarWrapper>
       <ToolBarLeftWrapper className="fixed-width">
-        <FileMeta mobile={mobile} type={type} />
+        {!mobile && <FileMeta type={type} />}
         <FileOption />
         <FileHistory />
-        <RemoveFile />
+        {!mobile && <RemoveFile />}
       </ToolBarLeftWrapper>
       <ToolBarCenterWrapper>
         <TextInput
@@ -78,7 +78,8 @@ const ToolBar = (props: {
         />
       </ToolBarCenterWrapper>
       <ToolBarRightWrapper className="fixed-width">
-        <RunFile mobile={mobile} type={type} />
+        {!mobile && <RunFile type={type} />}
+        {mobile && <RemoveFile />}
         <ShareFile mobile={mobile} />
       </ToolBarRightWrapper>
     </ToolBarWrapper>

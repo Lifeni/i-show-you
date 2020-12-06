@@ -17,7 +17,12 @@ const ShareFile = (props: { mobile: boolean }) => {
           size="field"
         />
       ) : (
-        <Button kind="primary" size="field" renderIcon={Link20}>
+        <Button
+          kind="tertiary"
+          size="field"
+          renderIcon={Link20}
+          style={{ border: 'none', paddingRight: '56px' }}
+        >
           Get Share Link
         </Button>
       )}

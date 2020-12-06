@@ -7,23 +7,21 @@ const TooltipWrapper = styled.div`
   font-size: 1rem;
 `
 
-const FileMeta = (props: { mobile: boolean; type: IFileMap }) => {
-  const { mobile, type } = props
+const FileMeta = (props: { type: IFileMap }) => {
+  const { type } = props
   return (
     <>
-      {!mobile && (
-        <TooltipWrapper>
-          <TooltipDefinition
-            align="start"
-            direction="bottom"
-            tooltipText={
-              'This is a local file and the data is stored in the browser.'
-            }
-          >
-            {type.id === -1 ? 'Local File' : type.name}
-          </TooltipDefinition>
-        </TooltipWrapper>
-      )}
+      <TooltipWrapper>
+        <TooltipDefinition
+          align="start"
+          direction="bottom"
+          tooltipText={
+            'This is a local file and the data is stored in the browser.'
+          }
+        >
+          {type.id === -1 ? 'Local File' : type.name}
+        </TooltipDefinition>
+      </TooltipWrapper>
     </>
   )
 }
