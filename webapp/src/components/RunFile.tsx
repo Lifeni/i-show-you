@@ -2,12 +2,14 @@ import { Play20 } from '@carbon/icons-react'
 import { Button } from 'carbon-components-react'
 import React from 'react'
 
-const RunFile = (props: { mobile: boolean }) => {
-  const { mobile } = props
+const canRunList = ['HTML', 'JavaScript']
+
+const RunFile = (props: { mobile: boolean; type: IFileMap }) => {
+  const { mobile, type } = props
 
   return (
     <>
-      {!mobile && (
+      {!mobile && canRunList.includes(type.name) && (
         <Button
           hasIconOnly
           renderIcon={Play20}

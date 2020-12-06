@@ -1,14 +1,28 @@
-import { Button } from 'carbon-components-react'
+import { TooltipDefinition } from 'carbon-components-react'
 import React from 'react'
+import styled from 'styled-components'
+
+const TooltipWrapper = styled.div`
+  padding: 0 16px;
+  font-size: 1rem;
+`
 
 const FileMeta = (props: { mobile: boolean; type: IFileMap }) => {
   const { mobile, type } = props
   return (
     <>
       {!mobile && (
-        <Button kind="ghost" size="field">
-          {type.id === -1 ? 'Local File' : type.name}
-        </Button>
+        <TooltipWrapper>
+          <TooltipDefinition
+            align="start"
+            direction="bottom"
+            tooltipText={
+              'This is a local file and the data is stored in the browser.'
+            }
+          >
+            {type.id === -1 ? 'Local File' : type.name}
+          </TooltipDefinition>
+        </TooltipWrapper>
       )}
     </>
   )

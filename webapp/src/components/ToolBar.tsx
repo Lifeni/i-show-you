@@ -64,7 +64,7 @@ const ToolBar = (props: {
         <FileMeta mobile={mobile} type={type} />
         <FileOption />
         <FileHistory />
-        <RunFile mobile={mobile} />
+        <RunFile mobile={mobile} type={type} />
       </ToolBarLeftWrapper>
       <ToolBarCenterWrapper>
         <TextInput
