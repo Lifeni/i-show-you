@@ -9,8 +9,8 @@ module.exports = {
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/" },
+      { text: "Config", link: "/config/" },
       { text: "FAQ", link: "/faq/" },
-      { text: "API", link: "/api/" },
       { text: "GitHub", link: "https://github.com/Lifeni/i-show-you" },
     ],
   },
