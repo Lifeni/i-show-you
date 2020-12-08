@@ -1,19 +1,24 @@
 import Editor from '@monaco-editor/react'
-import { Loading } from 'carbon-components-react'
-import React, { useRef, useState } from 'react'
+import { InlineLoading } from 'carbon-components-react'
+import React, { useContext, useRef, useState } from 'react'
 
 import styled from 'styled-components'
+import { DataContext } from '../App'
 
-import '../styles/TextEditor.css'
 import ToolBar from './ToolBar'
 
 const Wrapper = styled.div`
   overflow: hidden;
 `
 
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 const TextEditor = () => {
   const [type, setType] = useState({ id: -1, name: 'Text', slug: 'text' })
-  const [mobile, setMobile] = useState(false)
 
   const editorRef = useRef()
 
@@ -21,24 +26,12 @@ const TextEditor = () => {
     editorRef.current = editor
   }
 
-  const checkMobile = () => {
-    if (window.innerWidth < 720) {
-      setMobile(true)
-    } else {
-      setMobile(false)
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', checkMobile)
-
-  window.addEventListener('resize', () => {
-    window.requestAnimationFrame(checkMobile)
-  })
+  const { isMobile } = useContext(DataContext)
 
   return (
     <Wrapper>
       <ToolBar
-        mobile={mobile}
+        mobile={isMobile}
         editor={editorRef}
         type={type}
         setType={setType}
@@ -50,7 +43,9 @@ const TextEditor = () => {
         theme="light"
         language={type.slug}
         loading={
-          <Loading description="Editor Loading ..." withOverlay={false} />
+          <LoadingWrapper>
+            <InlineLoading description="Editor Loading ..." />
+          </LoadingWrapper>
         }
         options={{
           fontFamily:
@@ -62,7 +57,7 @@ const TextEditor = () => {
             bottom: 16,
           },
           minimap: {
-            enabled: !mobile,
+            enabled: !isMobile,
             scale: 1,
             maxColumn: 150,
           },

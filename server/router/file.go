@@ -17,10 +17,10 @@ type File struct {
 }
 
 func CreateFile(c echo.Context) error {
-	f := new(File)
-	if err := c.Bind(f); err != nil {
-		return err
-	}
+	//f := new(File)
+	//if err := c.Bind(f); err != nil {
+	//	return err
+	//}
 
 	var content struct {
 		Message string    `json:"message"`

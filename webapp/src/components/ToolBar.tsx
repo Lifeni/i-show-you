@@ -58,6 +58,15 @@ const ToolBar = (props: {
     }
   }
 
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const input: HTMLInputElement | null = document.querySelector(
+        '#editor-file-name'
+      )
+      input?.focus()
+    }, 500)
+  })
+
   return (
     <ToolBarWrapper>
       <ToolBarLeftWrapper className="fixed-width">
@@ -74,6 +83,7 @@ const ToolBar = (props: {
           onKeyPress={focusEditor}
           autoComplete="off"
           aria-autocomplete="none"
+          autoFocus
           id="editor-file-name"
         />
       </ToolBarCenterWrapper>

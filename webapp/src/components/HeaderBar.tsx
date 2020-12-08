@@ -11,7 +11,6 @@ import {
 import React from 'react'
 import styled from 'styled-components'
 
-import '../styles/HeaderBar.css'
 import { HeaderFileTab, SideNavFileTab } from './FileTab'
 import HeaderRightMenu from './HeaderRightMenu'
 import SwitchLanguage from './SwitchLanguage'
@@ -31,7 +30,9 @@ const HeaderBar = () => {
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
           />
-          <HeaderName prefix="I Show">You</HeaderName>
+          <HeaderName href="/" prefix="I Show">
+            You
+          </HeaderName>
           <HeaderNavigation aria-label="Your Files">
             <HeaderFileTab />
           </HeaderNavigation>
