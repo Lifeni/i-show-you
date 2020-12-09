@@ -1,47 +1,128 @@
-import React, { createContext, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Loading, ToastNotification } from 'carbon-components-react'
+import React, { createContext, useEffect, useState } from 'react'
+import { Redirect, useParams } from 'react-router-dom'
+import store from 'store2'
+import styled from 'styled-components'
 import { validate } from 'uuid'
 import HeaderBar from './components/HeaderBar'
 import TextEditor from './components/TextEditor'
 
 const context: IGlobalData = {
-  uuid: '',
   isMobile: false,
 }
-const DataContext = createContext(context)
+const GlobalContext = createContext(context)
+
+const NotificationWrapper = styled.div`
+  position: fixed;
+  z-index: 99998;
+  top: 48px;
+  right: 0;
+`
+
+const LoadingWrapper = styled.div`
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+
+  svg {
+    transform: scale(0.5);
+  }
+`
 
 const App = () => {
-  const [uuid, setUuid] = useState('')
-  const [mobile, setMobile] = useState(false)
-
-  let { id }: IURLParams = useParams()
-  if (validate(id)) {
-    setUuid(id)
-  }
-
-  const checkMobile = () => {
-    if (window.innerWidth < 720) {
-      setMobile(true)
-    } else {
-      setMobile(false)
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', checkMobile)
-
-  window.addEventListener('resize', () => {
-    window.requestAnimationFrame(checkMobile)
+  const [message, setMessage] = useState(false)
+  const [notification, setNotification] = useState({
+    status: 0,
+    statusText: '',
+    message: '',
+    documentation: '',
   })
+  const [loading, setLoading] = useState(true)
+  const [redirect, setRedirect] = useState(false)
+
+  const { id }: IURLParams = useParams()
+
+  useEffect(() => {
+    if (id) {
+      if (validate(id)) {
+        const currentPage = store.namespace(id)
+        fetch(`/api/file/${id}`).then(async res => {
+          const data = await res.json()
+          setLoading(false)
+          if (res.status === 200) {
+            currentPage.add('remote', data)
+          } else if (res.status === 404) {
+            setRedirect(true)
+          } else {
+            setNotification({
+              status: res.status,
+              statusText: res.statusText,
+              message: data.message,
+              documentation: data.documentation,
+            })
+          }
+        })
+      } else {
+        setRedirect(true)
+      }
+    } else {
+      setLoading(false)
+      const currentPage = store.namespace('local-file')
+      currentPage.add('name', '')
+      currentPage.add('type', '')
+      currentPage.add('content', '')
+    }
+  }, [])
+
+  const [isMobile, setMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setMobile(window.innerWidth < 720)
+    }
+
+    checkMobile()
+
+    window.addEventListener('resize', () => {
+      window.requestAnimationFrame(() => {
+        checkMobile()
+      })
+    })
+  }, [isMobile])
 
   return (
     <>
-      <DataContext.Provider value={{ uuid: uuid, isMobile: mobile }}>
+      {loading && (
+        <LoadingWrapper>
+          <Loading description="Loading ..." withOverlay={false} />
+        </LoadingWrapper>
+      )}
+      {redirect && <Redirect to={{ pathname: '/home', search: '?404' }} />}
+      {message && (
+        <NotificationWrapper>
+          <ToastNotification
+            title={notification.message}
+            onCloseButtonClick={() => setMessage(false)}
+          />
+        </NotificationWrapper>
+      )}
+      <GlobalContext.Provider value={{ isMobile: isMobile }}>
         <HeaderBar />
         <TextEditor />
-      </DataContext.Provider>
+      </GlobalContext.Provider>
     </>
   )
 }
 
 export default App
-export { DataContext }
+
+export { GlobalContext }

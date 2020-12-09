@@ -1,7 +1,7 @@
 import { Add20 } from '@carbon/icons-react'
 import { Button, Column, Grid, Row } from 'carbon-components-react'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.main`
@@ -46,6 +46,11 @@ const EmptyBox = styled.div`
 `
 
 const Home = () => {
+  let message = 'I Show You'
+  const query = new URLSearchParams(useLocation().search)
+  if (query.get('404') === '') {
+    message = 'File Not Found'
+  }
   return (
     <Container>
       <StyledGrid>
@@ -53,9 +58,9 @@ const Home = () => {
           <Column sm={0} lg={1} xlg={2} />
           <Column sm={4} md={8} lg={10} xlg={8}>
             <TopBar>
-              <StyledH1>I Show You</StyledH1>
+              <StyledH1>{message}</StyledH1>
               <ButtonWrapper>
-                <Link to="/new">
+                <Link to="/">
                   <Button renderIcon={Add20}>New File</Button>
                 </Link>
               </ButtonWrapper>
@@ -66,7 +71,7 @@ const Home = () => {
         <Row>
           <Column sm={0} lg={1} xlg={2} />
           <Column sm={4} md={8} lg={10} xlg={8}>
-            <EmptyBox>No File</EmptyBox>
+            <EmptyBox>No Local File</EmptyBox>
           </Column>
           <Column sm={0} lg={1} xlg={2} />
         </Row>

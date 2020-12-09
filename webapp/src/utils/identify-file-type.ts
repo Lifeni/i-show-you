@@ -127,13 +127,21 @@ const fileMap = [
   },
 ]
 
-const findLanguage = (ext: string): IFileMap => {
+const findByExt = (ext: string): IFileMap => {
   for (let lang of fileMap) {
-    if (lang.ext.includes(ext)) {
+    if (lang.ext?.includes(ext)) {
+      return lang
+    }
+  }
+  return { id: -1, name: 'Text', slug: 'text' }
+}
+const findBySlug = (slug: string): IFileMap => {
+  for (let lang of fileMap) {
+    if (lang.slug === slug) {
       return lang
     }
   }
   return { id: -1, name: 'Text', slug: 'text' }
 }
 
-export { findLanguage }
+export { findByExt, findBySlug }

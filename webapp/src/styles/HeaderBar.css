@@ -8,7 +8,7 @@
 }
 
 .menu-item span {
-  padding: 0.8rem;
+  padding: 0 0.8rem;
 }
 
 .menu-item span.danger {
@@ -23,6 +23,6 @@
 }
 
 .bx--header-panel--expanded {
-  height: 205px;
+  height: 290px;
   padding-bottom: 12px;
 }

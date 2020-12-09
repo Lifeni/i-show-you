@@ -1,9 +1,11 @@
 import Editor from '@monaco-editor/react'
 import { InlineLoading } from 'carbon-components-react'
-import React, { useContext, useRef, useState } from 'react'
-
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import store from 'store2'
 import styled from 'styled-components'
-import { DataContext } from '../App'
+import { useDebounce } from 'use-debounce'
+import { GlobalContext } from '../App'
 
 import ToolBar from './ToolBar'
 
@@ -18,24 +20,35 @@ const LoadingWrapper = styled.div`
 `
 
 const TextEditor = () => {
-  const [type, setType] = useState({ id: -1, name: 'Text', slug: 'text' })
+  const { isMobile } = useContext(GlobalContext)
+  const { id }: IURLParams = useParams()
+  const currentPage = store.namespace(id || 'local-file')
 
+  const [type, setType] = useState({
+    id: -1,
+    name: 'Text',
+    slug: 'text',
+  })
+  const [value, setValue] = useState(currentPage.get('content'))
+  const [debouncedValue] = useDebounce(value, 500)
   const editorRef = useRef()
 
-  function handleEditorDidMount(_: any, editor: any) {
+  function handleEditorDidMount(_valueGetter: any, editor: any) {
     editorRef.current = editor
+    // @ts-ignore
+    editorRef.current.onDidChangeModelContent(ev => {
+      // @ts-ignore
+      setValue(editorRef.current.getValue())
+    })
   }
 
-  const { isMobile } = useContext(DataContext)
+  useEffect(() => {
+    currentPage.set('content', debouncedValue)
+  }, [debouncedValue])
 
   return (
     <Wrapper>
-      <ToolBar
-        mobile={isMobile}
-        editor={editorRef}
-        type={type}
-        setType={setType}
-      />
+      <ToolBar editor={editorRef} updateType={setType} />
       <Editor
         width="100%"
         height="calc(100vh - 88px)"
@@ -47,6 +60,7 @@ const TextEditor = () => {
             <InlineLoading description="Editor Loading ..." />
           </LoadingWrapper>
         }
+        value={value}
         options={{
           fontFamily:
             "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",

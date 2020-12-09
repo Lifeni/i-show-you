@@ -5,7 +5,6 @@ import Admin from './Admin'
 import App from './App'
 import Home from './Home'
 import './index.scss'
-import Overlay from './Overlay'
 import './styles/HeaderBar.css'
 import './styles/TextEditor.css'
 
@@ -13,8 +12,8 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Switch>
-        <Route path="/new">
-          <Overlay />
+        <Route path="/home">
+          <Home />
         </Route>
         <Route path="/admin">
           <Admin />
@@ -23,6 +22,9 @@ ReactDOM.render(
           <App />
         </Route>
         <Route path="/">
+          <App />
+        </Route>
+        <Route path="*">
           <Home />
         </Route>
       </Switch>

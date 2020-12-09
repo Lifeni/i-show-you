@@ -8,10 +8,15 @@ interface IFileMap {
 }
 
 interface IGlobalData {
-  uuid: string
   isMobile: boolean
 }
 
 interface IURLParams {
   id: string
+}
+
+interface IResponseData {
+  message: string
+  data?: any
+  documentation?: string
 }

@@ -1,13 +1,17 @@
 import { TextInput } from 'carbon-components-react'
-import React, { MutableRefObject } from 'react'
+import React, { MutableRefObject, useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import store from 'store2'
 import styled from 'styled-components'
-import { findLanguage } from '../utils/identify-file-type'
+import { useDebounce } from 'use-debounce'
+import { findByExt, findBySlug } from '../utils/identify-file-type'
 import FileHistory from './FileHistory'
 import FileMeta from './FileMeta'
 import FileOption from './FileOption'
 import RemoveFile from './RemoveFile'
 import RunFile from './RunFile'
 import ShareFile from './ShareFile'
+import { GlobalContext } from '../App'
 
 const ToolBarWrapper = styled.div`
   width: 100%;
@@ -36,20 +40,37 @@ const ToolBarRightWrapper = styled.div`
 `
 
 const ToolBar = (props: {
-  mobile: boolean
   editor: MutableRefObject<undefined>
-  type: IFileMap
-  setType: Function
+  updateType: Function
 }) => {
-  const { mobile, editor, type, setType } = props
+  const { editor, updateType } = props
+  const { isMobile } = useContext(GlobalContext)
+
+  const { id }: IURLParams = useParams()
+  const currentPage = store.namespace(id || 'local-file')
+
+  const [type, setType] = useState(currentPage.get('type'))
+  const [name, setName] = useState(currentPage.get('name'))
+  const [debouncedType] = useDebounce(type, 500)
+  const [debouncedName] = useDebounce(name, 500)
 
   const changeLanguage = (e: { target: { value: string } }) => {
+    setName(e.target.value)
     const arr = e.target.value.split('.')
     if (e.target.value.includes('.') && arr.length > 0) {
-      const lang = findLanguage(arr[arr.length - 1])
-      setType(lang)
+      const lang = findByExt(arr[arr.length - 1])
+      setType(lang.slug)
+      updateType(lang)
     }
   }
+
+  useEffect(() => {
+    currentPage.set('type', debouncedType)
+  }, [debouncedType])
+
+  useEffect(() => {
+    currentPage.set('name', debouncedName)
+  }, [debouncedName])
 
   const focusEditor = (e: { code: string }) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -59,21 +80,28 @@ const ToolBar = (props: {
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      const input: HTMLInputElement | null = document.querySelector(
-        '#editor-file-name'
-      )
-      input?.focus()
-    }, 500)
+    if (currentPage.get('name') !== '') {
+      setTimeout(() => {
+        // @ts-ignore
+        editor.current?.focus()
+      }, 500)
+    } else {
+      setTimeout(() => {
+        const input: HTMLInputElement | null = document.querySelector(
+          '#editor-file-name'
+        )
+        input?.focus()
+      }, 500)
+    }
   })
 
   return (
     <ToolBarWrapper>
       <ToolBarLeftWrapper className="fixed-width">
-        {!mobile && <FileMeta type={type} />}
+        {!isMobile && <FileMeta type={findBySlug(type)} />}
         <FileOption />
         <FileHistory />
-        {!mobile && <RemoveFile />}
+        {!isMobile && <RemoveFile />}
       </ToolBarLeftWrapper>
       <ToolBarCenterWrapper>
         <TextInput
@@ -81,6 +109,7 @@ const ToolBar = (props: {
           placeholder="Untitled"
           onChange={changeLanguage}
           onKeyPress={focusEditor}
+          defaultValue={!!name ? name : ''}
           autoComplete="off"
           aria-autocomplete="none"
           autoFocus
@@ -88,9 +117,9 @@ const ToolBar = (props: {
         />
       </ToolBarCenterWrapper>
       <ToolBarRightWrapper className="fixed-width">
-        {!mobile && <RunFile type={type} />}
-        {mobile && <RemoveFile />}
-        <ShareFile mobile={mobile} />
+        {!isMobile && <RunFile type={findBySlug(type)} />}
+        {isMobile && <RemoveFile />}
+        <ShareFile />
       </ToolBarRightWrapper>
     </ToolBarWrapper>
   )

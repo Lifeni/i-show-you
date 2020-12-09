@@ -22,8 +22,11 @@ func main() {
 
 	e.Static("/", "../webapp/build")
 
-	e.GET("/api/file/new", router.CreateFile)
-	//e.POST("/api/file", router.CreateFile)
+	e.GET("/api/file/:id", router.QueryFile)
+	e.POST("/api/file", router.CreateFile)
+	e.PUT("/api/file/:id", router.UpdateFile)
+	e.DELETE("/api/file/:id", router.RemoveFile)
+
 	e.GET("/api/ping", func(c echo.Context) error {
 		return c.String(http.StatusOK, "pong")
 	})

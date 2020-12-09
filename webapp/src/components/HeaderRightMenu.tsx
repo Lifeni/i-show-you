@@ -5,7 +5,9 @@ import {
   FlagFilled16,
   InformationFilled16,
   LogoGithub16,
+  StarFilled16,
   Switcher20,
+  UserAvatarFilled16,
 } from '@carbon/icons-react'
 import {
   HeaderGlobalAction,
@@ -15,6 +17,14 @@ import {
   SwitcherItem,
 } from 'carbon-components-react'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
+const StyledLink = styled(Link)`
+  width: 100%;
+  color: inherit;
+  text-decoration: inherit;
+`
 
 const HeaderRightMenu = () => {
   const [switcher, setSwitcher] = useState(false)
@@ -31,6 +41,20 @@ const HeaderRightMenu = () => {
       </HeaderGlobalAction>
       <HeaderPanel aria-label="Header Panel" expanded={switcher}>
         <Switcher aria-label="Switcher Container">
+          <SwitcherItem element="p" aria-label="Home" className="menu-item">
+            <StyledLink to="/home">
+              <StarFilled16 />
+              <span>Home</span>
+            </StyledLink>
+          </SwitcherItem>
+          <SwitcherItem element="p" aria-label="Admin" className="menu-item">
+            <StyledLink to="/admin">
+              <UserAvatarFilled16 />
+              <span>Admin</span>
+            </StyledLink>
+          </SwitcherItem>
+
+          <SwitcherDivider />
           <SwitcherItem
             aria-label="Documentation"
             href="https://lifeni.github.io/i-show-you"
