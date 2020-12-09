@@ -24,11 +24,7 @@ const TextEditor = () => {
   const { id }: IURLParams = useParams()
   const currentPage = store.namespace(id || 'local-file')
 
-  const [type, setType] = useState({
-    id: -1,
-    name: 'Text',
-    slug: 'text',
-  })
+  const [type, setType] = useState(currentPage.get('type'))
   const [value, setValue] = useState(currentPage.get('content'))
   const [debouncedValue] = useDebounce(value, 500)
   const editorRef = useRef()
@@ -36,7 +32,7 @@ const TextEditor = () => {
   function handleEditorDidMount(_valueGetter: any, editor: any) {
     editorRef.current = editor
     // @ts-ignore
-    editorRef.current.onDidChangeModelContent(ev => {
+    editorRef.current.onDidChangeModelContent(() => {
       // @ts-ignore
       setValue(editorRef.current.getValue())
     })
@@ -54,7 +50,7 @@ const TextEditor = () => {
         height="calc(100vh - 88px)"
         className="editor"
         theme="light"
-        language={type.slug}
+        language={type}
         loading={
           <LoadingWrapper>
             <InlineLoading description="Editor Loading ..." />

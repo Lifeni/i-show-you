@@ -60,7 +60,7 @@ const ToolBar = (props: {
     if (e.target.value.includes('.') && arr.length > 0) {
       const lang = findByExt(arr[arr.length - 1])
       setType(lang.slug)
-      updateType(lang)
+      updateType(lang.slug)
     }
   }
 
