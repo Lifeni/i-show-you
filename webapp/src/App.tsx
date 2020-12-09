@@ -55,28 +55,33 @@ const App = () => {
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
-        fetch(`/api/file/${id}`).then(async res => {
-          const data = await res.json()
+        if (!currentPage.has('token')) {
+          fetch(`/api/file/${id}`).then(async res => {
+            const data = await res.json()
+            setLoading(false)
+            if (res.status === 200) {
+              currentPage.add('remote', data)
+            } else if (res.status === 404) {
+              setRedirect(true)
+            } else {
+              setNotification({
+                status: res.status,
+                statusText: res.statusText,
+                message: data.message,
+                documentation: data.documentation,
+              })
+            }
+          })
+        } else {
           setLoading(false)
-          if (res.status === 200) {
-            currentPage.add('remote', data)
-          } else if (res.status === 404) {
-            setRedirect(true)
-          } else {
-            setNotification({
-              status: res.status,
-              statusText: res.statusText,
-              message: data.message,
-              documentation: data.documentation,
-            })
-          }
-        })
+        }
       } else {
         setRedirect(true)
       }
     } else {
       setLoading(false)
       const currentPage = store.namespace('local-file')
+      currentPage.add('token', '')
       currentPage.add('name', '')
       currentPage.add('type', '')
       currentPage.add('content', '')

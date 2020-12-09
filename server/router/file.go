@@ -1,9 +1,13 @@
 package router
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/satori/go.uuid"
+	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 type File struct {
@@ -26,17 +30,31 @@ type ResponseError struct {
 }
 
 func CreateFile(c echo.Context) error {
+	id := uuid.NewV4()
+
+	key := os.Getenv("JWT_TOKEN")
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":  id,
+		"nbf": time.Now().Unix(),
+	})
+
+	// Sign and get the complete encoded token as a string using the secret
+	tokenString, err := token.SignedString([]byte(key))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var data struct {
 		Message string    `json:"message"`
 		ID      uuid.UUID `json:"id"`
-		// TODO: add jwt token
+		Token   string    `json:"token"`
 	}
 
-	id := uuid.NewV4()
 	// TODO db operation insert
 	// TODO error handle
 	data.Message = "Ok"
 	data.ID = id
+	data.Token = tokenString
 
 	return c.JSON(http.StatusOK, &data)
 }

@@ -6,12 +6,17 @@ import {
   SideNavLink,
 } from 'carbon-components-react'
 import React, { forwardRef } from 'react'
+import { useParams } from 'react-router-dom'
+import store from 'store2'
 
 const HeaderFileTab = forwardRef((_, ref) => {
+  const { id }: IURLParams = useParams()
+  const currentPage = store.namespace(id || 'local-file')
+
   return (
     <>
       <HeaderMenuItem ref={ref} isCurrentPage>
-        Untitled File
+        {currentPage.get('token') === '' ? 'Local File' : id.slice(-8)}
       </HeaderMenuItem>
       <HeaderGlobalAction
         aria-label="New Tab"
@@ -25,11 +30,13 @@ const HeaderFileTab = forwardRef((_, ref) => {
 })
 
 const SideNavFileTab = () => {
+  const { id }: IURLParams = useParams()
+  const currentPage = store.namespace(id || 'local-file')
   return (
     <>
       <SideNavItems>
         <SideNavLink large aria-current="page">
-          Untitled File
+          {currentPage.get('token') === '' ? 'Local File' : id.slice(-8)}
         </SideNavLink>
         <SideNavLink renderIcon={Add20} large>
           New Tab

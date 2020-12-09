@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"log"
@@ -11,7 +12,12 @@ import (
 
 func main() {
 
-	err := database.ConnectDB()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	err = database.ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}

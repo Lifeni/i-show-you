@@ -1,4 +1,4 @@
-import { Link20 } from '@carbon/icons-react'
+import { Information20, Link20 } from '@carbon/icons-react'
 import { Button } from 'carbon-components-react'
 import React, { useContext, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
@@ -22,6 +22,12 @@ const ShareFile = () => {
     }).then(async res => {
       if (res.ok) {
         const data = await res.json()
+        const targetPage = store.namespace(data.id)
+        targetPage.set('token', data.token)
+        targetPage.set('name', currentPage.get('name'))
+        targetPage.set('type', currentPage.get('type'))
+        targetPage.set('content', currentPage.get('content'))
+        currentPage.clearAll()
         setUuid(data.id)
         setRedirect(true)
       }
@@ -30,26 +36,47 @@ const ShareFile = () => {
   return (
     <>
       {redirect && <Redirect to={`/${uuid}`} />}
-      {isMobile ? (
+      {currentPage.get('token') === '' ? (
+        isMobile ? (
+          <Button
+            hasIconOnly
+            renderIcon={Link20}
+            tooltipAlignment="center"
+            tooltipPosition="bottom"
+            iconDescription="Get Share Link"
+            kind="primary"
+            size="field"
+            onClick={share}
+          />
+        ) : (
+          <Button
+            kind="tertiary"
+            size="field"
+            renderIcon={Link20}
+            style={{ border: 'none', paddingRight: '56px' }}
+            onClick={share}
+          >
+            Get Share Link
+          </Button>
+        )
+      ) : isMobile ? (
         <Button
           hasIconOnly
-          renderIcon={Link20}
+          renderIcon={Information20}
           tooltipAlignment="center"
           tooltipPosition="bottom"
-          iconDescription="Get Share Link"
+          iconDescription="Link Info"
           kind="primary"
           size="field"
-          onClick={share}
         />
       ) : (
         <Button
           kind="tertiary"
           size="field"
-          renderIcon={Link20}
+          renderIcon={Information20}
           style={{ border: 'none', paddingRight: '56px' }}
-          onClick={share}
         >
-          Get Share Link
+          Link Info
         </Button>
       )}
     </>
