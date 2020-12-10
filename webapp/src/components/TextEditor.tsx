@@ -40,7 +40,7 @@ const TextEditor = () => {
 
   useEffect(() => {
     currentPage.set('content', debouncedValue)
-  }, [debouncedValue])
+  }, [currentPage, debouncedValue])
 
   return (
     <Wrapper>

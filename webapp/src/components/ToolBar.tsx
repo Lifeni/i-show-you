@@ -66,11 +66,11 @@ const ToolBar = (props: {
 
   useEffect(() => {
     currentPage.set('type', debouncedType)
-  }, [debouncedType])
+  }, [currentPage, debouncedType])
 
   useEffect(() => {
     currentPage.set('name', debouncedName)
-  }, [debouncedName])
+  }, [currentPage, debouncedName])
 
   const focusEditor = (e: { code: string }) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -113,6 +113,7 @@ const ToolBar = (props: {
           autoComplete="off"
           aria-autocomplete="none"
           autoFocus
+          className="styled-input"
           id="editor-file-name"
         />
       </ToolBarCenterWrapper>

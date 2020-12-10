@@ -1,11 +1,11 @@
-.bx--text-input {
+.styled-input.bx--text-input {
   width: 100%;
   background-color: #f4f4f4;
   text-align: center;
   outline: none;
 }
 
-.bx--text-input:focus {
+.styled-input.bx--text-input:focus {
   outline: none;
 }
 
