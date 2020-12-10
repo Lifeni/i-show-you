@@ -1,6 +1,7 @@
 import { Add20 } from '@carbon/icons-react'
 import { Button, Column, Grid, Row } from 'carbon-components-react'
-import React from 'react'
+import React, { useState } from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -47,38 +48,43 @@ const EmptyBox = styled.div`
 `
 
 const Home = () => {
-  let message = 'I Show You'
+  const [message, setMessage] = useState('I Show You')
   const path = useLocation().pathname
-  if (path !== 'home') {
-    message = 'File Not Found'
+  if (path !== '/home') {
+    setMessage('File Not Found')
   }
 
   return (
-    <Container>
-      <StyledGrid>
-        <Row>
-          <Column sm={0} lg={1} xlg={2} />
-          <Column sm={4} md={8} lg={10} xlg={8}>
-            <TopBar>
-              <StyledH1>{message}</StyledH1>
-              <ButtonWrapper>
-                <Link to="/">
-                  <Button renderIcon={Add20}>New File</Button>
-                </Link>
-              </ButtonWrapper>
-            </TopBar>
-          </Column>
-          <Column sm={0} lg={1} xlg={2} />
-        </Row>
-        <Row>
-          <Column sm={0} lg={1} xlg={2} />
-          <Column sm={4} md={8} lg={10} xlg={8}>
-            <EmptyBox>No Local File</EmptyBox>
-          </Column>
-          <Column sm={0} lg={1} xlg={2} />
-        </Row>
-      </StyledGrid>
-    </Container>
+    <HelmetProvider>
+      <Container>
+        <Helmet>
+          <title>Home | I Show You</title>
+        </Helmet>
+        <StyledGrid>
+          <Row>
+            <Column sm={0} lg={1} xlg={2} />
+            <Column sm={4} md={8} lg={10} xlg={8}>
+              <TopBar>
+                <StyledH1>{message}</StyledH1>
+                <ButtonWrapper>
+                  <Link to="/">
+                    <Button renderIcon={Add20}>New File</Button>
+                  </Link>
+                </ButtonWrapper>
+              </TopBar>
+            </Column>
+            <Column sm={0} lg={1} xlg={2} />
+          </Row>
+          <Row>
+            <Column sm={0} lg={1} xlg={2} />
+            <Column sm={4} md={8} lg={10} xlg={8}>
+              <EmptyBox>No Local File</EmptyBox>
+            </Column>
+            <Column sm={0} lg={1} xlg={2} />
+          </Row>
+        </StyledGrid>
+      </Container>
+    </HelmetProvider>
   )
 }
 

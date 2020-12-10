@@ -2,7 +2,7 @@ import { Play20 } from '@carbon/icons-react'
 import { Button } from 'carbon-components-react'
 import React from 'react'
 
-const canRunList = ['HTML', 'JavaScript']
+const canRunList = ['HTML', 'JavaScript', 'Markdown']
 
 const RunFile = (props: { type: IFileMap }) => {
   const { type } = props
@@ -15,7 +15,7 @@ const RunFile = (props: { type: IFileMap }) => {
           renderIcon={Play20}
           tooltipAlignment="center"
           tooltipPosition="bottom"
-          iconDescription="Run File"
+          iconDescription="Preview File"
           kind="ghost"
           size="field"
         />

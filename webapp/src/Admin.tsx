@@ -1,6 +1,7 @@
 import { ArrowRight20 } from '@carbon/icons-react'
 import { Button, Form, TextInput } from 'carbon-components-react'
 import React, { useEffect, useState } from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
 import styled from 'styled-components'
 
@@ -38,7 +39,10 @@ const Admin = () => {
   }, [adminPage])
 
   return (
-    <>
+    <HelmetProvider>
+      <Helmet>
+        <title>Admin | I Show You</title>
+      </Helmet>
       {logged ? (
         <h1>Welcome</h1>
       ) : (
@@ -69,7 +73,7 @@ const Admin = () => {
           </Form>
         </LoginContainer>
       )}
-    </>
+    </HelmetProvider>
   )
 }
 

@@ -3,6 +3,7 @@
   background-color: #f4f4f4;
   text-align: center;
   outline: none;
+  border-bottom: none;
 }
 
 .styled-input.bx--text-input:focus {
