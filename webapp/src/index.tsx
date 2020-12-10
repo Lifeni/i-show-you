@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import Admin from './Admin'
 import App from './App'
 import Home from './Home'
@@ -15,6 +15,9 @@ ReactDOM.render(
         <Route path="/home">
           <Home />
         </Route>
+        <Route path="/404">
+          <Home />
+        </Route>
         <Route path="/admin">
           <Admin />
         </Route>
@@ -25,7 +28,7 @@ ReactDOM.render(
           <App />
         </Route>
         <Route path="*">
-          <Home />
+          <Redirect to={{ pathname: '/404' }} />
         </Route>
       </Switch>
     </BrowserRouter>

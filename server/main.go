@@ -26,7 +26,7 @@ func main() {
 
 	e.Use(middleware.Gzip())
 
-	e.Static("/", "../webapp/build")
+	e.Static("/", "./public")
 
 	e.GET("/api/file/:id", router.QueryFile)
 	e.POST("/api/file", router.CreateFile)

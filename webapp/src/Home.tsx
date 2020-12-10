@@ -23,6 +23,7 @@ const TopBar = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 0 24px;
 `
 
 const StyledH1 = styled.h1`
@@ -47,10 +48,11 @@ const EmptyBox = styled.div`
 
 const Home = () => {
   let message = 'I Show You'
-  const query = new URLSearchParams(useLocation().search)
-  if (query.get('404') === '') {
+  const path = useLocation().pathname
+  if (path !== 'home') {
     message = 'File Not Found'
   }
+
   return (
     <Container>
       <StyledGrid>

@@ -86,7 +86,7 @@ const App = () => {
       currentPage.add('type', '')
       currentPage.add('content', '')
     }
-  }, [])
+  }, [id])
 
   const [isMobile, setMobile] = useState(false)
 
@@ -106,12 +106,17 @@ const App = () => {
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <LoadingWrapper>
           <Loading description="Loading ..." withOverlay={false} />
         </LoadingWrapper>
+      ) : (
+        <GlobalContext.Provider value={{ isMobile: isMobile }}>
+          <HeaderBar />
+          <TextEditor />
+        </GlobalContext.Provider>
       )}
-      {redirect && <Redirect to={{ pathname: '/home', search: '?404' }} />}
+      {redirect && <Redirect to={{ pathname: '/404' }} />}
       {message && (
         <NotificationWrapper>
           <ToastNotification
@@ -120,10 +125,6 @@ const App = () => {
           />
         </NotificationWrapper>
       )}
-      <GlobalContext.Provider value={{ isMobile: isMobile }}>
-        <HeaderBar />
-        <TextEditor />
-      </GlobalContext.Provider>
     </>
   )
 }
