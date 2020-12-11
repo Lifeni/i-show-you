@@ -19,6 +19,7 @@ import {
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import packageFile from '../../package.json'
 
 const StyledLink = styled(Link)`
   width: 100%;
@@ -88,7 +89,7 @@ const HeaderRightMenu = () => {
           <SwitcherDivider />
           <SwitcherItem aria-label="Version" className="menu-item">
             <InformationFilled16 />
-            <span>v0.1.0 Alpha</span>
+            <span>v{packageFile.version}</span>
           </SwitcherItem>
           <SwitcherItem aria-label="Clear Data" className="menu-item">
             <CloseFilled16 color="#fa4d56" />
