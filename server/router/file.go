@@ -4,11 +4,21 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/satori/go.uuid"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
+
+type Config struct {
+	Server struct {
+		JwtSecret struct {
+			File  string `yaml:"file"`
+			Admin string `yaml:"admin"`
+		}
+	}
+}
 
 type File struct {
 	Name    string `json:"name"`
@@ -32,14 +42,23 @@ type ResponseError struct {
 func CreateFile(c echo.Context) error {
 	id := uuid.NewV4()
 
-	key := os.Getenv("JWT_TOKEN")
+	file, err := ioutil.ReadFile("./configs/main.yml")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	config := &Config{}
+	err = yaml.Unmarshal(file, &config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":  id,
 		"nbf": time.Now().Unix(),
 	})
 
-	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString([]byte(key))
+	tokenString, err := token.SignedString([]byte(config.Server.JwtSecret.File))
 	if err != nil {
 		log.Fatal(err)
 	}
