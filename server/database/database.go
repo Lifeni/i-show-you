@@ -15,7 +15,7 @@ var (
 
 func ConnectDB() error {
 	var err error
-	Client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	Client, err = mongo.NewClient(options.Client().ApplyURI("mongodb://mongo:27017"))
 	if err != nil {
 		return err
 	}
