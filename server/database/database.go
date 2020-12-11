@@ -6,7 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
-	"server/util"
 	"time"
 )
 
@@ -17,9 +16,7 @@ var (
 func ConnectDB() error {
 	var err error
 
-	config := util.GetConfig()
-
-	Client, err = mongo.NewClient(options.Client().ApplyURI(config.Server.DbMongo.Uri))
+	Client, err = mongo.NewClient(options.Client().ApplyURI("mongodb://mongo:27017"))
 	if err != nil {
 		return err
 	}

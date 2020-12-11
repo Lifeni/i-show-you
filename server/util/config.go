@@ -8,9 +8,6 @@ import (
 
 type Config struct {
 	Server struct {
-		DbMongo struct {
-			Uri string `yaml:"uri"`
-		}
 		JwtSecret struct {
 			File  string `yaml:"file"`
 			Admin string `yaml:"admin"`
