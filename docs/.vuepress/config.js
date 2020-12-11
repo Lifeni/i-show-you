@@ -7,9 +7,9 @@ module.exports = {
   themeConfig: {
     logo: "/logo.png",
     nav: [
-      { text: "Home", link: "/" },
-      { text: "Guide", link: "/guide/" },
-      // { text: "Config", link: "/config/" },
+      { text: "主页", link: "/" },
+      { text: "指南", link: "/guide/" },
+      { text: "配置", link: "/config/" },
       { text: "FAQ", link: "/faq/" },
       { text: "API", link: "/api/" },
       { text: "GitHub", link: "https://github.com/Lifeni/i-show-you" },

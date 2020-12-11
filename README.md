@@ -9,24 +9,51 @@
 ## Introduction
 
 - [x] 💻 Modern UI, based on IBM's Carbon design system.
-- [ ] 🚀 Self-hosted, use docker-compose to build your own application.
+- [x] 🚀 Self-hosted, use docker-compose to build your own application.
 - [ ] 📱 Mobile friendly, responsive UI interface and PWA support.
 - [ ] 🌐 Internationalization support, support Chinese, English and Emoji.
 - [ ] // TODO
 
 ## Quick Start
 
-// TODO
+It is recommended to use Docker Compose for deployment.
+
+1. Download the `docker-compose.yml` file in the repo to your own machine. It is best to choose a separate folder, because the application configuration file will be stored in the `folder/configs/main.yml`.
+
+2. Create a new `main.yml` file and place it in the `folder/configs/main.yml` with the following content.
+
+    ```yml
+    server:
+      jwt-secret:
+        file: golang
+        admin: password
+    ```
+
+    `server.jwt-secret.file` is the JWT encryption key of the file creator, which is used to verify the creator of the file (only the creator can modify the file).
+
+    `server.jwt-secert.admin` is the JWT encryption key of the background management page, used to verify the administrator's authority.
+
+3. Execute the following command in the folder to start the container.
+
+    ```shell
+    docker-compose up -d
+    ```
+
+    The `-d` command stands for background execution, and you can view real-time output if you remove it.
+
+    > Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file yourself.
 
 ## Documentation
 
-The documentation is being written.
+The documentation is being written. (Currently only available in Chinese)
 
-See https://lifeni.github.io/i-show-you/ .
+See https://lifeni.github.io/i-show-you .
 
 ## Demo
 
-// TODO
+The application is currently under development, and the data may be cleared at any time.
+
+See https://i-show-you.dev.lifeni.life .
 
 ## Development Setup
 
