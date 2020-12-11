@@ -1,8 +1,10 @@
 name: Build and Deploy Documentation
+
 on:
   push:
-    branches:
-      - master
+    path:
+      - "docs/**"
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

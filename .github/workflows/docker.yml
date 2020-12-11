@@ -1,4 +1,5 @@
-name: Build and Publish Docker image
+name: Build and Publish Docker Image
+
 on:
   release:
     types: [ published ]
