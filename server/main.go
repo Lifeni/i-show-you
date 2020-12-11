@@ -17,7 +17,7 @@ func main() {
 
 	_, err := ioutil.ReadFile("./configs/main.yml")
 	if err != nil {
-		e.File("/", "./welcome.html")
+		e.File("/", "./public/welcome.html")
 		e.File("/favicon.ico", "./public/favicon.ico")
 		e.File("/logo.svg", "./public/assets/logo.svg")
 	} else {

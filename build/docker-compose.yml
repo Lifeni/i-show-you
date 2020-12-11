@@ -3,6 +3,7 @@ version: "3"
 services:
   mongo:
     image: mongo:latest
+    container_name: i-show-you-mongo
     restart: always
     ports:
       - 27017:27017
@@ -13,6 +14,7 @@ services:
 
   app:
     image: lifeni/i-show-you:latest
+    container_name: i-show-you-app
     restart: always
     ports:
       - 8080:8080
