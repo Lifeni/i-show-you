@@ -2,7 +2,7 @@ name: Build and Deploy Documentation
 
 on:
   push:
-    path:
+    paths:
       - "docs/**"
 
 jobs:

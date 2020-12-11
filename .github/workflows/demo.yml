@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/i-show-you
+            cd /home/i-show-you/build
             docker pull lifeni/i-show-you
             docker-compose down
             docker-compose up -d
