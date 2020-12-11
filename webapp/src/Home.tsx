@@ -1,6 +1,6 @@
 import { Add20 } from '@carbon/icons-react'
 import { Button, Column, Grid, Row } from 'carbon-components-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -50,9 +50,12 @@ const EmptyBox = styled.div`
 const Home = () => {
   const [message, setMessage] = useState('I Show You')
   const path = useLocation().pathname
-  if (path !== '/home') {
-    setMessage('File Not Found')
-  }
+
+  useEffect(() => {
+    if (path !== '/home') {
+      setMessage('File Not Found')
+    }
+  }, [path])
 
   return (
     <HelmetProvider>
