@@ -8,14 +8,14 @@ RUN yarn && yarn build
 FROM golang:alpine as server
 WORKDIR /go/src/app
 COPY ./server .
-RUN go env -w GO111MODULE=on && go env -w GOPROXY=https://goproxy.io,direct && go install -v ./... && RUN go get -d -v ./...
+RUN go install -v ./... && go get -d -v ./...
 
 FROM alpine:latest
 WORKDIR /app
-RUN apk update && apk --no-cache add ca-certificates && rm -rf /var/cache/apk/*
 COPY --from=webapp /web/build ./public
 COPY --from=server /go/bin/server .
 COPY configs ./configs/
+RUN apk update && apk --no-cache add ca-certificates && rm -rf /var/cache/apk/*
 
 EXPOSE 8080
 
