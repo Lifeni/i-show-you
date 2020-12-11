@@ -5,8 +5,8 @@ services:
     image: mongo:latest
     container_name: i-show-you-mongo
     restart: always
-    ports:
-      - 27017:27017
+    # ports:
+    #   - 27017:27017
     volumes:
       - data:/data/db
     networks:
