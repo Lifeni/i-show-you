@@ -1,0 +1,11 @@
+docs
+scripts
+node_modules
+.github
+.git
+.idea
+
+server/public
+server/configs
+
+*.exe

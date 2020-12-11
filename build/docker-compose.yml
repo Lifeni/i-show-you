@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  i-show-you-app:
+    image: lifeni/i-show-you:latest
+    restart: always
+    volumes:
+      - ./configs:/app/configs
+    ports:
+      - 8080:8080
+    depends_on:
+      - i-show-you-mongo
+
+  i-show-you-mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - i-show-you-data:/data/db
+
+volumes:
+  i-show-you-data:

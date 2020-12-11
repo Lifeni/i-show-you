@@ -1,0 +1,1 @@
+docker build -t i-show-you -f .\\build\\Dockerfile .

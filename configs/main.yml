@@ -1,0 +1,4 @@
+server:
+  jwt-secret:
+    file: golang
+    admin: password
