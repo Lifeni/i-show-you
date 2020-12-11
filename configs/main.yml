@@ -1,4 +1,6 @@
 server:
+  db-mongo:
+    uri: mongodb://mongo:27017
   jwt-secret:
     file: golang
     admin: password

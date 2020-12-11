@@ -14,7 +14,7 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=webapp /web/build ./public
 COPY --from=server /go/bin/server .
-COPY configs ./configs/
+COPY ./configs/main.yml ./configs/
 RUN apk update && apk --no-cache add ca-certificates && rm -rf /var/cache/apk/*
 
 EXPOSE 8080

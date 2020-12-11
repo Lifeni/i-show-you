@@ -1,17 +1,17 @@
 version: "3"
 
 services:
-  i-show-you-mongo:
+  mongo:
     image: mongo:latest
     restart: always
     ports:
       - 27017:27017
     volumes:
-      - i-show-you-data:/data/db
+      - data:/data/db
     networks:
-      - i-show-you-network
+      - network
 
-  i-show-you-app:
+  app:
     image: lifeni/i-show-you:latest
     restart: always
     ports:
@@ -19,12 +19,12 @@ services:
     volumes:
       - ./configs:/app/configs
     networks:
-      - i-show-you-network
+      - network
     depends_on:
-      - i-show-you-mongo
+      - mongo
 
 volumes:
-  i-show-you-data:
+  data:
 
 networks:
-  i-show-you-network:
+  network:
