@@ -27,11 +27,12 @@
       jwt-secret:
         file: golang
         admin: password
-    ```
-
-    `server.jwt-secret.file` 为文件创建者的 JWT 加密秘钥，用于验证文件的创建者（只有创建者才可以修改文件）。
-
-    `server.jwt-secert.admin` 为后台管理页面的 JWT 加密秘钥，用于验证管理员权限。
+    
+    admin:
+          password: 1234
+	```
+    
+    详细配置请查看文档 [配置 | I Show You](https://lifeni.github.io/i-show-you/config/) 。
     
 3. 在文件夹下执行下面的命令启动容器。
 

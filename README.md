@@ -27,11 +27,12 @@ It is recommended to use Docker Compose for deployment.
       jwt-secret:
         file: golang
         admin: password
+    
+    admin:
+      password: 1234
     ```
 
-    `server.jwt-secret.file` is the JWT encryption key of the file creator, which is used to verify the creator of the file (only the creator can modify the file).
-
-    `server.jwt-secert.admin` is the JWT encryption key of the background management page, used to verify the administrator's authority.
+    For detailed configuration, please see [Configuration | I Show You](https://lifeni.github.io/i-show-you/config/) .
 
 3. Execute the following command in the folder to start the container.
 
