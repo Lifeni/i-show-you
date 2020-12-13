@@ -13,6 +13,9 @@ type Config struct {
 			Admin string `yaml:"admin"`
 		}
 	}
+	Admin struct {
+		Password string `yaml:"password"`
+	}
 }
 
 func GetConfig() *Config {

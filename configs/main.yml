@@ -2,3 +2,6 @@ server:
   jwt-secret:
     file: golang
     admin: password
+
+admin:
+  password: 1234
