@@ -1,4 +1,4 @@
-import { Add20 } from '@carbon/icons-react'
+import { Add20, Cloud20, Screen16, Screen20 } from '@carbon/icons-react'
 import {
   HeaderGlobalAction,
   HeaderMenuItem,
@@ -8,8 +8,13 @@ import {
 import React, { forwardRef, useContext, useEffect, useState } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import store from 'store2'
+import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../App'
+
+const StyledScreenIcon = styled(Screen16)`
+  margin: -2px 8px -2px 0;
+`
 
 const HeaderFileTab = forwardRef((_, ref) => {
   const { pageId } = useContext(GlobalContext)
@@ -36,10 +41,10 @@ const HeaderFileTab = forwardRef((_, ref) => {
             key={JSON.parse(debouncedTabData[key]).created_at}
             to={`/`}
           >
-            {'# ' +
-              (JSON.parse(debouncedTabData[key]).name === ''
-                ? 'Untitled File'
-                : JSON.parse(debouncedTabData[key]).name)}
+            <StyledScreenIcon />
+            {JSON.parse(debouncedTabData[key]).name === ''
+              ? 'Untitled File'
+              : JSON.parse(debouncedTabData[key]).name}
           </HeaderMenuItem>
         ) : null
       )}
@@ -99,11 +104,11 @@ const SideNavFileTab = () => {
               key={JSON.parse(debouncedTabData[key]).created_at}
               to={`/`}
               large
+              renderIcon={Screen20}
             >
-              {'# ' +
-                (JSON.parse(debouncedTabData[key]).name === ''
-                  ? 'Untitled File'
-                  : JSON.parse(debouncedTabData[key]).name)}
+              {JSON.parse(debouncedTabData[key]).name === ''
+                ? 'Untitled File'
+                : JSON.parse(debouncedTabData[key]).name}
             </SideNavLink>
           ) : null
         )}
@@ -116,6 +121,7 @@ const SideNavFileTab = () => {
               key={JSON.parse(debouncedTabData[key]).created_at}
               to={`/${key}`}
               large
+              renderIcon={Cloud20}
             >
               {JSON.parse(debouncedTabData[key]).name === ''
                 ? 'Untitled File'
