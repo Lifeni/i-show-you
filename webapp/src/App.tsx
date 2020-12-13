@@ -87,10 +87,14 @@ const App = () => {
       const tabs = store.namespace('tabs')
       const currentPage = store.namespace('local-file')
       if (!currentPage.get('created-at')) {
-        tabs.set('local-file', 'Untitled File')
+        const date = new Date()
+        tabs.set(
+          'local-file',
+          JSON.stringify({ name: 'Untitled File', created_at: date })
+        )
         currentPage.set('token', '')
-        currentPage.set('created-at', new Date(), false)
-        currentPage.set('updated-at', '')
+        currentPage.set('created-at', date, false)
+        currentPage.set('updated-at', date)
         currentPage.set('name', '')
         currentPage.set('type', '')
         currentPage.set('content', '')

@@ -19,6 +19,10 @@ const StyledHeader = styled(Header)`
   position: relative;
 `
 
+const StyledHeaderName = styled(HeaderName)`
+  white-space: nowrap;
+`
+
 const HeaderBar = () => {
   return (
     <HeaderContainer
@@ -30,9 +34,9 @@ const HeaderBar = () => {
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
           />
-          <HeaderName href="/" prefix="I Show">
+          <StyledHeaderName href="/" prefix="I Show">
             You
-          </HeaderName>
+          </StyledHeaderName>
           <HeaderNavigation aria-label="Your Files">
             <HeaderFileTab />
           </HeaderNavigation>

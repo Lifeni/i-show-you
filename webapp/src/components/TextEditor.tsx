@@ -30,6 +30,7 @@ const TextEditor = () => {
 
   useEffect(() => {
     setValue(currentPage.get('content') || '')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 
   function handleEditorDidMount(_valueGetter: any, editor: any) {
@@ -43,6 +44,8 @@ const TextEditor = () => {
 
   useEffect(() => {
     currentPage.set('content', debouncedValue)
+    currentPage.set('updated-at', new Date())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue])
 
   return (

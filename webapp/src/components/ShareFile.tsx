@@ -26,7 +26,13 @@ const ShareFile = () => {
       if (res.ok) {
         const data = await res.json()
         const tabs = store.namespace('tabs')
-        tabs.set(data.id, currentPage.get('name'))
+        tabs.set(
+          data.id,
+          JSON.stringify({
+            name: currentPage.get('name'),
+            created_at: currentPage.get('created-at'),
+          })
+        )
         tabs.remove('local-file')
         const targetPage = store.namespace(data.id)
         targetPage.set('token', data.token)
@@ -59,10 +65,9 @@ const ShareFile = () => {
           />
         ) : (
           <Button
-            kind="tertiary"
+            kind="primary"
             size="field"
             renderIcon={Link20}
-            style={{ border: 'none', paddingRight: '56px' }}
             onClick={share}
           >
             Get Share Link
@@ -79,12 +84,7 @@ const ShareFile = () => {
           size="field"
         />
       ) : (
-        <Button
-          kind="tertiary"
-          size="field"
-          renderIcon={Information20}
-          style={{ border: 'none', paddingRight: '56px' }}
-        >
+        <Button kind="primary" size="field" renderIcon={Information20}>
           Link Info
         </Button>
       )}

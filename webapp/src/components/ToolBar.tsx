@@ -54,9 +54,14 @@ const ToolBar = (props: {
   const [debouncedName] = useDebounce(name, 300)
 
   const changeLanguage = (e: { target: { value: string } }) => {
-    console.log(e)
     setName(e.target.value)
-    tabs.set(pageId, e.target.value === '' ? 'Untitled File' : e.target.value)
+    tabs.set(
+      pageId,
+      JSON.stringify({
+        name: e.target.value,
+        created_at: store.namespace(pageId).get('created-at'),
+      })
+    )
     window.dispatchEvent(new Event('storage'))
     const arr = e.target.value.split('.')
     if (e.target.value.includes('.') && arr.length > 0) {
@@ -68,10 +73,14 @@ const ToolBar = (props: {
 
   useEffect(() => {
     currentPage.set('name', debouncedName)
+    currentPage.set('updated-at', new Date())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName])
 
   useEffect(() => {
     currentPage.set('type', debouncedType)
+    currentPage.set('updated-at', new Date())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedType])
 
   useEffect(() => {
@@ -84,6 +93,7 @@ const ToolBar = (props: {
     if (input) {
       input.value = currentPage.get('name') || ''
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 
   const focusEditor = (e: { code: string }) => {

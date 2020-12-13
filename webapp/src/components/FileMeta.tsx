@@ -1,8 +1,8 @@
 import { TooltipDefinition } from 'carbon-components-react'
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useContext } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
+import { GlobalContext } from '../App'
 
 const TooltipWrapper = styled.div`
   padding: 0 18px;
@@ -11,8 +11,8 @@ const TooltipWrapper = styled.div`
 
 const FileMeta = (props: { type: IFileMap }) => {
   const { type } = props
-  const { id }: IURLParams = useParams()
-  const currentPage = store.namespace(id || 'local-file')
+  const { pageId } = useContext(GlobalContext)
+  const currentPage = store.namespace(pageId)
   return (
     <>
       <TooltipWrapper>
