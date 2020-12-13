@@ -5,42 +5,88 @@ import {
   SideNavItems,
   SideNavLink,
 } from 'carbon-components-react'
-import React, { forwardRef } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { forwardRef, useContext, useState } from 'react'
+import { Link, LinkProps } from 'react-router-dom'
 import store from 'store2'
+import { useDebounce } from 'use-debounce'
+import { GlobalContext } from '../App'
 
 const HeaderFileTab = forwardRef((_, ref) => {
-  const { id }: IURLParams = useParams()
-  const currentPage = store.namespace(id || 'local-file')
+  const { pageId } = useContext(GlobalContext)
+  const tabs = store.namespace('tabs')
+
+  const [tabData, setTabData] = useState(tabs.getAll())
+  const [debouncedTabData] = useDebounce(tabData, 300)
+
+  const updateTabData = () => {
+    setTabData(tabs.getAll())
+  }
+  window.addEventListener('storage', updateTabData, false)
 
   return (
     <>
-      <HeaderMenuItem ref={ref} isCurrentPage>
-        {currentPage.get('token') === '' ? 'Local File' : id.slice(-8)}
-      </HeaderMenuItem>
-      <HeaderGlobalAction
-        aria-label="New Tab"
-        onClick={() => {}}
-        className="fix-icon-position"
-      >
-        <Add20 />
-      </HeaderGlobalAction>
+      {Object.keys(debouncedTabData).map(key => (
+        <HeaderMenuItem<LinkProps>
+          element={Link}
+          isCurrentPage={key === pageId}
+          key={key}
+          to={`/${key === 'local-file' ? '' : key}`}
+        >
+          {(key === 'local-file' ? '# ' : '') + debouncedTabData[key]}
+        </HeaderMenuItem>
+      ))}
+      {Object.keys(debouncedTabData).includes('local-file') || (
+        <Link to="/">
+          <HeaderGlobalAction
+            aria-label="New Tab"
+            className="fix-icon-position"
+          >
+            <Add20 />
+          </HeaderGlobalAction>
+        </Link>
+      )}
     </>
   )
 })
 
 const SideNavFileTab = () => {
-  const { id }: IURLParams = useParams()
-  const currentPage = store.namespace(id || 'local-file')
+  const { pageId } = useContext(GlobalContext)
+  const tabs = store.namespace('tabs')
+
+  const [tabData, setTabData] = useState(tabs.getAll())
+  const [debouncedTabData] = useDebounce(tabData, 300)
+
+  const updateTabData = () => {
+    setTabData(tabs.getAll())
+  }
+  window.addEventListener('storage', updateTabData, false)
+
   return (
     <>
       <SideNavItems>
-        <SideNavLink large aria-current="page">
-          {currentPage.get('token') === '' ? 'Local File' : id.slice(-8)}
-        </SideNavLink>
-        <SideNavLink renderIcon={Add20} large>
-          New Tab
-        </SideNavLink>
+        {Object.keys(debouncedTabData).map(key => (
+          <SideNavLink<LinkProps>
+            element={Link}
+            aria-current={key === pageId ? 'page' : 'false'}
+            key={key}
+            to={`/${key === 'local-file' ? '' : key}`}
+            large
+          >
+            {(key === 'local-file' ? '# ' : '') + debouncedTabData[key]}
+          </SideNavLink>
+        ))}
+        {Object.keys(debouncedTabData).includes('local-file') ? (
+          ''
+        ) : (
+          <SideNavLink<LinkProps>
+            element={Link}
+            to="/"
+            renderIcon={Add20}
+            large
+          >
+            New Tab
+          </SideNavLink>
+        )}
       </SideNavItems>
     </>
   )

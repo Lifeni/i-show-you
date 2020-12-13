@@ -9,6 +9,7 @@ interface IFileMap {
 
 interface IGlobalData {
   isMobile: boolean
+  pageId: string
 }
 
 interface IURLParams {

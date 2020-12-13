@@ -1,9 +1,9 @@
 import { TextInput } from 'carbon-components-react'
 import React, { MutableRefObject, useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
+import { GlobalContext } from '../App'
 import { findByExt, findBySlug } from '../utils/identify-file-type'
 import FileHistory from './FileHistory'
 import FileMeta from './FileMeta'
@@ -11,7 +11,6 @@ import FileOption from './FileOption'
 import RemoveFile from './RemoveFile'
 import RunFile from './RunFile'
 import ShareFile from './ShareFile'
-import { GlobalContext } from '../App'
 
 const ToolBarWrapper = styled.div`
   width: 100%;
@@ -44,18 +43,21 @@ const ToolBar = (props: {
   updateType: Function
 }) => {
   const { editor, updateType } = props
-  const { isMobile } = useContext(GlobalContext)
+  const { isMobile, pageId } = useContext(GlobalContext)
 
-  const { id }: IURLParams = useParams()
-  const currentPage = store.namespace(id || 'local-file')
+  const currentPage = store.namespace(pageId)
+  const tabs = store.namespace('tabs')
 
-  const [type, setType] = useState(currentPage.get('type'))
-  const [name, setName] = useState(currentPage.get('name'))
-  const [debouncedType] = useDebounce(type, 500)
-  const [debouncedName] = useDebounce(name, 500)
+  const [type, setType] = useState(currentPage.get('type') || '')
+  const [name, setName] = useState(currentPage.get('name') || '')
+  const [debouncedType] = useDebounce(type, 300)
+  const [debouncedName] = useDebounce(name, 300)
 
   const changeLanguage = (e: { target: { value: string } }) => {
+    console.log(e)
     setName(e.target.value)
+    tabs.set(pageId, e.target.value === '' ? 'Untitled File' : e.target.value)
+    window.dispatchEvent(new Event('storage'))
     const arr = e.target.value.split('.')
     if (e.target.value.includes('.') && arr.length > 0) {
       const lang = findByExt(arr[arr.length - 1])
@@ -65,12 +67,24 @@ const ToolBar = (props: {
   }
 
   useEffect(() => {
-    currentPage.set('type', debouncedType)
-  }, [currentPage, debouncedType])
+    currentPage.set('name', debouncedName)
+  }, [debouncedName])
 
   useEffect(() => {
-    currentPage.set('name', debouncedName)
-  }, [currentPage, debouncedName])
+    currentPage.set('type', debouncedType)
+  }, [debouncedType])
+
+  useEffect(() => {
+    setName(currentPage.get('name') || '')
+    setType(currentPage.get('type') || '')
+    updateType(currentPage.get('type') || '')
+    const input: HTMLInputElement | null = document.querySelector(
+      '#editor-file-name'
+    )
+    if (input) {
+      input.value = currentPage.get('name') || ''
+    }
+  }, [pageId])
 
   const focusEditor = (e: { code: string }) => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
@@ -79,18 +93,17 @@ const ToolBar = (props: {
     }
   }
 
+  const focusToolBar = () => {
+    const input: HTMLInputElement | null = document.querySelector(
+      '#editor-file-name'
+    )
+    input?.focus()
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
-    if (currentPage.get('name') !== '') {
+    if (currentPage.get('name') === '') {
       setTimeout(() => {
-        // @ts-ignore
-        editor.current?.focus()
-      }, 500)
-    } else {
-      setTimeout(() => {
-        const input: HTMLInputElement | null = document.querySelector(
-          '#editor-file-name'
-        )
-        input?.focus()
+        focusToolBar()
       }, 500)
     }
   })
@@ -109,8 +122,10 @@ const ToolBar = (props: {
           placeholder="Untitled"
           onChange={changeLanguage}
           onKeyPress={focusEditor}
-          defaultValue={!!name ? name : ''}
+          defaultValue={name}
+          title={name}
           autoComplete="off"
+          maxLength={32}
           aria-autocomplete="none"
           autoFocus
           className="styled-input"

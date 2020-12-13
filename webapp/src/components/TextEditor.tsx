@@ -1,7 +1,6 @@
 import Editor from '@monaco-editor/react'
 import { InlineLoading } from 'carbon-components-react'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
@@ -20,14 +19,18 @@ const LoadingWrapper = styled.div`
 `
 
 const TextEditor = () => {
-  const { isMobile } = useContext(GlobalContext)
-  const { id }: IURLParams = useParams()
-  const currentPage = store.namespace(id || 'local-file')
+  const { isMobile, pageId } = useContext(GlobalContext)
+  const currentPage = store.namespace(pageId)
 
-  const [type, setType] = useState(currentPage.get('type'))
-  const [value, setValue] = useState(currentPage.get('content'))
-  const [debouncedValue] = useDebounce(value, 500)
+  const [type, setType] = useState(currentPage.get('type') || '')
+  const [value, setValue] = useState(currentPage.get('content') || '')
+  const [debouncedValue] = useDebounce(value, 300)
+
   const editorRef = useRef()
+
+  useEffect(() => {
+    setValue(currentPage.get('content') || '')
+  }, [pageId])
 
   function handleEditorDidMount(_valueGetter: any, editor: any) {
     editorRef.current = editor
@@ -40,7 +43,7 @@ const TextEditor = () => {
 
   useEffect(() => {
     currentPage.set('content', debouncedValue)
-  }, [currentPage, debouncedValue])
+  }, [debouncedValue])
 
   return (
     <Wrapper>

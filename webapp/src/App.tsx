@@ -9,7 +9,9 @@ import TextEditor from './components/TextEditor'
 
 const context: IGlobalData = {
   isMobile: false,
+  pageId: 'local-file',
 }
+
 const GlobalContext = createContext(context)
 
 const NotificationWrapper = styled.div`
@@ -50,8 +52,10 @@ const App = () => {
   const [redirect, setRedirect] = useState(false)
 
   const { id }: IURLParams = useParams()
+  const [pageId, setPageId] = useState(id || 'local-file')
 
   useEffect(() => {
+    setPageId(id || 'local-file')
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
@@ -80,11 +84,18 @@ const App = () => {
       }
     } else {
       setLoading(false)
+      const tabs = store.namespace('tabs')
       const currentPage = store.namespace('local-file')
-      currentPage.add('token', '')
-      currentPage.add('name', '')
-      currentPage.add('type', '')
-      currentPage.add('content', '')
+      if (!currentPage.get('created-at')) {
+        tabs.set('local-file', 'Untitled File')
+        currentPage.set('token', '')
+        currentPage.set('created-at', new Date(), false)
+        currentPage.set('updated-at', '')
+        currentPage.set('name', '')
+        currentPage.set('type', '')
+        currentPage.set('content', '')
+        currentPage.set('line', '')
+      }
     }
   }, [id])
 
@@ -111,7 +122,7 @@ const App = () => {
           <Loading description="Loading ..." withOverlay={false} />
         </LoadingWrapper>
       ) : (
-        <GlobalContext.Provider value={{ isMobile: isMobile }}>
+        <GlobalContext.Provider value={{ isMobile: isMobile, pageId: pageId }}>
           <HeaderBar />
           <TextEditor />
         </GlobalContext.Provider>

@@ -17,15 +17,8 @@ import {
   SwitcherItem,
 } from 'carbon-components-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import { Link, LinkProps } from 'react-router-dom'
 import packageFile from '../../package.json'
-
-const StyledLink = styled(Link)`
-  width: 100%;
-  color: inherit;
-  text-decoration: inherit;
-`
 
 const HeaderRightMenu = () => {
   const [switcher, setSwitcher] = useState(false)
@@ -42,17 +35,23 @@ const HeaderRightMenu = () => {
       </HeaderGlobalAction>
       <HeaderPanel aria-label="Header Panel" expanded={switcher}>
         <Switcher aria-label="Switcher Container">
-          <SwitcherItem element="p" aria-label="Home" className="menu-item">
-            <StyledLink to="/home">
-              <StarFilled16 />
-              <span>Home</span>
-            </StyledLink>
+          <SwitcherItem<LinkProps>
+            element={Link}
+            aria-label="Home"
+            className="menu-item"
+            to="/home"
+          >
+            <StarFilled16 />
+            <span>Home</span>
           </SwitcherItem>
-          <SwitcherItem element="p" aria-label="Admin" className="menu-item">
-            <StyledLink to="/admin">
-              <UserAvatarFilled16 />
-              <span>Admin</span>
-            </StyledLink>
+          <SwitcherItem<LinkProps>
+            element={Link}
+            aria-label="Admin"
+            className="menu-item"
+            to="/admin"
+          >
+            <UserAvatarFilled16 />
+            <span>Admin</span>
           </SwitcherItem>
 
           <SwitcherDivider />
