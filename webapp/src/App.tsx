@@ -90,7 +90,11 @@ const App = () => {
         const date = new Date()
         tabs.set(
           'local-file',
-          JSON.stringify({ name: 'Untitled File', created_at: date })
+          JSON.stringify({
+            name: 'Untitled File',
+            created_at: date,
+            id: 'local-file',
+          })
         )
         currentPage.set('token', '')
         currentPage.set('created-at', date, false)

@@ -31,6 +31,7 @@ const ShareFile = () => {
           JSON.stringify({
             name: currentPage.get('name'),
             created_at: currentPage.get('created-at'),
+            id: data.id,
           })
         )
         tabs.remove('local-file')
