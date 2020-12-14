@@ -169,8 +169,8 @@ const Home = () => {
         </Helmet>
         <StyledGrid>
           <Row>
-            <Column sm={0} lg={2} xlg={3} />
-            <Column sm={4} md={8} lg={8} xlg={6}>
+            <Column sm={0} md={1} lg={2} xlg={3} />
+            <Column sm={4} md={6} lg={8} xlg={6}>
               <TopBar>
                 <StyledH1>
                   <img
@@ -192,11 +192,11 @@ const Home = () => {
                 </ButtonWrapper>
               </TopBar>
             </Column>
-            <Column sm={0} lg={2} xlg={3} />
+            <Column sm={0} md={1} lg={2} xlg={3} />
           </Row>
           <Row>
-            <Column sm={0} lg={2} xlg={3} />
-            <Column sm={4} md={8} lg={8} xlg={6}>
+            <Column sm={0} md={1} lg={2} xlg={3} />
+            <Column sm={4} md={6} lg={8} xlg={6}>
               {redirect === '' ? null : <Redirect to={redirect} />}
               {isEmpty ? (
                 <EmptyBox>👀 No File</EmptyBox>
@@ -242,7 +242,7 @@ const Home = () => {
                 </FileBox>
               )}
             </Column>
-            <Column sm={0} lg={1} xlg={2} />
+            <Column sm={0} md={1} lg={2} xlg={3} />
           </Row>
         </StyledGrid>
       </Container>

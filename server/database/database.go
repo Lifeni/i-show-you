@@ -10,8 +10,13 @@ import (
 )
 
 var (
-	Client *mongo.Client
+	Client   *mongo.Client
+	Database *mongo.Database
 )
+
+func GetCollection(name string) *mongo.Collection {
+	return Database.Collection(name)
+}
 
 func ConnectDB() error {
 	var err error
@@ -33,6 +38,7 @@ func ConnectDB() error {
 		return err
 	}
 	log.Println("Connected to database")
+	Database = Client.Database("i-show-you")
 
 	return err
 }

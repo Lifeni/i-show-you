@@ -22,21 +22,24 @@ const ShareFile = () => {
         content: currentPage.get('content'),
         line: currentPage.get('line'),
       }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
     }).then(async res => {
       if (res.ok) {
         const data = await res.json()
         const tabs = store.namespace('tabs')
         tabs.set(
-          data.id,
+          data.data.id,
           JSON.stringify({
             name: currentPage.get('name'),
             created_at: currentPage.get('created-at'),
-            id: data.id,
+            id: data.data.id,
           })
         )
         tabs.remove('local-file')
-        const targetPage = store.namespace(data.id)
-        targetPage.set('token', data.token)
+        const targetPage = store.namespace(data.data.id)
+        targetPage.set('token', data.data.token)
         targetPage.set('name', currentPage.get('name'))
         targetPage.set('created-at', currentPage.get('created-at'))
         targetPage.set('updated-at', currentPage.get('updated-at'))
@@ -44,7 +47,7 @@ const ShareFile = () => {
         targetPage.set('content', currentPage.get('content'))
         targetPage.set('line', currentPage.get('line'))
         currentPage.clearAll()
-        setUuid(data.id)
+        setUuid(data.data.id)
         setRedirect(true)
       }
     })

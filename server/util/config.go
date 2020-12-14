@@ -18,6 +18,14 @@ type Config struct {
 	}
 }
 
+var (
+	ConfigFile *Config
+)
+
+func InitConfig() {
+	ConfigFile = GetConfig()
+}
+
 func GetConfig() *Config {
 	file, err := ioutil.ReadFile("./configs/main.yml")
 	if err != nil {

@@ -26,6 +26,7 @@ const StyledHeaderName = styled(HeaderName)`
 
 const StyledHeaderMenuButton = styled(HeaderMenuButton)`
   width: 48px;
+  min-width: 48px;
   height: 48px;
 `
 

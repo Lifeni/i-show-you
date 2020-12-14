@@ -13,7 +13,7 @@ import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../App'
 
 const StyledScreenIcon = styled(Screen16)`
-  margin: -2px 8px -2px 0;
+  margin: -4px 8px -4px 0;
 `
 
 const HeaderFileTab = forwardRef((_, ref) => {

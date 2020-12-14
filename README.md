@@ -42,7 +42,7 @@ It is recommended to use Docker Compose for deployment.
 
     The `-d` command stands for background execution, and you can view real-time output if you remove it.
 
-    > Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file yourself.
+> Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file yourself.
 
 ## Documentation
 

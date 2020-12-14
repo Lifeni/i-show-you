@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"server/database"
 	"server/router"
+	"server/util"
 )
 
 func main() {
@@ -25,6 +26,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		util.InitConfig()
+		router.InitFileCollection()
 
 		e.Static("/", "./public/")
 		e.GET("/:path", func(c echo.Context) error {
