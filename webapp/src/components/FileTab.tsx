@@ -29,7 +29,11 @@ const HeaderFileTab = forwardRef((_, ref) => {
     }
 
     window.addEventListener('storage', updateTabData, false)
-  }, [tabs])
+    return () => {
+      window.removeEventListener('storage', updateTabData)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -91,7 +95,11 @@ const SideNavFileTab = () => {
     }
 
     window.addEventListener('storage', updateTabData, false)
-  }, [tabs])
+    return () => {
+      window.removeEventListener('storage', updateTabData)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
