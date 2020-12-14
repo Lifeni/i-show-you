@@ -18,10 +18,19 @@ import {
 } from 'carbon-components-react'
 import React, { useState } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
+import store from 'store2'
 import packageFile from '../../package.json'
 
 const HeaderRightMenu = () => {
   const [switcher, setSwitcher] = useState(false)
+
+  const handleClearAllData = () => {
+    const ans = window.confirm('Really?')
+    if (ans) {
+      store.clearAll()
+      window.location.href = '/'
+    }
+  }
 
   return (
     <>
@@ -90,7 +99,11 @@ const HeaderRightMenu = () => {
             <InformationFilled16 />
             <span>v{packageFile.version}</span>
           </SwitcherItem>
-          <SwitcherItem aria-label="Clear Data" className="menu-item">
+          <SwitcherItem
+            aria-label="Clear Data"
+            className="menu-item"
+            onClick={handleClearAllData}
+          >
             <CloseFilled16 color="#fa4d56" />
             <span className="danger">Clear All Data</span>
           </SwitcherItem>

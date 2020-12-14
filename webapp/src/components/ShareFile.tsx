@@ -20,7 +20,7 @@ const ShareFile = () => {
         name: currentPage.get('name'),
         type: currentPage.get('type'),
         content: currentPage.get('content'),
-        line: currentPage.get('line'),
+        options: currentPage.get('options'),
       }),
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -34,7 +34,9 @@ const ShareFile = () => {
           JSON.stringify({
             name: currentPage.get('name'),
             created_at: currentPage.get('created-at'),
+            updated_at: currentPage.get('updated-at'),
             id: data.data.id,
+            authentication: currentPage.get('authentication'),
           })
         )
         tabs.remove('local-file')
@@ -45,7 +47,9 @@ const ShareFile = () => {
         targetPage.set('updated-at', currentPage.get('updated-at'))
         targetPage.set('type', currentPage.get('type'))
         targetPage.set('content', currentPage.get('content'))
-        targetPage.set('line', currentPage.get('line'))
+        targetPage.set('authentication', currentPage.get('authentication'))
+        targetPage.set('options', currentPage.get('options'))
+
         currentPage.clearAll()
         setUuid(data.data.id)
         setRedirect(true)

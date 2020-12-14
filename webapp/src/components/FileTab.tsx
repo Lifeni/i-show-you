@@ -13,7 +13,7 @@ import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../App'
 
 const StyledScreenIcon = styled(Screen16)`
-  margin: -4px 8px -4px 0;
+  margin: -3px 8px -3px 0;
 `
 
 const HeaderFileTab = forwardRef((_, ref) => {
@@ -71,7 +71,7 @@ const HeaderFileTab = forwardRef((_, ref) => {
       ) ? null : (
         <Link to="/" key="add-file">
           <HeaderGlobalAction
-            aria-label="New Tab"
+            aria-label="New File"
             className="fix-icon-position"
           >
             <Add20 />
@@ -147,7 +147,7 @@ const SideNavFileTab = () => {
             large
             key="add-file"
           >
-            New Tab
+            New File
           </SideNavLink>
         )}
       </SideNavItems>

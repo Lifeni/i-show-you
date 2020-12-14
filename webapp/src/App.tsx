@@ -60,26 +60,44 @@ const App = () => {
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
-        if (!currentPage.has('token')) {
-          fetch(`/api/file/${id}`).then(async res => {
-            const data = await res.json()
-            setLoading(false)
-            if (res.status === 200) {
-              // currentPage.add('remote', data)
-            } else if (res.status === 404) {
-              setRedirect(true)
-            } else {
-              setNotification({
-                status: res.status,
-                statusText: res.statusText,
-                message: data.message,
-                documentation: data.documentation,
+        fetch(`/api/file/${id}`, {
+          headers: new Headers({
+            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+          }),
+        }).then(async res => {
+          const data = await res.json()
+          if (res.status === 200) {
+            const tabs = store.namespace('tabs')
+            tabs.set(
+              id,
+              JSON.stringify({
+                name: data.data.name,
+                created_at: data.data.created_at,
+                updated_at: data.data.updated_at,
+                id: id,
+                authentication: data.authentication,
               })
-            }
-          })
-        } else {
+            )
+
+            currentPage.set('created-at', data.data.created_at, true)
+            currentPage.set('updated-at', data.data.updated_at, true)
+            currentPage.set('name', data.data.name, true)
+            currentPage.set('type', data.data.type, true)
+            currentPage.set('content', data.data.content, true)
+            currentPage.set('authentication', data.authentication, true)
+            currentPage.set('options', '{}')
+          } else if (res.status === 404) {
+            setRedirect(true)
+          } else {
+            setNotification({
+              status: res.status,
+              statusText: res.statusText,
+              message: data.message,
+              documentation: data.documentation,
+            })
+          }
           setLoading(false)
-        }
+        })
       } else {
         setRedirect(true)
       }
@@ -103,22 +121,28 @@ const App = () => {
         currentPage.set('name', '')
         currentPage.set('type', '')
         currentPage.set('content', '')
-        currentPage.set('line', '')
+        currentPage.set('authentication', 'owner')
+        currentPage.set('options', '{}')
       }
     }
   }, [id])
 
-  let isMobile = false
+  const [isMobile, setMobile] = useState(false)
+  useEffect(() => {
+    const checkWidth = () => {
+      window.requestAnimationFrame(() => {
+        setMobile(window.innerWidth < 720)
+      })
+    }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    isMobile = window.innerWidth < 720
-  })
+    window.addEventListener('DOMContentLoaded', checkWidth)
+    window.addEventListener('resize', checkWidth)
 
-  window.addEventListener('resize', () => {
-    window.requestAnimationFrame(() => {
-      isMobile = window.innerWidth < 720
-    })
-  })
+    return () => {
+      window.removeEventListener('DOMContentLoaded', checkWidth)
+      window.removeEventListener('resize', checkWidth)
+    }
+  }, [])
 
   return (
     <HelmetProvider>

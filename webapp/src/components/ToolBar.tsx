@@ -125,7 +125,9 @@ const ToolBar = (props: {
         {!isMobile && <FileMeta type={findBySlug(type)} />}
         <FileOption />
         <FileHistory />
-        {!isMobile && <RemoveFile />}
+        {!isMobile && currentPage.get('authentication') === 'owner' && (
+          <RemoveFile />
+        )}
       </ToolBarLeftWrapper>
       <ToolBarCenterWrapper>
         <TextInput
@@ -139,13 +141,16 @@ const ToolBar = (props: {
           maxLength={32}
           aria-autocomplete="none"
           autoFocus
+          readOnly={currentPage.get('authentication') !== 'owner'}
           className="styled-input"
           id="editor-file-name"
         />
       </ToolBarCenterWrapper>
       <ToolBarRightWrapper className="fixed-width">
         {!isMobile && <RunFile type={findBySlug(type)} />}
-        {isMobile && <RemoveFile />}
+        {isMobile && currentPage.get('authentication') === 'owner' && (
+          <RemoveFile />
+        )}
         <ShareFile />
       </ToolBarRightWrapper>
     </ToolBarWrapper>
