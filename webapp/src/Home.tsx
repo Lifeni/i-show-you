@@ -1,4 +1,4 @@
-import { Add20, Cloud20, Screen20, View20 } from '@carbon/icons-react'
+import { Add20, Cloud20, Edit20, Screen20 } from '@carbon/icons-react'
 import {
   Button,
   ClickableTile,
@@ -39,8 +39,22 @@ const TopBar = styled.div`
 `
 
 const StyledH1 = styled.h1`
+  display: flex;
   padding: 24px 0;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
+  align-items: center;
+
+  img {
+    margin: 0 24px 0 0;
+    border-radius: 48px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 410px) {
+    img {
+      display: none;
+    }
+  }
 `
 
 const ButtonWrapper = styled.div`
@@ -59,9 +73,11 @@ const EmptyBox = styled.div`
 `
 
 const FileBox = styled.div`
+  max-height: calc(100vh - 192px);
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow: auto;
 `
 
 const StyledTile = styled(ClickableTile)`
@@ -77,7 +93,7 @@ const StyledTile = styled(ClickableTile)`
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: light;
     white-space: nowrap;
   }
@@ -119,6 +135,18 @@ const Home = () => {
     }
   }, [path])
 
+  let isMobile = false
+
+  window.addEventListener('DOMContentLoaded', () => {
+    isMobile = window.innerWidth < 720
+  })
+
+  window.addEventListener('resize', () => {
+    window.requestAnimationFrame(() => {
+      isMobile = window.innerWidth < 720
+    })
+  })
+
   useEffect(() => {
     if (tabs.size() === 0) {
       setEmpty(true)
@@ -141,14 +169,22 @@ const Home = () => {
         </Helmet>
         <StyledGrid>
           <Row>
-            <Column sm={0} lg={1} xlg={2} />
-            <Column sm={4} md={8} lg={10} xlg={8}>
+            <Column sm={0} lg={2} xlg={3} />
+            <Column sm={4} md={8} lg={8} xlg={6}>
               <TopBar>
-                <StyledH1>{message}</StyledH1>
+                <StyledH1>
+                  <img
+                    src="/assets/logo.svg"
+                    alt="Logo"
+                    width={48}
+                    height={48}
+                  />
+                  {message}
+                </StyledH1>
                 <ButtonWrapper>
                   <Link to="/">
                     {Object.keys(tabData).some(key => key === 'local-file') ? (
-                      <Button renderIcon={View20}>View Local File</Button>
+                      <Button renderIcon={Edit20}>Edit Local File</Button>
                     ) : (
                       <Button renderIcon={Add20}>New File</Button>
                     )}
@@ -156,11 +192,11 @@ const Home = () => {
                 </ButtonWrapper>
               </TopBar>
             </Column>
-            <Column sm={0} lg={1} xlg={2} />
+            <Column sm={0} lg={2} xlg={3} />
           </Row>
           <Row>
-            <Column sm={0} lg={1} xlg={2} />
-            <Column sm={4} md={8} lg={10} xlg={8}>
+            <Column sm={0} lg={2} xlg={3} />
+            <Column sm={4} md={8} lg={8} xlg={6}>
               {redirect === '' ? null : <Redirect to={redirect} />}
               {isEmpty ? (
                 <EmptyBox>👀 No File</EmptyBox>
@@ -189,12 +225,14 @@ const Home = () => {
                         <h2>{JSON.parse(tabData[key]).name}</h2>
                       </div>
 
-                      <p>
-                        {store
-                          .namespace(JSON.parse(tabData[key]).id)
-                          .get('content')
-                          .slice(0, 120)}
-                      </p>
+                      {isMobile ? null : (
+                        <p>
+                          {store
+                            .namespace(JSON.parse(tabData[key]).id)
+                            .get('content')
+                            .slice(0, 120)}
+                        </p>
+                      )}
 
                       <time>
                         {dayjs(JSON.parse(tabData[key]).created_at).fromNow()}

@@ -13,6 +13,7 @@ import styled from 'styled-components'
 
 import { HeaderFileTab, SideNavFileTab } from './FileTab'
 import HeaderRightMenu from './HeaderRightMenu'
+import HorizontalScroller from './HorizontalScroller'
 import SwitchLanguage from './SwitchLanguage'
 
 const StyledHeader = styled(Header)`
@@ -23,13 +24,18 @@ const StyledHeaderName = styled(HeaderName)`
   white-space: nowrap;
 `
 
+const StyledHeaderMenuButton = styled(HeaderMenuButton)`
+  width: 48px;
+  height: 48px;
+`
+
 const HeaderBar = () => {
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
         <StyledHeader aria-label="Header of I Show You">
           <SkipToContent />
-          <HeaderMenuButton
+          <StyledHeaderMenuButton
             aria-label="Open Menu"
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
@@ -37,9 +43,17 @@ const HeaderBar = () => {
           <StyledHeaderName href="/" prefix="I Show">
             You
           </StyledHeaderName>
-          <HeaderNavigation aria-label="Your Files">
-            <HeaderFileTab />
-          </HeaderNavigation>
+
+          <HorizontalScroller>
+            <HeaderNavigation
+              key="header-nav"
+              id="header-nav"
+              aria-label="Your Files"
+            >
+              <HeaderFileTab />
+            </HeaderNavigation>
+          </HorizontalScroller>
+
           <SideNav
             aria-label="Side Navigation"
             expanded={isSideNavExpanded}

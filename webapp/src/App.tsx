@@ -1,5 +1,6 @@
 import { Loading, ToastNotification } from 'carbon-components-react'
 import React, { createContext, useEffect, useState } from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
@@ -64,7 +65,7 @@ const App = () => {
             const data = await res.json()
             setLoading(false)
             if (res.status === 200) {
-              currentPage.add('remote', data)
+              // currentPage.add('remote', data)
             } else if (res.status === 404) {
               setRedirect(true)
             } else {
@@ -107,24 +108,25 @@ const App = () => {
     }
   }, [id])
 
-  const [isMobile, setMobile] = useState(false)
+  let isMobile = false
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setMobile(window.innerWidth < 720)
-    }
+  window.addEventListener('DOMContentLoaded', () => {
+    isMobile = window.innerWidth < 720
+  })
 
-    checkMobile()
-
-    window.addEventListener('resize', () => {
-      window.requestAnimationFrame(() => {
-        checkMobile()
-      })
+  window.addEventListener('resize', () => {
+    window.requestAnimationFrame(() => {
+      isMobile = window.innerWidth < 720
     })
-  }, [isMobile])
+  })
 
   return (
-    <>
+    <HelmetProvider>
+      <Helmet>
+        <title>
+          {store.namespace(pageId).get('name') || 'Untitled File'} | I Show You
+        </title>
+      </Helmet>
       {loading ? (
         <LoadingWrapper>
           <Loading description="Loading ..." withOverlay={false} />
@@ -144,7 +146,7 @@ const App = () => {
           />
         </NotificationWrapper>
       )}
-    </>
+    </HelmetProvider>
   )
 }
 
