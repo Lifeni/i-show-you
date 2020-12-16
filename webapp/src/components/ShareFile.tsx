@@ -8,17 +8,30 @@ import {
   Switch,
 } from 'carbon-components-react'
 import React, { useContext, useState } from 'react'
+import QRCode from 'react-qr-code'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { GlobalContext } from '../App'
 
 const CodeSnippetWrapper = styled.div`
-  padding: 16px 0 12px 0;
+  margin: 12px 0;
 `
 
 const StyledLink16 = styled(Link16)`
   margin: -3px 8px -3px 0;
+`
+
+const Label = styled.p`
+  font-size: 0.875rem;
+  margin: 12px 4px;
+`
+
+const QRCodeWrapper = styled.div`
+  width: 100%;
+  padding: 3rem 24px 0 24px;
+  display: flex;
+  justify-content: center;
 `
 
 const ShareFile = () => {
@@ -164,9 +177,9 @@ const ShareFile = () => {
             onKeyDown={() => {}}
           />
           <Switch
-            name="markdown"
-            text="Markdown"
-            onClick={() => handleSwitch('markdown')}
+            name="qrcode"
+            text="QR Code"
+            onClick={() => handleSwitch('qrcode')}
             onKeyDown={() => {}}
           />
           <Switch
@@ -184,6 +197,7 @@ const ShareFile = () => {
         </ContentSwitcher>
         {pageSwitch === 'link' ? (
           <>
+            <Label>1. Normal Link</Label>
             <CodeSnippetWrapper>
               <CodeSnippet
                 type="multi"
@@ -194,13 +208,7 @@ const ShareFile = () => {
                 {window.location.href}
               </CodeSnippet>
             </CodeSnippetWrapper>
-            <Link href={window.location.href} target="_blank">
-              <StyledLink16 />
-              {window.location.href}
-            </Link>
-          </>
-        ) : pageSwitch === 'markdown' ? (
-          <>
+            <Label>2. Markdown Link</Label>
             <CodeSnippetWrapper>
               <CodeSnippet
                 type="multi"
@@ -213,11 +221,16 @@ const ShareFile = () => {
                 {`[${document.title}](${window.location.href})`}
               </CodeSnippet>
             </CodeSnippetWrapper>
+
             <Link href={window.location.href} target="_blank">
               <StyledLink16 />
-              {document.title}
+              Open link in new tab
             </Link>
           </>
+        ) : pageSwitch === 'qrcode' ? (
+          <QRCodeWrapper>
+            <QRCode value={window.location.href} />
+          </QRCodeWrapper>
         ) : pageSwitch === 'raw' ? (
           <>
             <CodeSnippetWrapper>
@@ -239,7 +252,7 @@ const ShareFile = () => {
               target="_blank"
             >
               <StyledLink16 />
-              {window.location.origin + '/api/file/' + pageId + '/raw'}
+              Open link in new tab
             </Link>
           </>
         ) : pageSwitch === 'embed' ? (
