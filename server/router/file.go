@@ -188,7 +188,6 @@ func QueryRawFile(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, &res)
 	}
 
-	log.Println(file.Content)
 	return c.String(http.StatusOK, file.Content)
 }
 
