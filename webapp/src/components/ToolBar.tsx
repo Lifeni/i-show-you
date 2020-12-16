@@ -75,18 +75,23 @@ const ToolBar = (props: {
   }
 
   useEffect(() => {
-    currentPage.set('name', debouncedName)
-    currentPage.set('type', debouncedType)
-
-    currentPage.set('updated-at', new Date())
-    const pre = tabs.get(pageId)
-    tabs.set(
-      pageId,
-      JSON.stringify({
-        ...JSON.parse(pre),
-        name: debouncedName,
-      })
-    )
+    if (
+      debouncedName !== currentPage.get('name') ||
+      debouncedType !== currentPage.get('type')
+    ) {
+      currentPage.set('name', debouncedName)
+      currentPage.set('type', debouncedType)
+      currentPage.set('updated-at', new Date())
+      const pre = tabs.get(pageId)
+      tabs.set(
+        pageId,
+        JSON.stringify({
+          ...JSON.parse(pre),
+          name: debouncedName,
+          updated_at: new Date(),
+        })
+      )
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName, debouncedType])
 
@@ -117,13 +122,18 @@ const ToolBar = (props: {
     input?.focus()
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  useEffect(() => {
     if (currentPage.get('name') === '') {
       setTimeout(() => {
         focusToolBar()
       }, 500)
+    } else {
+      setTimeout(() => {
+        // @ts-ignore
+        editor.current?.focus()
+      }, 500)
     }
-  })
+  }, [currentPage, editor])
 
   return (
     <ToolBarWrapper>
@@ -144,7 +154,7 @@ const ToolBar = (props: {
           defaultValue={name}
           title={name}
           autoComplete="off"
-          maxLength={32}
+          maxLength={100}
           aria-autocomplete="none"
           autoFocus
           readOnly={currentPage.get('authentication') !== 'owner'}
