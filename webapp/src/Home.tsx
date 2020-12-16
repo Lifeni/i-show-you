@@ -1,53 +1,87 @@
-import { Add20, Cloud20, Edit20, Screen20 } from '@carbon/icons-react'
+import {
+  BookmarkFilled16,
+  CloseFilled16,
+  Cloud16,
+  DocumentAdd20,
+  DocumentImport20,
+  Edit20,
+  FlagFilled16,
+  InformationFilled16,
+  LogoGithub16,
+  Screen16,
+  StarFilled16,
+  Time16,
+  UserAvatarFilled16,
+} from '@carbon/icons-react'
 import {
   Button,
   ClickableTile,
   Column,
   Grid,
   Row,
+  Switcher,
+  SwitcherDivider,
+  SwitcherItem,
 } from 'carbon-components-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import React, { useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
-import { Link, Redirect, useLocation } from 'react-router-dom'
+import { Link, LinkProps, Redirect, useLocation } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import packageFile from '../package.json'
+import HeaderBar from './components/HeaderBar'
 
 dayjs.extend(relativeTime)
 
 const Container = styled.main`
+  position: relative;
   width: 100%;
-  min-height: 100vh;
-  padding: 48px 12px;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
 `
 
 const StyledGrid = styled(Grid)`
   width: 100%;
+  max-width: unset;
+  margin: 0;
+  padding: 0;
 `
 
-const TopBar = styled.div`
+const StyledRow = styled(Row)`
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0 24px;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  [class*='bx--col'] {
+    padding: 0;
+  }
 `
 
 const StyledH1 = styled.h1`
   display: flex;
-  padding: 24px 0;
+  padding: 48px 40px;
   font-size: 1.5rem;
-  align-items: center;
+  font-weight: bold;
+  flex-direction: column;
+  color: #fff;
 
   img {
-    margin: 0 24px 0 0;
+    margin: 0 0 24px 0;
     border-radius: 48px;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+  }
+
+  span {
+    font-size: 1rem;
+    line-height: 2rem;
+    font-weight: normal;
   }
 
   @media (max-width: 410px) {
@@ -56,7 +90,14 @@ const StyledH1 = styled.h1`
 `
 
 const ButtonWrapper = styled.div`
-  padding: 24px 0;
+  max-width: 960px;
+  margin: 12px auto 36px auto;
+  display: flex;
+  gap: 16px;
+
+  @media (max-width: 410px) {
+    margin: 0 0 16px 0;
+  }
 
   a {
     text-decoration: none;
@@ -64,50 +105,97 @@ const ButtonWrapper = styled.div`
 `
 
 const EmptyBox = styled.div`
-  width: 100%;
+  max-width: 960px;
+  margin: 0 auto 12px auto;
+  height: calc(100vh - 180px);
   min-height: 50vh;
   padding: 48px;
   border: dashed 2px #e0e0e0;
   color: #616161;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
 `
 
 const FileBox = styled.div`
-  max-height: calc(100vh - 192px);
+  max-width: 960px;
+  margin: 0 auto 12px auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 16px;
-  overflow: auto;
 `
 
 const StyledTile = styled(ClickableTile)`
   width: 100%;
-  padding: 0 24px;
+  min-width: 240px;
+  max-width: 300px;
+  padding: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
 
   div {
+    width: 100%;
+    padding: 20px 24px 0 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    svg {
+      min-width: 16px;
+      min-height: 16px;
+      margin: 0;
+    }
+
+    time,
+    span {
+      display: flex;
+      align-items: center;
+      svg {
+        margin: 0 8px 0 0;
+      }
+    }
   }
 
   h2 {
+    width: 100%;
+    padding: 0 24px;
     font-size: 1rem;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  p {
-    width: 100%;
-    margin: 0 24px;
-    white-space: nowrap;
+  pre {
+    position: relative;
+    width: calc(100% - 24px);
+    height: calc((276px / 16) * 9);
+    margin: 8px 12px 12px 12px;
+    padding: 10px 12px;
+    font-size: 0.75rem;
+    line-height: 1rem;
     overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
+    white-space: pre-wrap;
+    background-color: #f4f4f4;
+
+    ::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      width: 100%;
+      display: flex;
+      box-shadow: 0 0 24px 24px #f4f4f4;
+    }
   }
 
   time {
@@ -115,12 +203,48 @@ const StyledTile = styled(ClickableTile)`
   }
 `
 
-const StyledScreenIcon = styled(Screen20)`
-  margin: 0 16px 0 0;
+const SideBar = styled.aside`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #161616;
+
+  svg {
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  span {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `
 
-const StyledCloudIcon = styled(Cloud20)`
-  margin: 0 16px 0 0;
+const FileList = styled.div`
+  width: 100%;
+  height: 100vh;
+  padding: 36px;
+  overflow: auto;
+
+  @media (max-width: 672px) {
+    height: calc(100vh - 48px);
+  }
+
+  @media (max-width: 410px) {
+    padding: 24px;
+  }
+`
+
+const StyledSwitcher = styled(Switcher)`
+  padding: 48px 24px;
+`
+
+const StyledSwitcherDivider = styled(SwitcherDivider)`
+  width: calc(100% - 2rem);
 `
 
 const Home = () => {
@@ -130,6 +254,14 @@ const Home = () => {
   const [isEmpty, setEmpty] = useState(true)
   const path = useLocation().pathname
   const tabs = store.namespace('tabs')
+
+  const handleClearAllData = () => {
+    const ans = window.confirm('Really?')
+    if (ans) {
+      store.clearAll()
+      window.location.href = '/home'
+    }
+  }
 
   useEffect(() => {
     switch (path) {
@@ -146,17 +278,22 @@ const Home = () => {
     }
   }, [path])
 
-  let isMobile = false
+  const [isMobile, setMobile] = useState(false)
+  useEffect(() => {
+    const checkWidth = () => {
+      window.requestAnimationFrame(() => {
+        setMobile(window.innerWidth < 720)
+      })
+    }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    isMobile = window.innerWidth < 720
-  })
+    window.addEventListener('DOMContentLoaded', checkWidth)
+    window.addEventListener('resize', checkWidth)
 
-  window.addEventListener('resize', () => {
-    window.requestAnimationFrame(() => {
-      isMobile = window.innerWidth < 720
-    })
-  })
+    return () => {
+      window.removeEventListener('DOMContentLoaded', checkWidth)
+      window.removeEventListener('resize', checkWidth)
+    }
+  }, [])
 
   const [tabData, setTabData] = useState(
     Object.values(tabs.getAll())
@@ -203,13 +340,18 @@ const Home = () => {
     <HelmetProvider>
       <Container>
         <Helmet>
-          <title>Home | I Show You</title>
+          <title>
+            {message === 'I Show You' ? 'Home' : message} | I Show You
+          </title>
         </Helmet>
-        <StyledGrid>
-          <Row>
-            <Column sm={0} md={1} lg={2} xlg={3} />
-            <Column sm={4} md={6} lg={8} xlg={6}>
-              <TopBar>
+        {redirect === '' ? null : <Redirect to={redirect} />}
+        <StyledGrid condensed>
+          <StyledRow>
+            <Column sm={4} md={0} lg={0} xlg={0} max={0}>
+              <HeaderBar noNav={true} />
+            </Column>
+            <Column sm={0} md={2} lg={3} xlg={2} max={2}>
+              <SideBar>
                 <StyledH1>
                   <img
                     src={`/assets/${status}.svg`}
@@ -218,64 +360,141 @@ const Home = () => {
                     height={48}
                   />
                   {message}
+                  <br />
+                  <span>Preview</span>
                 </StyledH1>
+                <StyledSwitcher aria-label="Switcher Container">
+                  <SwitcherItem<LinkProps>
+                    element={Link}
+                    aria-label="Home"
+                    className="menu-item"
+                    to="/home"
+                  >
+                    <StarFilled16 />
+                    <span>Home</span>
+                  </SwitcherItem>
+                  <SwitcherItem<LinkProps>
+                    element={Link}
+                    aria-label="Admin"
+                    className="menu-item"
+                    to="/admin"
+                  >
+                    <UserAvatarFilled16 />
+                    <span>Admin</span>
+                  </SwitcherItem>
+
+                  <StyledSwitcherDivider />
+                  <SwitcherItem
+                    aria-label="Documentation"
+                    href="https://lifeni.github.io/i-show-you"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="menu-item"
+                  >
+                    <BookmarkFilled16 />
+                    <span>Documentation</span>
+                  </SwitcherItem>
+                  <SwitcherItem
+                    aria-label="GitHub"
+                    href="https://github.com/Lifeni/i-show-you"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="menu-item"
+                  >
+                    <LogoGithub16 />
+                    <span>GitHub</span>
+                  </SwitcherItem>
+                  <SwitcherItem
+                    aria-label="GitHub Issues"
+                    href="https://github.com/Lifeni/i-show-you/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="menu-item"
+                  >
+                    <FlagFilled16 />
+                    <span>Report Issues</span>
+                  </SwitcherItem>
+                  <StyledSwitcherDivider />
+                  <SwitcherItem aria-label="Version" className="menu-item">
+                    <InformationFilled16 />
+                    <span>v{packageFile.version}</span>
+                  </SwitcherItem>
+                  <SwitcherItem
+                    aria-label="Clear Data"
+                    className="menu-item"
+                    onClick={handleClearAllData}
+                  >
+                    <CloseFilled16 color="#fa4d56" />
+                    <span className="danger">Clear All Data</span>
+                  </SwitcherItem>
+                </StyledSwitcher>
+              </SideBar>
+            </Column>
+            <Column sm={4} md={6} lg={9} xlg={10} max={10}>
+              <FileList>
                 <ButtonWrapper>
                   <Link to="/">
                     {tabData.some(data => data.id === 'local-file') ? (
                       <Button renderIcon={Edit20}>Edit Local File</Button>
                     ) : (
-                      <Button renderIcon={Add20}>New File</Button>
+                      <Button renderIcon={DocumentAdd20}>New File</Button>
                     )}
                   </Link>
+                  {isMobile ? null : (
+                    <Button renderIcon={DocumentImport20} kind="secondary">
+                      Import File
+                    </Button>
+                  )}
                 </ButtonWrapper>
-              </TopBar>
+
+                {isEmpty ? (
+                  <EmptyBox>No File</EmptyBox>
+                ) : (
+                  <FileBox>
+                    {tabData.map(data => (
+                      <StyledTile
+                        handleClick={() => {
+                          setRedirect(
+                            `/${data.id === 'local-file' ? '' : data.id}`
+                          )
+                        }}
+                        key={data.created_at}
+                      >
+                        <div>
+                          {data.id === 'local-file' ? (
+                            <span>
+                              <Screen16 />
+                              Local
+                            </span>
+                          ) : (
+                            <span>
+                              <Cloud16 />
+                              Shared
+                            </span>
+                          )}
+                          <time>
+                            <Time16 />
+                            {dayjs(data.updated_at).fromNow()}
+                          </time>
+                        </div>
+
+                        <h2>{data.name || 'Untitled File'}</h2>
+
+                        <pre>
+                          <code>
+                            {store
+                              .namespace(data.id)
+                              .get('content')
+                              .slice(0, 200)}
+                          </code>
+                        </pre>
+                      </StyledTile>
+                    ))}
+                  </FileBox>
+                )}
+              </FileList>
             </Column>
-            <Column sm={0} md={1} lg={2} xlg={3} />
-          </Row>
-          <Row>
-            <Column sm={0} md={1} lg={2} xlg={3} />
-            <Column sm={4} md={6} lg={8} xlg={6}>
-              {redirect === '' ? null : <Redirect to={redirect} />}
-              {isEmpty ? (
-                <EmptyBox>👀 No File</EmptyBox>
-              ) : (
-                <FileBox>
-                  {tabData.map(data => (
-                    <StyledTile
-                      handleClick={() => {
-                        setRedirect(
-                          `/${data.id === 'local-file' ? '' : data.id}`
-                        )
-                      }}
-                      key={data.created_at}
-                    >
-                      <div>
-                        {data.id === 'local-file' ? (
-                          <StyledScreenIcon />
-                        ) : (
-                          <StyledCloudIcon />
-                        )}
-
-                        <h2>{data.name}</h2>
-                      </div>
-
-                      {isMobile ? null : (
-                        <p>
-                          {store
-                            .namespace(data.id)
-                            .get('content')
-                            .slice(0, 120)}
-                        </p>
-                      )}
-
-                      <time>{dayjs(data.updated_at).fromNow()}</time>
-                    </StyledTile>
-                  ))}
-                </FileBox>
-              )}
-            </Column>
-            <Column sm={0} md={1} lg={2} xlg={3} />
-          </Row>
+          </StyledRow>
         </StyledGrid>
       </Container>
     </HelmetProvider>

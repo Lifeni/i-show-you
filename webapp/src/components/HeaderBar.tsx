@@ -9,6 +9,7 @@ import {
   SkipToContent,
 } from 'carbon-components-react'
 import React from 'react'
+import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { HeaderFileTab, SideNavFileTab } from './FileTab'
@@ -20,8 +21,9 @@ const StyledHeader = styled(Header)`
   position: relative;
 `
 
-const StyledHeaderName = styled(HeaderName)`
+const HeaderNameWrapper = styled.div`
   white-space: nowrap;
+  text-decoration: none;
 `
 
 const StyledHeaderMenuButton = styled(HeaderMenuButton)`
@@ -30,40 +32,50 @@ const StyledHeaderMenuButton = styled(HeaderMenuButton)`
   height: 48px;
 `
 
-const HeaderBar = () => {
+const HeaderBar = (props: { noNav: boolean }) => {
+  const { noNav } = props
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
         <StyledHeader aria-label="Header of I Show You">
           <SkipToContent />
-          <StyledHeaderMenuButton
-            aria-label="Open Menu"
-            onClick={onClickSideNavExpand}
-            isActive={isSideNavExpanded}
-          />
-          <StyledHeaderName href="/" prefix="I Show">
-            You
-          </StyledHeaderName>
+          {noNav ? null : (
+            <StyledHeaderMenuButton
+              aria-label="Open Menu"
+              onClick={onClickSideNavExpand}
+              isActive={isSideNavExpanded}
+            />
+          )}
+          <HeaderNameWrapper>
+            <HeaderName<LinkProps> element={Link} prefix="I Show" to="/home">
+              You
+            </HeaderName>
+          </HeaderNameWrapper>
 
-          <HorizontalScroller>
-            <HeaderNavigation
-              key="header-nav"
-              id="header-nav"
-              aria-label="Your Files"
-            >
-              <HeaderFileTab />
-            </HeaderNavigation>
-          </HorizontalScroller>
+          {noNav ? null : (
+            <>
+              <HorizontalScroller>
+                <HeaderNavigation
+                  key="header-nav"
+                  id="header-nav"
+                  aria-label="Your Files"
+                >
+                  <HeaderFileTab />
+                </HeaderNavigation>
+              </HorizontalScroller>
 
-          <SideNav
-            aria-label="Side Navigation"
-            expanded={isSideNavExpanded}
-            isPersistent={false}
-          >
-            <SideNavFileTab />
-          </SideNav>
+              <SideNav
+                aria-label="Side Navigation"
+                expanded={isSideNavExpanded}
+                isPersistent={false}
+              >
+                <SideNavFileTab />
+              </SideNav>
+            </>
+          )}
+
           <HeaderGlobalBar>
-            <SwitchLanguage />
+            {noNav ? null : <SwitchLanguage />}
             <HeaderRightMenu />
           </HeaderGlobalBar>
         </StyledHeader>

@@ -145,7 +145,7 @@ const App = () => {
         </LoadingWrapper>
       ) : (
         <GlobalContext.Provider value={{ isMobile: isMobile, pageId: pageId }}>
-          <HeaderBar />
+          <HeaderBar noNav={false} />
           <TextEditor />
         </GlobalContext.Provider>
       )}
