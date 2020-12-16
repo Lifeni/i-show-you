@@ -12,6 +12,14 @@ interface IGlobalData {
   pageId: string
 }
 
+interface ITabData {
+  name: string
+  created_at: string
+  updated_at: string
+  id: string
+  authentication: string
+}
+
 interface IURLParams {
   id: string
 }

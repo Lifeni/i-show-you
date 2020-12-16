@@ -20,12 +20,27 @@ const HeaderFileTab = forwardRef((_, ref) => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const [tabData, setTabData] = useState(tabs.getAll())
+  const [tabData, setTabData] = useState(
+    Object.values(tabs.getAll())
+      .map(v => JSON.parse(v))
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      )
+  )
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(tabs.getAll())
+      setTabData(
+        Object.values(tabs.getAll())
+          .map(v => JSON.parse(v))
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at).getTime() -
+              new Date(a.updated_at).getTime()
+          )
+      )
     }
 
     window.addEventListener('storage', updateTabData, false)
@@ -37,38 +52,32 @@ const HeaderFileTab = forwardRef((_, ref) => {
 
   return (
     <>
-      {Object.keys(debouncedTabData).map(key =>
-        key === 'local-file' ? (
+      {debouncedTabData.map(data =>
+        data.id === 'local-file' ? (
           <HeaderMenuItem<LinkProps>
             element={Link}
-            isCurrentPage={key === pageId}
-            key={JSON.parse(debouncedTabData[key]).created_at}
+            isCurrentPage={data.id === pageId}
+            key={data.created_at}
             to={`/`}
           >
             <StyledScreenIcon />
-            {JSON.parse(debouncedTabData[key]).name === ''
-              ? 'Untitled File'
-              : JSON.parse(debouncedTabData[key]).name}
+            {data.name === '' ? 'Untitled File' : data.name}
           </HeaderMenuItem>
         ) : null
       )}
-      {Object.keys(debouncedTabData).map(key =>
-        key === 'local-file' ? null : (
+      {debouncedTabData.map(data =>
+        data.id === 'local-file' ? null : (
           <HeaderMenuItem<LinkProps>
             element={Link}
-            isCurrentPage={key === pageId}
-            key={JSON.parse(debouncedTabData[key]).created_at}
-            to={`/${key}`}
+            isCurrentPage={data.id === pageId}
+            key={data.created_at}
+            to={`/${data.id}`}
           >
-            {JSON.parse(debouncedTabData[key]).name === ''
-              ? 'Untitled File'
-              : JSON.parse(debouncedTabData[key]).name}
+            {data.name === '' ? 'Untitled File' : data.name}
           </HeaderMenuItem>
         )
       )}
-      {Object.keys(debouncedTabData).some(
-        key => key === 'local-file'
-      ) ? null : (
+      {debouncedTabData.some(key => key.id === 'local-file') ? null : (
         <Link to="/" key="add-file">
           <HeaderGlobalAction
             aria-label="New File"
@@ -86,12 +95,27 @@ const SideNavFileTab = () => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const [tabData, setTabData] = useState(tabs.getAll())
+  const [tabData, setTabData] = useState(
+    Object.values(tabs.getAll())
+      .map(v => JSON.parse(v))
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      )
+  )
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(tabs.getAll())
+      setTabData(
+        Object.values(tabs.getAll())
+          .map(v => JSON.parse(v))
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at).getTime() -
+              new Date(a.updated_at).getTime()
+          )
+      )
     }
 
     window.addEventListener('storage', updateTabData, false)
@@ -104,42 +128,36 @@ const SideNavFileTab = () => {
   return (
     <>
       <SideNavItems>
-        {Object.keys(debouncedTabData).map(key =>
-          key === 'local-file' ? (
+        {debouncedTabData.map(data =>
+          data.id === 'local-file' ? (
             <SideNavLink<LinkProps>
               element={Link}
-              aria-current={key === pageId ? 'page' : 'false'}
-              key={JSON.parse(debouncedTabData[key]).created_at}
+              aria-current={data.id === pageId ? 'page' : 'false'}
+              key={data.created_at}
               to={`/`}
               large
               renderIcon={Screen20}
             >
-              {JSON.parse(debouncedTabData[key]).name === ''
-                ? 'Untitled File'
-                : JSON.parse(debouncedTabData[key]).name}
+              {data.name === '' ? 'Untitled File' : data.name}
             </SideNavLink>
           ) : null
         )}
 
-        {Object.keys(debouncedTabData).map(key =>
-          key === 'local-file' ? null : (
+        {debouncedTabData.map(data =>
+          data.id === 'local-file' ? null : (
             <SideNavLink<LinkProps>
               element={Link}
-              aria-current={key === pageId ? 'page' : 'false'}
-              key={JSON.parse(debouncedTabData[key]).created_at}
-              to={`/${key}`}
+              aria-current={data.id === pageId ? 'page' : 'false'}
+              key={data.created_at}
+              to={`/${data}`}
               large
               renderIcon={Cloud20}
             >
-              {JSON.parse(debouncedTabData[key]).name === ''
-                ? 'Untitled File'
-                : JSON.parse(debouncedTabData[key]).name}
+              {data.name === '' ? 'Untitled File' : data.name}
             </SideNavLink>
           )
         )}
-        {Object.keys(debouncedTabData).some(
-          key => key === 'local-file'
-        ) ? null : (
+        {debouncedTabData.some(data => data === 'local-file') ? null : (
           <SideNavLink<LinkProps>
             element={Link}
             to="/"

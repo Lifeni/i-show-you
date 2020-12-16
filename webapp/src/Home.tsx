@@ -83,8 +83,7 @@ const FileBox = styled.div`
 `
 
 const StyledTile = styled(ClickableTile)`
-  width: fit-content;
-  min-width: 100%;
+  width: 100%;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -132,8 +131,6 @@ const Home = () => {
   const path = useLocation().pathname
   const tabs = store.namespace('tabs')
 
-  const [tabData, setTabData] = useState(tabs.getAll())
-
   useEffect(() => {
     switch (path) {
       case '/404': {
@@ -161,6 +158,15 @@ const Home = () => {
     })
   })
 
+  const [tabData, setTabData] = useState(
+    Object.values(tabs.getAll())
+      .map(v => JSON.parse(v))
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      )
+  )
+
   useEffect(() => {
     if (tabs.size() === 0) {
       setEmpty(true)
@@ -169,10 +175,24 @@ const Home = () => {
     }
 
     const updateTabData = () => {
-      setTabData(tabs.getAll())
+      setTabData(
+        Object.values(tabs.getAll())
+          .map(v => JSON.parse(v))
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at).getTime() -
+              new Date(a.updated_at).getTime()
+          )
+      )
     }
 
-    window.addEventListener('storage', updateTabData, false)
+    window.addEventListener(
+      'storage',
+      () => {
+        updateTabData()
+      },
+      false
+    )
   }, [tabs])
 
   return (
@@ -197,7 +217,7 @@ const Home = () => {
                 </StyledH1>
                 <ButtonWrapper>
                   <Link to="/">
-                    {Object.keys(tabData).some(key => key === 'local-file') ? (
+                    {tabData.some(data => data.id === 'local-file') ? (
                       <Button renderIcon={Edit20}>Edit Local File</Button>
                     ) : (
                       <Button renderIcon={Add20}>New File</Button>
@@ -216,41 +236,35 @@ const Home = () => {
                 <EmptyBox>👀 No File</EmptyBox>
               ) : (
                 <FileBox>
-                  {Object.keys(tabData).map(key => (
+                  {tabData.map(data => (
                     <StyledTile
                       handleClick={() => {
                         setRedirect(
-                          `/${
-                            JSON.parse(tabData[key]).id === 'local-file'
-                              ? ''
-                              : JSON.parse(tabData[key]).id
-                          }`
+                          `/${data.id === 'local-file' ? '' : data.id}`
                         )
                       }}
-                      key={JSON.parse(tabData[key]).created_at}
+                      key={data.created_at}
                     >
                       <div>
-                        {JSON.parse(tabData[key]).id === 'local-file' ? (
+                        {data.id === 'local-file' ? (
                           <StyledScreenIcon />
                         ) : (
                           <StyledCloudIcon />
                         )}
 
-                        <h2>{JSON.parse(tabData[key]).name}</h2>
+                        <h2>{data.name}</h2>
                       </div>
 
                       {isMobile ? null : (
                         <p>
                           {store
-                            .namespace(JSON.parse(tabData[key]).id)
+                            .namespace(data.id)
                             .get('content')
                             .slice(0, 120)}
                         </p>
                       )}
 
-                      <time>
-                        {dayjs(JSON.parse(tabData[key]).created_at).fromNow()}
-                      </time>
+                      <time>{dayjs(data.updated_at).fromNow()}</time>
                     </StyledTile>
                   ))}
                 </FileBox>

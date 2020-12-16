@@ -60,7 +60,9 @@ const ToolBar = (props: {
       JSON.stringify({
         name: e.target.value,
         created_at: store.namespace(pageId).get('created-at'),
+        updated_at: store.namespace(pageId).get('updated-at'),
         id: pageId,
+        authentication: store.namespace(pageId).get('authentication'),
       })
     )
     window.dispatchEvent(new Event('storage'))

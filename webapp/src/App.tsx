@@ -98,7 +98,9 @@ const App = () => {
           JSON.stringify({
             name: 'Untitled File',
             created_at: date,
+            updated_at: date,
             id: 'local-file',
+            authentication: 'owner',
           })
         )
         currentPage.set('token', '')
