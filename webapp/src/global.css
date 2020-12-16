@@ -1,3 +1,25 @@
+.styled-input.bx--text-input {
+  width: 100%;
+  background-color: #f4f4f4;
+  text-align: center;
+  outline: none;
+  border-bottom: none;
+}
+
+.styled-input.bx--text-input:focus {
+  outline: none;
+}
+
+.fixed-width {
+  width: 33%;
+}
+
+@media (max-width: 720px) {
+  .fixed-width {
+    width: auto;
+  }
+}
+
 .fix-icon-position {
   padding: 12px;
 }

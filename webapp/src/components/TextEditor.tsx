@@ -89,6 +89,7 @@ const TextEditor = () => {
             scale: 1,
             maxColumn: 150,
           },
+          readOnly: currentPage.get('authentication') !== 'owner',
         }}
         editorDidMount={handleEditorDidMount}
       />

@@ -5,8 +5,7 @@ import Admin from './Admin'
 import App from './App'
 import Home from './Home'
 import './index.scss'
-import './styles/HeaderBar.css'
-import './styles/TextEditor.css'
+import './global.css'
 
 ReactDOM.render(
   <React.StrictMode>
