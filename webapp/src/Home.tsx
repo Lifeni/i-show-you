@@ -193,6 +193,10 @@ const Home = () => {
       },
       false
     )
+
+    return () => {
+      window.removeEventListener('storage', updateTabData)
+    }
   }, [tabs])
 
   return (

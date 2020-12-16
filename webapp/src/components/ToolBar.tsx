@@ -76,15 +76,19 @@ const ToolBar = (props: {
 
   useEffect(() => {
     currentPage.set('name', debouncedName)
-    currentPage.set('updated-at', new Date())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedName])
-
-  useEffect(() => {
     currentPage.set('type', debouncedType)
+
     currentPage.set('updated-at', new Date())
+    const pre = tabs.get(pageId)
+    tabs.set(
+      pageId,
+      JSON.stringify({
+        ...JSON.parse(pre),
+        name: debouncedName,
+      })
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedType])
+  }, [debouncedName, debouncedType])
 
   useEffect(() => {
     setName(currentPage.get('name') || '')

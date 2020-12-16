@@ -45,6 +45,15 @@ const TextEditor = () => {
   useEffect(() => {
     currentPage.set('content', debouncedValue)
     currentPage.set('updated-at', new Date())
+    const tabs = store.namespace('tabs')
+    const pre = tabs.get(pageId)
+    tabs.set(
+      pageId,
+      JSON.stringify({
+        ...JSON.parse(pre),
+        updated_at: new Date(),
+      })
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue])
 

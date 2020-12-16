@@ -128,6 +128,18 @@ const SideNavFileTab = () => {
   return (
     <>
       <SideNavItems>
+        {debouncedTabData.some(data => data.id === 'local-file') ? null : (
+          <SideNavLink<LinkProps>
+            element={Link}
+            to="/"
+            renderIcon={Add20}
+            large
+            key="add-file"
+          >
+            New File
+          </SideNavLink>
+        )}
+
         {debouncedTabData.map(data =>
           data.id === 'local-file' ? (
             <SideNavLink<LinkProps>
@@ -156,17 +168,6 @@ const SideNavFileTab = () => {
               {data.name === '' ? 'Untitled File' : data.name}
             </SideNavLink>
           )
-        )}
-        {debouncedTabData.some(data => data === 'local-file') ? null : (
-          <SideNavLink<LinkProps>
-            element={Link}
-            to="/"
-            renderIcon={Add20}
-            large
-            key="add-file"
-          >
-            New File
-          </SideNavLink>
         )}
       </SideNavItems>
     </>
