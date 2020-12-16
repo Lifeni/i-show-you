@@ -1,4 +1,4 @@
-import { Loading, ToastNotification } from 'carbon-components-react'
+import { Loading } from 'carbon-components-react'
 import React, { createContext, useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
@@ -14,13 +14,6 @@ const context: IGlobalData = {
 }
 
 const GlobalContext = createContext(context)
-
-const NotificationWrapper = styled.div`
-  position: fixed;
-  z-index: 99998;
-  top: 48px;
-  right: 0;
-`
 
 const LoadingWrapper = styled.div`
   position: fixed;
@@ -42,15 +35,8 @@ const LoadingWrapper = styled.div`
 `
 
 const App = () => {
-  const [message, setMessage] = useState(false)
-  const [notification, setNotification] = useState({
-    status: 0,
-    statusText: '',
-    message: '',
-    documentation: '',
-  })
   const [loading, setLoading] = useState(true)
-  const [redirect, setRedirect] = useState(false)
+  const [redirect, setRedirect] = useState('200')
 
   const { id }: IURLParams = useParams()
   const [pageId, setPageId] = useState(id || 'local-file')
@@ -60,46 +46,46 @@ const App = () => {
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
-        fetch(`/api/file/${id}`, {
-          headers: new Headers({
-            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
-          }),
-        }).then(async res => {
-          const data = await res.json()
-          if (res.status === 200) {
-            const tabs = store.namespace('tabs')
-            tabs.set(
-              id,
-              JSON.stringify({
-                name: data.data.name,
-                created_at: data.data.created_at,
-                updated_at: data.data.updated_at,
-                id: id,
-                authentication: data.authentication,
-              })
-            )
+        if (currentPage.get('authentication') !== 'owner') {
+          fetch(`/api/file/${id}`, {
+            headers: new Headers({
+              Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+            }),
+          }).then(async res => {
+            const data = await res.json()
+            if (res.status === 200) {
+              const tabs = store.namespace('tabs')
+              tabs.set(
+                id,
+                JSON.stringify({
+                  name: data.data.name,
+                  created_at: data.data.created_at,
+                  updated_at: data.data.updated_at,
+                  id: id,
+                  authentication: data.authentication,
+                })
+              )
 
-            currentPage.set('created-at', data.data.created_at, true)
-            currentPage.set('updated-at', data.data.updated_at, true)
-            currentPage.set('name', data.data.name, true)
-            currentPage.set('type', data.data.type, true)
-            currentPage.set('content', data.data.content, true)
-            currentPage.set('authentication', data.authentication, true)
-            currentPage.set('options', '{}')
-          } else if (res.status === 404) {
-            setRedirect(true)
-          } else {
-            setNotification({
-              status: res.status,
-              statusText: res.statusText,
-              message: data.message,
-              documentation: data.documentation,
-            })
-          }
+              currentPage.set('created-at', data.data.created_at, true)
+              currentPage.set('updated-at', data.data.updated_at, true)
+              currentPage.set('name', data.data.name, true)
+              currentPage.set('type', data.data.type, true)
+              currentPage.set('content', data.data.content, true)
+              currentPage.set('authentication', data.authentication, true)
+              currentPage.set('options', '{}')
+
+              setLoading(false)
+            } else if (res.status === 404) {
+              setRedirect('404')
+            } else {
+              setRedirect('500')
+            }
+          })
+        } else {
           setLoading(false)
-        })
+        }
       } else {
-        setRedirect(true)
+        setRedirect('404')
       }
     } else {
       setLoading(false)
@@ -161,15 +147,7 @@ const App = () => {
           <TextEditor />
         </GlobalContext.Provider>
       )}
-      {redirect && <Redirect to={{ pathname: '/404' }} />}
-      {message && (
-        <NotificationWrapper>
-          <ToastNotification
-            title={notification.message}
-            onCloseButtonClick={() => setMessage(false)}
-          />
-        </NotificationWrapper>
-      )}
+      {redirect !== '200' && <Redirect to={{ pathname: redirect }} />}
     </HelmetProvider>
   )
 }

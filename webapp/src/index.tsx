@@ -18,6 +18,9 @@ ReactDOM.render(
         <Route path="/404">
           <Home />
         </Route>
+        <Route path="/500">
+          <Home />
+        </Route>
         <Route path="/admin">
           <Admin />
         </Route>

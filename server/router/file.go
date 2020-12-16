@@ -101,7 +101,12 @@ func CreateFile(c echo.Context) error {
 
 func QueryFile(c echo.Context) error {
 	id := c.Param("id")
-	tokenString := strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
+	var tokenString string
+	if c.Request().Header.Get("Authorization") != "" {
+		tokenString = strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
+	} else {
+		tokenString = ""
+	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
@@ -117,10 +122,6 @@ func QueryFile(c echo.Context) error {
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			if claims["id"] == id {
 				authentication = "owner"
-				//res := new(ResponseError)
-				//res.Message = "Invalid File ID"
-				//res.Documentation = "https://lifeni.github.io/i-show-you/api"
-				//return c.JSON(http.StatusUnauthorized, &res)
 			}
 		}
 	}
@@ -159,6 +160,36 @@ func QueryFile(c echo.Context) error {
 	res.Authentication = authentication
 	return c.JSON(http.StatusOK, &res)
 
+}
+
+func QueryRawFile(c echo.Context) error {
+
+	id := c.Param("id")
+
+	type QueryData struct {
+		Id string `json:"id"`
+	}
+
+	var file File
+
+	err := FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "File Not Found"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusNotFound, &res)
+		}
+		log.Println(err)
+		res := new(ResponseError)
+		res.Message = "Database Error"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusInternalServerError, &res)
+	}
+
+	log.Println(file.Content)
+	return c.String(http.StatusOK, file.Content)
 }
 
 func UpdateFile(c echo.Context) error {

@@ -51,14 +51,16 @@ const StyledH1 = styled.h1`
   }
 
   @media (max-width: 410px) {
-    img {
-      display: none;
-    }
+    padding: 48px 0;
   }
 `
 
 const ButtonWrapper = styled.div`
   padding: 24px 0;
+
+  a {
+    text-decoration: none;
+  }
 `
 
 const EmptyBox = styled.div`
@@ -81,7 +83,8 @@ const FileBox = styled.div`
 `
 
 const StyledTile = styled(ClickableTile)`
-  width: 100%;
+  width: fit-content;
+  min-width: 100%;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -94,8 +97,9 @@ const StyledTile = styled(ClickableTile)`
 
   h2 {
     font-size: 1rem;
-    font-weight: light;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   p {
@@ -122,6 +126,7 @@ const StyledCloudIcon = styled(Cloud20)`
 
 const Home = () => {
   const [message, setMessage] = useState('I Show You')
+  const [status, setStatus] = useState('normal')
   const [redirect, setRedirect] = useState('')
   const [isEmpty, setEmpty] = useState(true)
   const path = useLocation().pathname
@@ -130,8 +135,17 @@ const Home = () => {
   const [tabData, setTabData] = useState(tabs.getAll())
 
   useEffect(() => {
-    if (path !== '/home') {
-      setMessage('File Not Found')
+    switch (path) {
+      case '/404': {
+        setMessage('File Not Found')
+        setStatus('warning')
+        break
+      }
+      case '/500': {
+        setMessage('Server Error')
+        setStatus('error')
+        break
+      }
     }
   }, [path])
 
@@ -174,7 +188,7 @@ const Home = () => {
               <TopBar>
                 <StyledH1>
                   <img
-                    src="/assets/logo.svg"
+                    src={`/assets/${status}.svg`}
                     alt="Logo"
                     width={48}
                     height={48}

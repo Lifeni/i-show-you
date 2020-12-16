@@ -43,6 +43,7 @@ func main() {
 		api := e.Group("/api")
 
 		api.GET("/file/:id", router.QueryFile)
+		api.GET("/file/:id/raw", router.QueryRawFile)
 		api.POST("/file", router.CreateFile)
 		api.PUT("/file/:id", router.UpdateFile)
 		api.DELETE("/file/:id", router.RemoveFile)
