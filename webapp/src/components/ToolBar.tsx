@@ -1,5 +1,6 @@
 import { TextInput } from 'carbon-components-react'
 import React, { MutableRefObject, useContext, useEffect, useState } from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
@@ -52,6 +53,8 @@ const ToolBar = (props: {
   const [name, setName] = useState(currentPage.get('name') || '')
   const [debouncedType] = useDebounce(type, 300)
   const [debouncedName] = useDebounce(name, 300)
+
+  const [reRender, setReRender] = useState(0)
 
   const changeLanguage = (e: { target: { value: string } }) => {
     setName(e.target.value)
@@ -136,40 +139,45 @@ const ToolBar = (props: {
   }, [currentPage, editor])
 
   return (
-    <ToolBarWrapper>
-      <ToolBarLeftWrapper className="fixed-width">
-        {!isMobile && <FileMeta type={findBySlug(type)} />}
-        <FileOption />
-        <FileHistory />
-        {!isMobile && currentPage.get('authentication') === 'owner' && (
-          <RemoveFile />
-        )}
-      </ToolBarLeftWrapper>
-      <ToolBarCenterWrapper>
-        <TextInput
-          labelText=""
-          placeholder="Untitled"
-          onChange={changeLanguage}
-          onKeyPress={focusEditor}
-          defaultValue={name}
-          title={name}
-          autoComplete="off"
-          maxLength={100}
-          aria-autocomplete="none"
-          autoFocus
-          readOnly={currentPage.get('authentication') !== 'owner'}
-          className="styled-input"
-          id="editor-file-name"
-        />
-      </ToolBarCenterWrapper>
-      <ToolBarRightWrapper className="fixed-width">
-        {!isMobile && <RunFile type={findBySlug(type)} />}
-        {isMobile && currentPage.get('authentication') === 'owner' && (
-          <RemoveFile />
-        )}
-        <ShareFile />
-      </ToolBarRightWrapper>
-    </ToolBarWrapper>
+    <HelmetProvider>
+      <Helmet>
+        <title>{name} | I Show You</title>
+      </Helmet>
+      <ToolBarWrapper>
+        <ToolBarLeftWrapper className="fixed-width">
+          {!isMobile && <FileMeta type={findBySlug(type)} />}
+          <FileOption />
+          <FileHistory />
+          {!isMobile && currentPage.get('authentication') === 'owner' && (
+            <RemoveFile reRender={() => setReRender(reRender + 1)} />
+          )}
+        </ToolBarLeftWrapper>
+        <ToolBarCenterWrapper>
+          <TextInput
+            labelText=""
+            placeholder="Untitled"
+            onChange={changeLanguage}
+            onKeyPress={focusEditor}
+            defaultValue={name}
+            title={name}
+            autoComplete="off"
+            maxLength={100}
+            aria-autocomplete="none"
+            autoFocus
+            readOnly={currentPage.get('authentication') !== 'owner'}
+            className="styled-input"
+            id="editor-file-name"
+          />
+        </ToolBarCenterWrapper>
+        <ToolBarRightWrapper className="fixed-width">
+          {!isMobile && <RunFile type={findBySlug(type)} />}
+          {isMobile && currentPage.get('authentication') === 'owner' && (
+            <RemoveFile reRender={() => setReRender(reRender + 1)} />
+          )}
+          <ShareFile />
+        </ToolBarRightWrapper>
+      </ToolBarWrapper>
+    </HelmetProvider>
   )
 }
 

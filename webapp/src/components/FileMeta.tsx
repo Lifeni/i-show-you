@@ -26,13 +26,21 @@ const FileMeta = (props: { type: IFileMap }) => {
           >
             {type.id === -1 ? 'Local File' : type.name}
           </TooltipDefinition>
-        ) : (
+        ) : currentPage.get('authentication') === 'owner' ? (
           <TooltipDefinition
             align="start"
             direction="bottom"
             tooltipText={'The file will be saved to both local and server.'}
           >
             {type.id === -1 ? 'Auto Saved' : type.name}
+          </TooltipDefinition>
+        ) : (
+          <TooltipDefinition
+            align="start"
+            direction="bottom"
+            tooltipText={'You cannot edit this file.'}
+          >
+            Read Only
           </TooltipDefinition>
         )}
       </TooltipWrapper>

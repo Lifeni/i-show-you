@@ -28,7 +28,7 @@ const HeaderRightMenu = () => {
     const ans = window.confirm('Really?')
     if (ans) {
       store.clearAll()
-      window.location.href = '/'
+      window.location.href = '/home'
     }
   }
 

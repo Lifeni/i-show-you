@@ -57,7 +57,7 @@ const HeaderFileTab = forwardRef((_, ref) => {
           <HeaderMenuItem<LinkProps>
             element={Link}
             isCurrentPage={data.id === pageId}
-            key={data.created_at}
+            key={data.id}
             to={`/`}
           >
             <StyledScreenIcon />
@@ -70,7 +70,7 @@ const HeaderFileTab = forwardRef((_, ref) => {
           <HeaderMenuItem<LinkProps>
             element={Link}
             isCurrentPage={data.id === pageId}
-            key={data.created_at}
+            key={data.id}
             to={`/${data.id}`}
           >
             {data.name === '' ? 'Untitled File' : data.name}
@@ -145,7 +145,7 @@ const SideNavFileTab = () => {
             <SideNavLink<LinkProps>
               element={Link}
               aria-current={data.id === pageId ? 'page' : 'false'}
-              key={data.created_at}
+              key={data.id}
               to={`/`}
               large
               renderIcon={Screen20}
@@ -160,7 +160,7 @@ const SideNavFileTab = () => {
             <SideNavLink<LinkProps>
               element={Link}
               aria-current={data.id === pageId ? 'page' : 'false'}
-              key={data.created_at}
+              key={data.id}
               to={`/${data}`}
               large
               renderIcon={Cloud20}

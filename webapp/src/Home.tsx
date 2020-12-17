@@ -191,6 +191,7 @@ const StyledTile = styled(ClickableTile)`
       content: '';
       position: absolute;
       left: 0;
+      bottom: 0;
       z-index: 100;
       width: 100%;
       display: flex;
@@ -260,7 +261,7 @@ const StyledSwitcherDivider = styled(SwitcherDivider)`
 const Home = () => {
   const [message, setMessage] = useState('I Show You')
   const [status, setStatus] = useState('normal')
-  const [redirect, setRedirect] = useState('')
+  const [redirect, setRedirect] = useState('200')
   const [isEmpty, setEmpty] = useState(true)
   const path = useLocation().pathname
   const tabs = store.namespace('tabs')
@@ -296,11 +297,10 @@ const Home = () => {
       })
     }
 
-    window.addEventListener('DOMContentLoaded', checkWidth)
+    checkWidth()
     window.addEventListener('resize', checkWidth)
 
     return () => {
-      window.removeEventListener('DOMContentLoaded', checkWidth)
       window.removeEventListener('resize', checkWidth)
     }
   }, [])
@@ -354,7 +354,7 @@ const Home = () => {
             {message === 'I Show You' ? 'Home' : message} | I Show You
           </title>
         </Helmet>
-        {redirect === '' ? null : <Redirect to={redirect} />}
+        {redirect === '200' ? null : <Redirect to={redirect} />}
         <StyledGrid condensed>
           <StyledRow>
             <Column sm={4} md={0} lg={0} xlg={0} max={0}>
@@ -492,10 +492,12 @@ const Home = () => {
 
                         <pre>
                           <code>
-                            {store
-                              .namespace(data.id)
-                              .get('content')
-                              .slice(0, 200)}
+                            {store.namespace(data.id).get('content')
+                              ? store
+                                  .namespace(data.id)
+                                  .get('content')
+                                  .slice(0, 200)
+                              : ''}
                           </code>
                         </pre>
                       </StyledTile>

@@ -46,7 +46,7 @@ const App = () => {
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
-        if (currentPage.get('authentication') !== 'owner') {
+        if (!currentPage.get('authentication')) {
           fetch(`/api/file/${id}`, {
             headers: new Headers({
               Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
@@ -123,11 +123,10 @@ const App = () => {
       })
     }
 
-    window.addEventListener('DOMContentLoaded', checkWidth)
+    checkWidth()
     window.addEventListener('resize', checkWidth)
 
     return () => {
-      window.removeEventListener('DOMContentLoaded', checkWidth)
       window.removeEventListener('resize', checkWidth)
     }
   }, [])
