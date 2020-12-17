@@ -6,6 +6,15 @@ import {
   TileGroup,
 } from 'carbon-components-react'
 import React, { useState } from 'react'
+import styled from 'styled-components'
+
+const StyledTileGroup = styled(TileGroup)`
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+`
 
 const SwitchLanguage = () => {
   const [open, setOpen] = useState(false)
@@ -25,17 +34,17 @@ const SwitchLanguage = () => {
         modalLabel="Internationalization"
         primaryButtonText="OK"
         secondaryButtonText="Cancel"
-        danger
-        alert
         size="xs"
         onRequestClose={() => setOpen(false)}
       >
-        <p>The language setting will be stored in the browser.</p>
-        <br />
-        <TileGroup defaultSelected="en" name="language-tile-group">
-          <RadioTile value="en">English (Default)</RadioTile>
-          <RadioTile value="zh-cn">中文 (Chinese)</RadioTile>
-        </TileGroup>
+        <StyledTileGroup defaultSelected="en" name="language-tile-group">
+          <RadioTile value="en" light>
+            English (Default)
+          </RadioTile>
+          <RadioTile value="zh-cn" light>
+            中文 (Chinese)
+          </RadioTile>
+        </StyledTileGroup>
       </Modal>
     </>
   )

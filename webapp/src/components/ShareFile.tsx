@@ -1,4 +1,10 @@
-import { Information20, Link16, Link20 } from '@carbon/icons-react'
+import {
+  Information20,
+  Launch16,
+  Link16,
+  Link20,
+  TextLink16,
+} from '@carbon/icons-react'
 import {
   Button,
   CodeSnippet,
@@ -18,13 +24,21 @@ const CodeSnippetWrapper = styled.div`
   margin: 12px 0;
 `
 
-const StyledLink16 = styled(Link16)`
-  margin: -3px 8px -3px 0;
+const Description = styled.span`
+  display: flex;
+  align-items: center;
+`
+
+const IconWrapper = styled.span`
+  margin: 0 8px 0 0;
+  display: flex;
 `
 
 const Label = styled.p`
   font-size: 0.875rem;
   margin: 12px 4px;
+  display: flex;
+  justify-content: space-between;
 `
 
 const QRCodeWrapper = styled.div`
@@ -60,6 +74,7 @@ const ShareFile = () => {
       if (res.ok) {
         const data = await res.json()
         const tabs = store.namespace('tabs')
+        currentPage.set('updated-at', new Date())
         tabs.set(
           data.data.id,
           JSON.stringify({
@@ -70,7 +85,7 @@ const ShareFile = () => {
             authentication: currentPage.get('authentication'),
           })
         )
-        tabs.remove('local-file')
+        tabs.remove(pageId)
         const targetPage = store.namespace(data.data.id)
         targetPage.set('token', data.data.token)
         targetPage.set('name', currentPage.get('name'))
@@ -197,7 +212,22 @@ const ShareFile = () => {
         </ContentSwitcher>
         {pageSwitch === 'link' ? (
           <>
-            <Label>1. Normal Link</Label>
+            <Label>
+              <Description>
+                <IconWrapper>
+                  <Link16 />
+                </IconWrapper>
+                Normal Link
+              </Description>
+              <Link href={window.location.href} target="_blank">
+                <Description>
+                  <IconWrapper>
+                    <Launch16 />
+                  </IconWrapper>
+                  Open link in new tab
+                </Description>
+              </Link>
+            </Label>
             <CodeSnippetWrapper>
               <CodeSnippet
                 type="multi"
@@ -208,7 +238,15 @@ const ShareFile = () => {
                 {window.location.href}
               </CodeSnippet>
             </CodeSnippetWrapper>
-            <Label>2. Markdown Link</Label>
+
+            <Label>
+              <Description>
+                <IconWrapper>
+                  <TextLink16 />
+                </IconWrapper>
+                Markdown Link
+              </Description>
+            </Label>
             <CodeSnippetWrapper>
               <CodeSnippet
                 type="multi"
@@ -221,11 +259,6 @@ const ShareFile = () => {
                 {`[${document.title}](${window.location.href})`}
               </CodeSnippet>
             </CodeSnippetWrapper>
-
-            <Link href={window.location.href} target="_blank">
-              <StyledLink16 />
-              Open link in new tab
-            </Link>
           </>
         ) : pageSwitch === 'qrcode' ? (
           <QRCodeWrapper>
@@ -251,8 +284,12 @@ const ShareFile = () => {
               href={window.location.origin + '/api/file/' + pageId + '/raw'}
               target="_blank"
             >
-              <StyledLink16 />
-              Open link in new tab
+              <Description>
+                <IconWrapper>
+                  <Launch16 />
+                </IconWrapper>
+                Open link in new tab
+              </Description>
             </Link>
           </>
         ) : pageSwitch === 'embed' ? (
