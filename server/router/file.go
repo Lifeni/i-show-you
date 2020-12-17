@@ -2,7 +2,6 @@ package router
 
 import (
 	"context"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/satori/go.uuid"
@@ -11,7 +10,6 @@ import (
 	"net/http"
 	"server/database"
 	"server/util"
-	"strings"
 	"time"
 )
 
@@ -101,30 +99,8 @@ func CreateFile(c echo.Context) error {
 
 func QueryFile(c echo.Context) error {
 	id := c.Param("id")
-	var tokenString string
-	if c.Request().Header.Get("Authorization") != "" {
-		tokenString = strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
-	} else {
-		tokenString = ""
-	}
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-		return []byte(Config.Server.JwtSecret.File), nil
-	})
-
-	authentication := "ghost"
-
-	if err == nil {
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			if claims["id"] == id {
-				authentication = "owner"
-			}
-		}
-	}
+	authentication := util.VerifyToken(c)
 
 	type QueryData struct {
 		Id string `json:"id"`
@@ -132,7 +108,7 @@ func QueryFile(c echo.Context) error {
 
 	var file File
 
-	err = FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+	err := FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
@@ -181,6 +157,7 @@ func QueryRawFile(c echo.Context) error {
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
+
 		log.Println(err)
 		res := new(ResponseError)
 		res.Message = "Database Error"
@@ -196,5 +173,42 @@ func UpdateFile(c echo.Context) error {
 }
 
 func RemoveFile(c echo.Context) error {
-	return c.NoContent(http.StatusNotFound)
+	id := c.Param("id")
+
+	if util.VerifyToken(c) == "ghost" {
+		res := new(ResponseError)
+		res.Message = "Permission Denied"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusUnauthorized, &res)
+	}
+
+	type QueryData struct {
+		Id string `json:"id"`
+	}
+
+	_, err := FileCollection.DeleteOne(context.TODO(), QueryData{Id: id})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "File Not Found"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusNotFound, &res)
+		}
+
+		log.Println(err)
+		res := new(ResponseError)
+		res.Message = "Database Error"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusInternalServerError, &res)
+	}
+
+	type ResponseData struct {
+		Message string `json:"message"`
+	}
+
+	res := new(ResponseData)
+	res.Message = "Deleted"
+
+	return c.JSON(http.StatusOK, &res)
 }
