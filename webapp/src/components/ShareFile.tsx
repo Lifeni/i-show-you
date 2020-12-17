@@ -1,10 +1,4 @@
-import {
-  Information20,
-  Launch16,
-  Link16,
-  Link20,
-  TextLink16,
-} from '@carbon/icons-react'
+import { Launch16, Link16, Link20, TextLink16 } from '@carbon/icons-react'
 import {
   Button,
   CodeSnippet,
@@ -152,22 +146,17 @@ const ShareFile = () => {
       ) : isMobile ? (
         <Button
           hasIconOnly
-          renderIcon={Information20}
-          tooltipAlignment="center"
+          renderIcon={Link20}
+          tooltipAlignment="end"
           tooltipPosition="bottom"
-          iconDescription="Link Info"
+          iconDescription="View Link"
           kind="ghost"
           size="field"
           onClick={show}
         />
       ) : (
-        <Button
-          kind="ghost"
-          size="field"
-          renderIcon={Information20}
-          onClick={show}
-        >
-          Link Info
+        <Button kind="ghost" size="field" renderIcon={Link20} onClick={show}>
+          View Link
         </Button>
       )}
       <Modal

@@ -1,4 +1,4 @@
-import { TextInput } from 'carbon-components-react'
+import { Tag, TextInput } from 'carbon-components-react'
 import React, { MutableRefObject, useContext, useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
@@ -37,6 +37,11 @@ const ToolBarRightWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+`
+
+const NameLabel = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 const ToolBar = (props: {
@@ -147,27 +152,34 @@ const ToolBar = (props: {
         <ToolBarLeftWrapper className="fixed-width">
           {!isMobile && <FileMeta type={findBySlug(type)} />}
           <FileOption />
-          <FileHistory />
+          {currentPage.get('authentication') === 'owner' && <FileHistory />}
           {!isMobile && currentPage.get('authentication') === 'owner' && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />
           )}
         </ToolBarLeftWrapper>
         <ToolBarCenterWrapper>
-          <TextInput
-            labelText=""
-            placeholder="Untitled"
-            onChange={changeLanguage}
-            onKeyPress={focusEditor}
-            defaultValue={name}
-            title={name}
-            autoComplete="off"
-            maxLength={100}
-            aria-autocomplete="none"
-            autoFocus
-            readOnly={currentPage.get('authentication') !== 'owner'}
-            className="styled-input"
-            id="editor-file-name"
-          />
+          {currentPage.get('authentication') === 'owner' ? (
+            <TextInput
+              labelText=""
+              placeholder="Untitled"
+              onChange={changeLanguage}
+              onKeyPress={focusEditor}
+              defaultValue={name}
+              title={name}
+              autoComplete="off"
+              maxLength={100}
+              aria-autocomplete="none"
+              autoFocus
+              readOnly={currentPage.get('authentication') !== 'owner'}
+              className="styled-input"
+              id="editor-file-name"
+            />
+          ) : (
+            <NameLabel>
+              <Tag type="blue">Read Only</Tag>
+              name
+            </NameLabel>
+          )}
         </ToolBarCenterWrapper>
         <ToolBarRightWrapper className="fixed-width">
           {!isMobile && <RunFile type={findBySlug(type)} />}

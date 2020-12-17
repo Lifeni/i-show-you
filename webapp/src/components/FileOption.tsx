@@ -9,7 +9,7 @@ const FileOption = () => {
       <Button
         hasIconOnly
         renderIcon={SettingsAdjust20}
-        tooltipAlignment="center"
+        tooltipAlignment="start"
         tooltipPosition="bottom"
         iconDescription="Options"
         kind="ghost"
