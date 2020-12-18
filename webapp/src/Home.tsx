@@ -32,6 +32,7 @@ import store from 'store2'
 import styled from 'styled-components'
 import packageFile from '../package.json'
 import HeaderBar from './components/HeaderBar'
+import { MobileTipsInline } from './components/MobileTips'
 
 dayjs.extend(relativeTime)
 
@@ -112,7 +113,7 @@ const EmptyBox = styled.div`
   padding: 48px;
   border: dashed 2px #e0e0e0;
   color: #616161;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,6 +138,11 @@ const StyledTile = styled(ClickableTile)`
   align-items: flex-start;
   justify-content: flex-start;
   gap: 12px;
+  border-radius: 4px;
+
+  @media (max-width: 410px) {
+    max-width: unset;
+  }
 
   div {
     width: 100%;
@@ -293,7 +299,7 @@ const Home = () => {
   useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
-        setMobile(window.innerWidth < 720)
+        setMobile(window.innerWidth < 672)
       })
     }
 
@@ -442,20 +448,22 @@ const Home = () => {
             </Column>
             <Column sm={4} md={6} lg={9} xlg={10} max={10}>
               <FileList>
-                <ButtonWrapper>
-                  <Link to="/">
-                    {tabData.some(data => data.id === 'local-file') ? (
-                      <Button renderIcon={Edit20}>Edit Local File</Button>
-                    ) : (
-                      <Button renderIcon={DocumentAdd20}>New File</Button>
-                    )}
-                  </Link>
-                  {isMobile ? null : (
+                {isMobile ? (
+                  <MobileTipsInline />
+                ) : (
+                  <ButtonWrapper>
+                    <Link to="/">
+                      {tabData.some(data => data.id === 'local-file') ? (
+                        <Button renderIcon={Edit20}>Edit Local File</Button>
+                      ) : (
+                        <Button renderIcon={DocumentAdd20}>New File</Button>
+                      )}
+                    </Link>
                     <Button renderIcon={DocumentImport20} kind="secondary">
                       Import File
                     </Button>
-                  )}
-                </ButtonWrapper>
+                  </ButtonWrapper>
+                )}
 
                 {isEmpty ? (
                   <EmptyBox>No File</EmptyBox>

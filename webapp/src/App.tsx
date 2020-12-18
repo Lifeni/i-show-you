@@ -6,6 +6,7 @@ import store from 'store2'
 import styled from 'styled-components'
 import { validate } from 'uuid'
 import HeaderBar from './components/HeaderBar'
+import { MobileTips } from './components/MobileTips'
 import TextEditor from './components/TextEditor'
 
 const context: IGlobalData = {
@@ -119,7 +120,7 @@ const App = () => {
   useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
-        setMobile(window.innerWidth < 720)
+        setMobile(window.innerWidth < 672)
       })
     }
 
@@ -133,18 +134,19 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <Helmet>
-        <title>
-          {store.namespace(pageId).get('name') || 'Untitled File'} | I Show You
-        </title>
-      </Helmet>
       {loading ? (
-        <LoadingWrapper>
-          <Loading description="Loading ..." withOverlay={false} />
-        </LoadingWrapper>
+        <>
+          <Helmet>
+            <title>I Show You</title>
+          </Helmet>
+          <LoadingWrapper>
+            <Loading description="Loading ..." withOverlay={false} />
+          </LoadingWrapper>
+        </>
       ) : (
         <GlobalContext.Provider value={{ isMobile: isMobile, pageId: pageId }}>
           <HeaderBar noNav={false} />
+          {isMobile && pageId === 'local-file' ? <MobileTips /> : null}
           <TextEditor />
         </GlobalContext.Provider>
       )}
