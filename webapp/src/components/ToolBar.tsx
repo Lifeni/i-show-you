@@ -146,7 +146,7 @@ const ToolBar = (props: {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{name} | I Show You</title>
+        <title>{name || 'Untitled File'} | I Show You</title>
       </Helmet>
       <ToolBarWrapper>
         <ToolBarLeftWrapper className="fixed-width">
@@ -176,8 +176,8 @@ const ToolBar = (props: {
             />
           ) : (
             <NameLabel>
-              <Tag type="blue">Read Only</Tag>
-              name
+              {isMobile && <Tag type="blue">Read Only</Tag>}
+              {name}
             </NameLabel>
           )}
         </ToolBarCenterWrapper>

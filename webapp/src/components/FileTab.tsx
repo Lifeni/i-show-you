@@ -161,7 +161,7 @@ const SideNavFileTab = () => {
               element={Link}
               aria-current={data.id === pageId ? 'page' : 'false'}
               key={data.id}
-              to={`/${data}`}
+              to={`/${data.id}`}
               large
               renderIcon={Cloud20}
             >
