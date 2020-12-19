@@ -100,8 +100,9 @@ const ToolBar = (props: {
 
   useEffect(() => {
     if (
-      debouncedName !== currentPage.get('name') ||
-      debouncedType !== currentPage.get('type')
+      currentPage.get('authentication') === 'owner' &&
+      (debouncedName !== currentPage.get('name') ||
+        debouncedType !== currentPage.get('type'))
     ) {
       currentPage.set('name', debouncedName)
       currentPage.set('type', debouncedType)

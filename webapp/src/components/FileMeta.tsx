@@ -39,13 +39,11 @@ const FileMeta = (props: { status: string; type: IFileMap }) => {
             <InlineLoading
               description={status}
               status={
-                status === 'Auto Saved'
-                  ? 'finished'
+                status === 'Saving'
+                  ? 'active'
                   : status === 'Error'
                   ? 'error'
-                  : status === 'Ready'
-                  ? 'finished'
-                  : 'active'
+                  : 'finished'
               }
             />
           </TooltipIcon>
