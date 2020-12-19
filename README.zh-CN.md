@@ -14,7 +14,7 @@
 - [ ] 🌐 支持国际化，目前支持中文、英文以及 Emoji。
 - [ ] // TODO
 
-## 开始
+## 快速开始
 
 推荐使用 Docker Compose 进行部署。
 
@@ -56,7 +56,15 @@
 
 演示在 https://i-show-you.dev.lifeni.life 。
 
-## 开发
+## 遇到问题
+
+### 你的设备可能不支持编辑（Your device may not support editing）
+
+应用使用  [Monaco Editor](https://microsoft.github.io/monaco-editor/) 作为编辑器，而这个编辑器目前并不支持移动浏览器移动框架。如果仍要进行编辑，可能会出现无法删除、文字丢失等问题。
+
+关于 Monaco Editor 的更多信息，可以查看 [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor) 。
+
+## 开发配置
 
 // TODO
 

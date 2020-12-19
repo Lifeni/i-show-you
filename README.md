@@ -56,6 +56,16 @@ The application is currently under development, and the data may be cleared at a
 
 See https://i-show-you.dev.lifeni.life .
 
+
+
+## Troubleshooting
+
+### Your device may not support editing
+
+The application uses [Monaco Editor](https://microsoft.github.io/monaco-editor/) as the editor, and this editor currently does not support mobile browser mobile frameworks. If you still want to edit, there may be problems such as failure to delete and text loss.
+
+For more information about Monaco Editor, you can view [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor).
+
 ## Development Setup
 
 // TODO

@@ -58,7 +58,11 @@ const MobileTips = () => {
     <Container>
       <div aria-hidden={true}>😦</div>
       <h2>Your device may not support editing</h2>
-      <Button renderIcon={ArrowRight20} kind="primary">
+      <Button
+        renderIcon={ArrowRight20}
+        kind="primary"
+        href="https://github.com/Lifeni/i-show-you#your-device-may-not-support-editing"
+      >
         Learn More
       </Button>
       <Button kind="ghost" onClick={() => setHidden(true)}>
@@ -73,7 +77,12 @@ const MobileTipsInline = () => {
     <InlineContainer>
       <div aria-hidden={true}>😦</div>
       <h2>Your device may not support editing</h2>
-      <Button size="field" renderIcon={ArrowRight20} kind="primary">
+      <Button
+        size="field"
+        renderIcon={ArrowRight20}
+        kind="primary"
+        href="https://github.com/Lifeni/i-show-you#your-device-may-not-support-editing"
+      >
         Learn More
       </Button>
     </InlineContainer>
