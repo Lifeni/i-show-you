@@ -1,4 +1,10 @@
-import { Add20, Cloud20, Screen16, Screen20 } from '@carbon/icons-react'
+import {
+  Add20,
+  Cloud16,
+  Cloud20,
+  Screen16,
+  Screen20,
+} from '@carbon/icons-react'
 import {
   HeaderGlobalAction,
   HeaderMenuItem,
@@ -12,8 +18,10 @@ import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../App'
 
-const StyledScreenIcon = styled(Screen16)`
-  margin: -3px 8px -3px 0;
+const IconWrapper = styled.span`
+  svg {
+    margin: -3px 8px -3px 0;
+  }
 `
 
 const HeaderFileTab = forwardRef((_, ref) => {
@@ -60,7 +68,9 @@ const HeaderFileTab = forwardRef((_, ref) => {
             key={data.id}
             to={`/`}
           >
-            <StyledScreenIcon />
+            <IconWrapper>
+              <Screen16 />
+            </IconWrapper>
             {data.name === '' ? 'Untitled File' : data.name}
           </HeaderMenuItem>
         ) : null
@@ -73,6 +83,15 @@ const HeaderFileTab = forwardRef((_, ref) => {
             key={data.id}
             to={`/${data.id}`}
           >
+            {data.authentication === 'owner' ? (
+              <IconWrapper>
+                <Screen16 />
+              </IconWrapper>
+            ) : (
+              <IconWrapper>
+                <Cloud16 />
+              </IconWrapper>
+            )}
             {data.name === '' ? 'Untitled File' : data.name}
           </HeaderMenuItem>
         )
@@ -163,7 +182,7 @@ const SideNavFileTab = () => {
               key={data.id}
               to={`/${data.id}`}
               large
-              renderIcon={Cloud20}
+              renderIcon={data.authentication === 'owner' ? Screen20 : Cloud20}
             >
               {data.name === '' ? 'Untitled File' : data.name}
             </SideNavLink>
