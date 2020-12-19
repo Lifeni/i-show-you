@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "version": "1.0.0",
-  "description": "the documentation of i-show-you",
+  "description": "The documentation of i-show-you",
   "license": "MIT",
   "private": true,
   "scripts": {

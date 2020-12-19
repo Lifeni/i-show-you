@@ -1,8 +1,8 @@
 {
   "name": "webapp",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
-  "description": "the frontend of i-show-you",
+  "description": "The frontend of i-show-you",
   "dependencies": {
     "@carbon/icons-react": "^10.22.0",
     "@carbon/themes": "^10.24.0",
