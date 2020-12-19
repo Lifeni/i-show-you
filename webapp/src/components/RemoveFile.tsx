@@ -132,7 +132,8 @@ const RemoveFile = (props: { reRender: Function }) => {
           >
             Local File
           </SelectableTile>
-          {currentPage.get('token') === '' ? null : (
+          {currentPage.get('token') === '' ||
+          currentPage.get('authentication') === 'ghost' ? null : (
             <SelectableTile
               id="delete-remote"
               onChange={() => {

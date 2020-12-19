@@ -1,4 +1,10 @@
-import { Launch16, Link16, Link20, TextLink16 } from '@carbon/icons-react'
+import {
+  Launch16,
+  Link16,
+  Link20,
+  Share20,
+  TextLink16,
+} from '@carbon/icons-react'
 import {
   Button,
   CodeSnippet,
@@ -40,6 +46,10 @@ const QRCodeWrapper = styled.div`
   padding: 3rem 24px 0 24px;
   display: flex;
   justify-content: center;
+`
+
+const StyledButton = styled(Button)`
+  border: none;
 `
 
 const ShareFile = () => {
@@ -146,7 +156,7 @@ const ShareFile = () => {
       ) : isMobile ? (
         <Button
           hasIconOnly
-          renderIcon={Link20}
+          renderIcon={Share20}
           tooltipAlignment="end"
           tooltipPosition="bottom"
           iconDescription="View Link"
@@ -155,9 +165,14 @@ const ShareFile = () => {
           onClick={show}
         />
       ) : (
-        <Button kind="ghost" size="field" renderIcon={Link20} onClick={show}>
+        <StyledButton
+          kind="tertiary"
+          size="field"
+          renderIcon={Share20}
+          onClick={show}
+        >
           View Link
-        </Button>
+        </StyledButton>
       )}
       <Modal
         open={open}

@@ -12,7 +12,10 @@ const NotificationWrapper = styled.div`
 
   p {
     padding: 0 1rem 0 0;
-    line-height: 1.5;
+  }
+
+  svg + div {
+    gap: 4px;
   }
 
   @keyframes show {

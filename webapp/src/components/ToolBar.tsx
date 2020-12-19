@@ -146,14 +146,14 @@ const ToolBar = (props: {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>{name || 'Untitled File'} | I Show You</title>
+        <title>{name || 'Untitled File'}</title>
       </Helmet>
       <ToolBarWrapper>
         <ToolBarLeftWrapper className="fixed-width">
           {!isMobile && <FileMeta type={findBySlug(type)} />}
           <FileOption />
-          {currentPage.get('authentication') === 'owner' && <FileHistory />}
-          {!isMobile && currentPage.get('authentication') === 'owner' && (
+          <FileHistory />
+          {!isMobile && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />
           )}
         </ToolBarLeftWrapper>
@@ -183,7 +183,7 @@ const ToolBar = (props: {
         </ToolBarCenterWrapper>
         <ToolBarRightWrapper className="fixed-width">
           {!isMobile && <RunFile type={findBySlug(type)} />}
-          {isMobile && currentPage.get('authentication') === 'owner' && (
+          {isMobile && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />
           )}
           <ShareFile />
