@@ -1,10 +1,11 @@
-import { Loading } from 'carbon-components-react'
+import { Loading, NotificationKind } from 'carbon-components-react'
 import React, { createContext, useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { validate } from 'uuid'
+import GlobalNotification from './components/GlobalNotification'
 import HeaderBar from './components/HeaderBar'
 import { MobileTips } from './components/MobileTips'
 import TextEditor from './components/TextEditor'
@@ -42,12 +43,21 @@ const App = () => {
   const { id }: IURLParams = useParams()
   const [pageId, setPageId] = useState(id || 'local-file')
 
+  const [openNotification, setOpenNotification] = useState(false)
+  const [notificationKind, setNotificationKind] = useState('info')
+  const [notificationTitle, setNotificationTitle] = useState(
+    'Unknown Notification'
+  )
+  const [notificationSubtitle, setNotificationSubtitle] = useState(
+    'Unknown Notification'
+  )
+
   useEffect(() => {
     setPageId(id || 'local-file')
     if (id) {
       if (validate(id)) {
         const currentPage = store.namespace(id)
-        if (!currentPage.get('authentication')) {
+        if (currentPage.get('authentication') !== 'owner') {
           fetch(`/api/file/${id}`, {
             headers: new Headers({
               Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
@@ -77,13 +87,38 @@ const App = () => {
 
               setLoading(false)
             } else if (res.status === 404) {
-              setRedirect('404')
+              if (!currentPage.get('authentication')) {
+                setRedirect('404')
+              } else {
+                setLoading(false)
+                setNotificationKind('warning')
+                setNotificationTitle(`Show Local Cache`)
+                setNotificationSubtitle(
+                  'The file on the server has been deleted.'
+                )
+                setOpenNotification(true)
+              }
             } else {
               setRedirect('500')
             }
           })
         } else {
-          setLoading(false)
+          fetch(`/api/file/${id}`, {
+            headers: new Headers({
+              Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+            }),
+          }).then(async res => {
+            setLoading(false)
+            if (res.status === 404) {
+              currentPage.set('token', '', true)
+              setNotificationKind('warning')
+              setNotificationTitle(`Link Lost`)
+              setNotificationSubtitle(
+                'The file on the server has been deleted.'
+              )
+              setOpenNotification(true)
+            }
+          })
         }
       } else {
         setRedirect('404')
@@ -144,11 +179,22 @@ const App = () => {
           </LoadingWrapper>
         </>
       ) : (
-        <GlobalContext.Provider value={{ isMobile: isMobile, pageId: pageId }}>
-          <HeaderBar noNav={false} />
-          {isMobile && pageId === 'local-file' ? <MobileTips /> : null}
-          <TextEditor />
-        </GlobalContext.Provider>
+        <>
+          <GlobalNotification
+            open={openNotification}
+            close={() => setOpenNotification(false)}
+            title={notificationTitle}
+            subtitle={notificationSubtitle}
+            kind={notificationKind as NotificationKind}
+          />
+          <GlobalContext.Provider
+            value={{ isMobile: isMobile, pageId: pageId }}
+          >
+            <HeaderBar noNav={false} />
+            {isMobile && pageId === 'local-file' ? <MobileTips /> : null}
+            <TextEditor />
+          </GlobalContext.Provider>
+        </>
       )}
       {redirect !== '200' && <Redirect to={{ pathname: redirect }} />}
     </HelmetProvider>
