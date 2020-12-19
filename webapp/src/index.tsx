@@ -11,9 +11,6 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Switch>
-        <Route path="/home">
-          <Home />
-        </Route>
         <Route path="/404">
           <Home />
         </Route>
@@ -27,7 +24,7 @@ ReactDOM.render(
           <App />
         </Route>
         <Route path="/">
-          <App />
+          <Home />
         </Route>
         <Route path="*">
           <Redirect to={{ pathname: '/404' }} />

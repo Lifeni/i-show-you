@@ -28,7 +28,7 @@ const HeaderRightMenu = () => {
     const ans = window.confirm('Really?')
     if (ans) {
       store.clearAll()
-      window.location.href = '/home'
+      window.location.href = '/'
     }
   }
 
@@ -48,7 +48,7 @@ const HeaderRightMenu = () => {
             element={Link}
             aria-label="Home"
             className="menu-item"
-            to="/home"
+            to="/"
           >
             <StarFilled16 />
             <span>Home</span>

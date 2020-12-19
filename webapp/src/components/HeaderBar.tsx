@@ -47,7 +47,7 @@ const HeaderBar = (props: { noNav: boolean }) => {
             />
           )}
           <HeaderNameWrapper>
-            <HeaderName<LinkProps> element={Link} prefix="I Show" to="/home">
+            <HeaderName<LinkProps> element={Link} prefix="I Show" to="/">
               You
             </HeaderName>
           </HeaderNameWrapper>

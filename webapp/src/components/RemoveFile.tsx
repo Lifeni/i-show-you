@@ -88,7 +88,7 @@ const RemoveFile = (props: { reRender: Function }) => {
 
   return (
     <>
-      {redirect && <Redirect to={`/home`} />}
+      {redirect && <Redirect to={`/`} />}
       <GlobalNotification
         open={openNotification}
         close={() => setOpenNotification(false)}

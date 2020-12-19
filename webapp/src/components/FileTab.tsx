@@ -60,52 +60,31 @@ const HeaderFileTab = forwardRef((_, ref) => {
 
   return (
     <>
-      {debouncedTabData.map(data =>
-        data.id === 'local-file' ? (
-          <HeaderMenuItem<LinkProps>
-            element={Link}
-            isCurrentPage={data.id === pageId}
-            key={data.id}
-            to={`/`}
-          >
+      {debouncedTabData.map(data => (
+        <HeaderMenuItem<LinkProps>
+          element={Link}
+          isCurrentPage={data.id === pageId}
+          key={data.id}
+          to={`/${data.id}`}
+        >
+          {data.authentication === 'owner' ? (
             <IconWrapper>
               <Screen16 />
             </IconWrapper>
-            {data.name === '' ? 'Untitled File' : data.name}
-          </HeaderMenuItem>
-        ) : null
-      )}
-      {debouncedTabData.map(data =>
-        data.id === 'local-file' ? null : (
-          <HeaderMenuItem<LinkProps>
-            element={Link}
-            isCurrentPage={data.id === pageId}
-            key={data.id}
-            to={`/${data.id}`}
-          >
-            {data.authentication === 'owner' ? (
-              <IconWrapper>
-                <Screen16 />
-              </IconWrapper>
-            ) : (
-              <IconWrapper>
-                <Cloud16 />
-              </IconWrapper>
-            )}
-            {data.name === '' ? 'Untitled File' : data.name}
-          </HeaderMenuItem>
-        )
-      )}
-      {debouncedTabData.some(key => key.id === 'local-file') ? null : (
-        <Link to="/" key="add-file">
-          <HeaderGlobalAction
-            aria-label="New File"
-            className="fix-icon-position"
-          >
-            <Add20 />
-          </HeaderGlobalAction>
-        </Link>
-      )}
+          ) : (
+            <IconWrapper>
+              <Cloud16 />
+            </IconWrapper>
+          )}
+          {data.name === '' ? 'Untitled File' : data.name}
+        </HeaderMenuItem>
+      ))}
+
+      <Link to="/new" key="add-file">
+        <HeaderGlobalAction aria-label="New File" className="fix-icon-position">
+          <Add20 />
+        </HeaderGlobalAction>
+      </Link>
     </>
   )
 })
@@ -147,47 +126,28 @@ const SideNavFileTab = () => {
   return (
     <>
       <SideNavItems>
-        {debouncedTabData.some(data => data.id === 'local-file') ? null : (
+        <SideNavLink<LinkProps>
+          element={Link}
+          to="/"
+          renderIcon={Add20}
+          large
+          key="add-file"
+        >
+          New File
+        </SideNavLink>
+
+        {debouncedTabData.map(data => (
           <SideNavLink<LinkProps>
             element={Link}
-            to="/"
-            renderIcon={Add20}
+            aria-current={data.id === pageId ? 'page' : 'false'}
+            key={data.id}
+            to={`/${data.id}`}
             large
-            key="add-file"
+            renderIcon={data.authentication === 'owner' ? Screen20 : Cloud20}
           >
-            New File
+            {data.name === '' ? 'Untitled File' : data.name}
           </SideNavLink>
-        )}
-
-        {debouncedTabData.map(data =>
-          data.id === 'local-file' ? (
-            <SideNavLink<LinkProps>
-              element={Link}
-              aria-current={data.id === pageId ? 'page' : 'false'}
-              key={data.id}
-              to={`/`}
-              large
-              renderIcon={Screen20}
-            >
-              {data.name === '' ? 'Untitled File' : data.name}
-            </SideNavLink>
-          ) : null
-        )}
-
-        {debouncedTabData.map(data =>
-          data.id === 'local-file' ? null : (
-            <SideNavLink<LinkProps>
-              element={Link}
-              aria-current={data.id === pageId ? 'page' : 'false'}
-              key={data.id}
-              to={`/${data.id}`}
-              large
-              renderIcon={data.authentication === 'owner' ? Screen20 : Cloud20}
-            >
-              {data.name === '' ? 'Untitled File' : data.name}
-            </SideNavLink>
-          )
-        )}
+        ))}
       </SideNavItems>
     </>
   )

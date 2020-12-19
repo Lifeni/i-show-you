@@ -52,7 +52,7 @@ const StyledButton = styled(Button)`
   border: none;
 `
 
-const ShareFile = () => {
+const ViewLink = () => {
   const { isMobile, pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
   const [redirect, setRedirect] = useState(false)
@@ -308,4 +308,4 @@ const ShareFile = () => {
   )
 }
 
-export default ShareFile
+export default ViewLink

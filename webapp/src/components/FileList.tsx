@@ -91,7 +91,7 @@ const FileList = () => {
     return () => {
       window.removeEventListener('storage', updateTabData)
     }
-  }, [])
+  }, [tabs])
 
   return (
     <Container>

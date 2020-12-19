@@ -12,7 +12,7 @@ import TextEditor from './components/TextEditor'
 
 const context: IGlobalData = {
   isMobile: false,
-  pageId: 'local-file',
+  pageId: '',
 }
 
 const GlobalContext = createContext(context)
@@ -41,7 +41,7 @@ const App = () => {
   const [redirect, setRedirect] = useState('200')
 
   const { id }: IURLParams = useParams()
-  const [pageId, setPageId] = useState(id || 'local-file')
+  const [pageId, setPageId] = useState(id)
 
   const [openNotification, setOpenNotification] = useState(false)
   const [notificationKind, setNotificationKind] = useState('info')
@@ -49,105 +49,121 @@ const App = () => {
     'Unknown Notification'
   )
   const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
+    '只是一个通知占位符。'
   )
 
   useEffect(() => {
-    setPageId(id || 'local-file')
-    if (id) {
-      if (validate(id)) {
-        const currentPage = store.namespace(id)
-        if (currentPage.get('authentication') !== 'owner') {
-          fetch(`/api/file/${id}`, {
-            headers: new Headers({
-              Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
-            }),
-          }).then(async res => {
-            const data = await res.json()
-            if (res.status === 200) {
-              const tabs = store.namespace('tabs')
-              tabs.set(
-                id,
-                JSON.stringify({
-                  name: data.data.name,
-                  created_at: data.data.created_at,
-                  updated_at: data.data.updated_at,
-                  id: id,
-                  authentication: data.authentication,
-                })
-              )
-
-              currentPage.set('created-at', data.data.created_at, true)
-              currentPage.set('updated-at', data.data.updated_at, true)
-              currentPage.set('name', data.data.name, true)
-              currentPage.set('type', data.data.type, true)
-              currentPage.set('content', data.data.content, true)
-              currentPage.set('authentication', data.authentication, true)
-              currentPage.set('options', '{}')
-
-              setLoading(false)
-            } else if (res.status === 404) {
-              if (!currentPage.get('authentication')) {
-                setRedirect('404')
-              } else {
-                setLoading(false)
-                setNotificationKind('warning')
-                setNotificationTitle(`Show Local Cache`)
-                setNotificationSubtitle(
-                  'The file on the server has been deleted.'
-                )
-                setOpenNotification(true)
-              }
-            } else {
-              setRedirect('500')
-            }
-          })
+    setPageId(id)
+    if (id === 'new') {
+      const now = new Date()
+      fetch('/api/file', {
+        method: 'POST',
+        body: JSON.stringify({
+          created_at: now,
+          updated_at: now,
+          name: '',
+          type: '',
+          content: '',
+          options: {},
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+      }).then(async res => {
+        if (res.ok) {
+          const data = (await res.json()).data
+          const uuid = data.id
+          const token = data.id
+          const tabs = store.namespace('tabs')
+          const currentPage = store.namespace(uuid)
+          tabs.set(
+            uuid,
+            JSON.stringify({
+              name: '',
+              created_at: now,
+              updated_at: now,
+              id: uuid,
+              authentication: 'owner',
+            })
+          )
+          currentPage.set('token', token)
+          currentPage.set('created-at', now, false)
+          currentPage.set('updated-at', now)
+          currentPage.set('name', '')
+          currentPage.set('type', '')
+          currentPage.set('content', '')
+          currentPage.set('authentication', 'owner')
+          currentPage.set('options', '{}')
+          setRedirect(uuid)
+          setLoading(false)
         } else {
-          fetch(`/api/file/${id}`, {
-            headers: new Headers({
-              Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
-            }),
-          }).then(async res => {
+          setRedirect('500')
+        }
+      })
+    } else if (validate(id)) {
+      const currentPage = store.namespace(id)
+      if (currentPage.get('authentication') !== 'owner') {
+        fetch(`/api/file/${id}`, {
+          headers: new Headers({
+            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+          }),
+        }).then(async res => {
+          const data = await res.json()
+          if (res.status === 200) {
+            const tabs = store.namespace('tabs')
+            tabs.set(
+              id,
+              JSON.stringify({
+                name: data.data.name,
+                created_at: data.data.created_at,
+                updated_at: data.data.updated_at,
+                id: id,
+                authentication: data.authentication,
+              })
+            )
+
+            currentPage.set('created-at', data.data.created_at, true)
+            currentPage.set('updated-at', data.data.updated_at, true)
+            currentPage.set('name', data.data.name, true)
+            currentPage.set('type', data.data.type, true)
+            currentPage.set('content', data.data.content, true)
+            currentPage.set('authentication', data.authentication, true)
+            currentPage.set('options', data.data.options)
             setLoading(false)
-            if (res.status === 404) {
-              currentPage.set('token', '', true)
+          } else if (res.status === 404) {
+            if (!currentPage.get('authentication')) {
+              setRedirect('404')
+            } else {
+              setLoading(false)
               setNotificationKind('warning')
-              setNotificationTitle(`Link Lost`)
+              setNotificationTitle(`Show Local Cache`)
               setNotificationSubtitle(
                 'The file on the server has been deleted.'
               )
               setOpenNotification(true)
             }
-          })
-        }
+          } else {
+            setRedirect('500')
+          }
+        })
       } else {
-        setRedirect('404')
+        fetch(`/api/file/${id}`, {
+          headers: new Headers({
+            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+          }),
+        }).then(async res => {
+          setLoading(false)
+          if (res.status === 404) {
+            currentPage.set('token', '', true)
+            setNotificationKind('warning')
+            setNotificationTitle(`Link Lost`)
+            setNotificationSubtitle('The file on the server has been deleted.')
+            setOpenNotification(true)
+          }
+        })
       }
     } else {
-      setLoading(false)
-      const tabs = store.namespace('tabs')
-      const currentPage = store.namespace('local-file')
-      if (!currentPage.get('created-at')) {
-        const date = new Date()
-        tabs.set(
-          'local-file',
-          JSON.stringify({
-            name: 'Untitled File',
-            created_at: date,
-            updated_at: date,
-            id: 'local-file',
-            authentication: 'owner',
-          })
-        )
-        currentPage.set('token', '')
-        currentPage.set('created-at', date, false)
-        currentPage.set('updated-at', date)
-        currentPage.set('name', '')
-        currentPage.set('type', '')
-        currentPage.set('content', '')
-        currentPage.set('authentication', 'owner')
-        currentPage.set('options', '{}')
-      }
+      setRedirect('404')
     }
   }, [id])
 
@@ -165,7 +181,7 @@ const App = () => {
     return () => {
       window.removeEventListener('resize', checkWidth)
     }
-  }, [])
+  }, [id])
 
   return (
     <HelmetProvider>
@@ -191,7 +207,10 @@ const App = () => {
             value={{ isMobile: isMobile, pageId: pageId }}
           >
             <HeaderBar noNav={false} />
-            {isMobile && pageId === 'local-file' ? <MobileTips /> : null}
+            {isMobile &&
+            store.namespace(pageId).get('authentication') === 'owner' ? (
+              <MobileTips />
+            ) : null}
             <TextEditor />
           </GlobalContext.Provider>
         </>

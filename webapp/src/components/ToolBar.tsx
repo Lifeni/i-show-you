@@ -11,7 +11,7 @@ import FileMeta from './FileMeta'
 import FileOption from './FileOption'
 import RemoveFile from './RemoveFile'
 import RunFile from './RunFile'
-import ShareFile from './ShareFile'
+import ViewLink from './ViewLink'
 
 const ToolBarWrapper = styled.div`
   width: 100%;
@@ -186,7 +186,7 @@ const ToolBar = (props: {
           {isMobile && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />
           )}
-          <ShareFile />
+          <ViewLink />
         </ToolBarRightWrapper>
       </ToolBarWrapper>
     </HelmetProvider>

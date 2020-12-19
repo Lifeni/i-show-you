@@ -105,7 +105,7 @@ const FileCard = (props: {
   return (
     <StyledTile
       handleClick={() => {
-        setRedirect(`/${data.id === 'local-file' ? '' : data.id}`)
+        setRedirect(`/${data.id}`)
       }}
     >
       <div>

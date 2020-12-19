@@ -1,8 +1,7 @@
-import { DocumentAdd20, DocumentImport20 } from '@carbon/icons-react'
-import { Button } from 'carbon-components-react'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import ImportFile from './ImportFile'
+import NewFile from './NewFile'
 
 const ButtonWrapper = styled.div`
   max-width: 960px;
@@ -22,12 +21,8 @@ const ButtonWrapper = styled.div`
 const HomeActions = () => {
   return (
     <ButtonWrapper>
-      <Link to="/new">
-        <Button renderIcon={DocumentAdd20}>New File</Button>
-      </Link>
-      <Button renderIcon={DocumentImport20} kind="secondary">
-        Import File
-      </Button>
+      <NewFile />
+      <ImportFile />
     </ButtonWrapper>
   )
 }

@@ -83,12 +83,17 @@ const SideBar = () => {
     const ans = window.confirm('Really?')
     if (ans) {
       store.clearAll()
-      window.location.href = '/home'
+      window.location.href = '/'
     }
   }
 
   useEffect(() => {
     switch (path) {
+      case '/': {
+        setMessage('I Show You')
+        setStatus('normal')
+        break
+      }
       case '/404': {
         setMessage('File Not Found')
         setStatus('warning')
@@ -126,7 +131,7 @@ const SideBar = () => {
             element={Link}
             aria-label="Home"
             className="menu-item"
-            to="/home"
+            to="/"
           >
             <StarFilled16 />
             <span>Home</span>
