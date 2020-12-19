@@ -1,4 +1,8 @@
-import { TooltipDefinition } from 'carbon-components-react'
+import {
+  InlineLoading,
+  TooltipDefinition,
+  TooltipIcon,
+} from 'carbon-components-react'
 import React, { useContext } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
@@ -9,8 +13,8 @@ const TooltipWrapper = styled.div`
   font-size: 1rem;
 `
 
-const FileMeta = (props: { type: IFileMap }) => {
-  const { type } = props
+const FileMeta = (props: { status: string; type: IFileMap }) => {
+  const { status, type } = props
   const { pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
   return (
@@ -27,13 +31,24 @@ const FileMeta = (props: { type: IFileMap }) => {
             {type.id === -1 ? 'Local File' : type.name}
           </TooltipDefinition>
         ) : currentPage.get('authentication') === 'owner' ? (
-          <TooltipDefinition
+          <TooltipIcon
             align="start"
             direction="bottom"
             tooltipText={'The file will be saved to both local and server.'}
           >
-            {type.id === -1 ? 'Auto Saved' : type.name}
-          </TooltipDefinition>
+            <InlineLoading
+              description={status}
+              status={
+                status === 'Auto Saved'
+                  ? 'finished'
+                  : status === 'Error'
+                  ? 'error'
+                  : status === 'Ready'
+                  ? 'finished'
+                  : 'active'
+              }
+            />
+          </TooltipIcon>
         ) : (
           <TooltipDefinition
             align="start"

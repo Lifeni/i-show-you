@@ -33,7 +33,7 @@ const HeaderFileTab = forwardRef((_, ref) => {
       .map(v => JSON.parse(v))
       .sort(
         (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       )
   )
   const [debouncedTabData] = useDebounce(tabData, 300)
@@ -45,8 +45,8 @@ const HeaderFileTab = forwardRef((_, ref) => {
           .map(v => JSON.parse(v))
           .sort(
             (a, b) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime()
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
           )
       )
     }
@@ -98,7 +98,7 @@ const SideNavFileTab = () => {
       .map(v => JSON.parse(v))
       .sort(
         (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       )
   )
   const [debouncedTabData] = useDebounce(tabData, 300)
@@ -110,8 +110,8 @@ const SideNavFileTab = () => {
           .map(v => JSON.parse(v))
           .sort(
             (a, b) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime()
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
           )
       )
     }
@@ -128,7 +128,7 @@ const SideNavFileTab = () => {
       <SideNavItems>
         <SideNavLink<LinkProps>
           element={Link}
-          to="/"
+          to="/new"
           renderIcon={Add20}
           large
           key="add-file"

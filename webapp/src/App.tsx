@@ -73,7 +73,7 @@ const App = () => {
         if (res.ok) {
           const data = (await res.json()).data
           const uuid = data.id
-          const token = data.id
+          const token = data.token
           const tabs = store.namespace('tabs')
           const currentPage = store.namespace(uuid)
           tabs.set(

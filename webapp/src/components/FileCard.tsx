@@ -66,7 +66,7 @@ const StyledTile = styled(ClickableTile)`
     font-size: 0.75rem;
     line-height: 1rem;
     overflow: hidden;
-    white-space: pre-wrap;
+    white-space: pre;
     background-color: #f4f4f4;
     transition: all 0.15s cubic-bezier(0.2, 0, 0.38, 0.9);
 
@@ -77,6 +77,7 @@ const StyledTile = styled(ClickableTile)`
       bottom: 0;
       z-index: 100;
       width: 100%;
+      height: 0;
       display: flex;
       box-shadow: 0 0 24px 24px #f4f4f4;
       transition: all 0.15s cubic-bezier(0.2, 0, 0.38, 0.9);

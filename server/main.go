@@ -46,6 +46,7 @@ func main() {
 		api.GET("/file/:id/raw", router.QueryRawFile)
 		api.POST("/file", router.CreateFile)
 		api.PUT("/file/:id", router.UpdateFile)
+		api.PATCH("/file/:id/:key", router.UpdateFilePatch)
 		api.DELETE("/file/:id", router.RemoveFile)
 
 		api.GET("/ping", func(c echo.Context) error {

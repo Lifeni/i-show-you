@@ -1,11 +1,11 @@
 import Editor from '@monaco-editor/react'
-import { InlineLoading } from 'carbon-components-react'
+import { InlineLoading, NotificationKind } from 'carbon-components-react'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../App'
-
+import GlobalNotification from './GlobalNotification'
 import ToolBar from './ToolBar'
 
 const Wrapper = styled.div`
@@ -26,6 +26,8 @@ const TextEditor = () => {
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
 
+  const [status, setStatus] = useState('Ready')
+
   const editorRef = useRef()
 
   useEffect(() => {
@@ -42,6 +44,15 @@ const TextEditor = () => {
     })
   }
 
+  const [openNotification, setOpenNotification] = useState(false)
+  const [notificationKind, setNotificationKind] = useState('info')
+  const [notificationTitle, setNotificationTitle] = useState(
+    'Unknown Notification'
+  )
+  const [notificationSubtitle, setNotificationSubtitle] = useState(
+    'Unknown Notification'
+  )
+
   useEffect(() => {
     if (debouncedValue !== currentPage.get('content')) {
       currentPage.set('content', debouncedValue)
@@ -55,6 +66,28 @@ const TextEditor = () => {
           updated_at: new Date(),
         })
       )
+      setStatus('Saving')
+      fetch(`/api/file/${pageId}/content`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          updated_at: currentPage.get('updated-at'),
+          content: currentPage.get('content'),
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+        }),
+      }).then(async res => {
+        if (res.status === 200) {
+          setStatus('Auto Saved')
+        } else {
+          setStatus('Error')
+          setNotificationKind('error')
+          setNotificationTitle(`Save Error ${res.status}`)
+          setNotificationSubtitle((await res.json()).message)
+          setOpenNotification(true)
+        }
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +95,14 @@ const TextEditor = () => {
 
   return (
     <Wrapper>
-      <ToolBar editor={editorRef} updateType={setType} />
+      <GlobalNotification
+        open={openNotification}
+        close={() => setOpenNotification(false)}
+        title={notificationTitle}
+        subtitle={notificationSubtitle}
+        kind={notificationKind as NotificationKind}
+      />
+      <ToolBar editor={editorRef} status={status} updateType={setType} />
       <Editor
         width="100%"
         height="calc(100vh - 88px)"

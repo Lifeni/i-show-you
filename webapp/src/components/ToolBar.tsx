@@ -1,4 +1,4 @@
-import { Tag, TextInput } from 'carbon-components-react'
+import { NotificationKind, Tag, TextInput } from 'carbon-components-react'
 import React, { MutableRefObject, useContext, useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
@@ -9,6 +9,7 @@ import { findByExt, findBySlug } from '../utils/check-file-type'
 import FileHistory from './FileHistory'
 import FileMeta from './FileMeta'
 import FileOption from './FileOption'
+import GlobalNotification from './GlobalNotification'
 import RemoveFile from './RemoveFile'
 import RunFile from './RunFile'
 import ViewLink from './ViewLink'
@@ -46,9 +47,10 @@ const NameLabel = styled.div`
 
 const ToolBar = (props: {
   editor: MutableRefObject<undefined>
+  status: string
   updateType: Function
 }) => {
-  const { editor, updateType } = props
+  const { editor, status, updateType } = props
   const { isMobile, pageId } = useContext(GlobalContext)
 
   const currentPage = store.namespace(pageId)
@@ -82,6 +84,20 @@ const ToolBar = (props: {
     }
   }
 
+  const [fileStatus, setFileStatus] = useState(status)
+  const [openNotification, setOpenNotification] = useState(false)
+  const [notificationKind, setNotificationKind] = useState('info')
+  const [notificationTitle, setNotificationTitle] = useState(
+    'Unknown Notification'
+  )
+  const [notificationSubtitle, setNotificationSubtitle] = useState(
+    'Unknown Notification'
+  )
+
+  useEffect(() => {
+    setFileStatus(status)
+  }, [status])
+
   useEffect(() => {
     if (
       debouncedName !== currentPage.get('name') ||
@@ -99,6 +115,29 @@ const ToolBar = (props: {
           updated_at: new Date(),
         })
       )
+      setFileStatus('Saving')
+      fetch(`/api/file/${pageId}/name`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          updated_at: currentPage.get('updated-at'),
+          name: currentPage.get('name'),
+          type: currentPage.get('type'),
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+        }),
+      }).then(async res => {
+        if (res.status === 200) {
+          setFileStatus('Auto Saved')
+        } else {
+          setFileStatus('Error')
+          setNotificationKind('error')
+          setNotificationTitle(`Save Error ${res.status}`)
+          setNotificationSubtitle((await res.json()).message)
+          setOpenNotification(true)
+        }
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName, debouncedType])
@@ -148,9 +187,18 @@ const ToolBar = (props: {
       <Helmet>
         <title>{name || 'Untitled File'}</title>
       </Helmet>
+      <GlobalNotification
+        open={openNotification}
+        close={() => setOpenNotification(false)}
+        title={notificationTitle}
+        subtitle={notificationSubtitle}
+        kind={notificationKind as NotificationKind}
+      />
       <ToolBarWrapper>
         <ToolBarLeftWrapper className="fixed-width">
-          {!isMobile && <FileMeta type={findBySlug(type)} />}
+          {!isMobile && (
+            <FileMeta status={fileStatus} type={findBySlug(type)} />
+          )}
           <FileOption />
           <FileHistory />
           {!isMobile && (

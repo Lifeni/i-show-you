@@ -48,3 +48,11 @@
   height: 290px;
   padding-bottom: 12px;
 }
+
+.bx--tooltip--definition .bx--tooltip__trigger {
+  border: none;
+}
+
+.bx--tooltip__trigger.bx--tooltip--bottom .bx--assistive-text {
+  padding: 0.5rem 1rem;
+}
