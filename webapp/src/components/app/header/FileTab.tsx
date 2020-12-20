@@ -58,6 +58,28 @@ const HeaderFileTab = forwardRef((_, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    const currentPage = store.namespace(pageId)
+    if (currentPage.get('authentication') !== 'owner') {
+      const updateTabData = () => {
+        setTabData(
+          Object.values(tabs.getAll())
+            .map(v => JSON.parse(v))
+            .sort(
+              (a, b) =>
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            )
+        )
+      }
+      window.addEventListener('updateStorage', updateTabData, false)
+      return () => {
+        window.removeEventListener('updateStorage', updateTabData)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId])
+
   return (
     <>
       {debouncedTabData.map(data => (
@@ -122,6 +144,28 @@ const SideNavFileTab = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const currentPage = store.namespace(pageId)
+    if (currentPage.get('authentication') !== 'owner') {
+      const updateTabData = () => {
+        setTabData(
+          Object.values(tabs.getAll())
+            .map(v => JSON.parse(v))
+            .sort(
+              (a, b) =>
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            )
+        )
+      }
+      window.addEventListener('updateStorage', updateTabData, false)
+      return () => {
+        window.removeEventListener('updateStorage', updateTabData)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId])
 
   return (
     <>

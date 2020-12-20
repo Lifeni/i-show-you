@@ -12,7 +12,7 @@ import React from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { HeaderFileTab, SideNavFileTab } from '../toolbar/FileTab'
+import { HeaderFileTab, SideNavFileTab } from '../header/FileTab'
 import HeaderRightMenu from '../header/HeaderRightMenu'
 import HorizontalScroller from '../header/HorizontalScroller'
 import SwitchLanguage from '../header/SwitchLanguage'

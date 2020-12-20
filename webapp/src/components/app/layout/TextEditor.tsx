@@ -33,43 +33,55 @@ const TextEditor = () => {
   useEffect(() => {
     setValue(currentPage.get('content') || '')
 
-    const save = (e: KeyboardEvent) => {
-      if (
-        currentPage.get('authentication') === 'owner' &&
-        e.ctrlKey &&
-        e.key === 's'
-      ) {
-        e.preventDefault()
-        setStatus('Saving')
-        fetch(`/api/file/${pageId}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            updated_at: currentPage.get('updated-at'),
-            content: currentPage.get('content'),
-            name: currentPage.get('name'),
-            type: currentPage.get('type'),
-            options: currentPage.get('options'),
-          }),
-          headers: new Headers({
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
-          }),
-        }).then(async res => {
-          if (res.status === 200) {
-            setStatus('Saved')
-          } else {
-            setStatus('Error')
-            setNotificationKind('error')
-            setNotificationTitle(`Save Error ${res.status}`)
-            setNotificationSubtitle((await res.json()).message)
-            setOpenNotification(true)
-          }
-        })
+    if (currentPage.get('authentication') !== 'owner') {
+      const updateValue = () => {
+        setValue(currentPage.get('content') || '')
       }
+
+      window.addEventListener('updateStorage', updateValue, false)
+      return () => {
+        window.removeEventListener('updateStorage', updateValue)
+      }
+    } else {
+      const save = (e: KeyboardEvent) => {
+        if (
+          currentPage.get('authentication') === 'owner' &&
+          e.ctrlKey &&
+          e.key === 's'
+        ) {
+          e.preventDefault()
+          setStatus('Saving')
+          fetch(`/api/file/${pageId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              updated_at: currentPage.get('updated-at'),
+              content: currentPage.get('content'),
+              name: currentPage.get('name'),
+              type: currentPage.get('type'),
+              options: currentPage.get('options'),
+            }),
+            headers: new Headers({
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+            }),
+          }).then(async res => {
+            if (res.status === 200) {
+              setStatus('Saved')
+            } else {
+              setStatus('Error')
+              setNotificationKind('error')
+              setNotificationTitle(`Save Error ${res.status}`)
+              setNotificationSubtitle((await res.json()).message)
+              setOpenNotification(true)
+            }
+          })
+        }
+      }
+
+      window.addEventListener('keydown', save)
+      return () => window.removeEventListener('keydown', save)
     }
 
-    window.addEventListener('keydown', save)
-    return () => window.removeEventListener('keydown', save)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 

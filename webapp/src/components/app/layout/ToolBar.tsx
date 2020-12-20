@@ -4,12 +4,12 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
-import { GlobalContext } from '../../App'
 import { findByExt, findBySlug } from '../../../utils/check-file-type'
+import { GlobalContext } from '../../App'
+import GlobalNotification from '../../global/GlobalNotification'
 import FileHistory from '../toolbar/FileHistory'
 import FileMeta from '../toolbar/FileMeta'
 import FileOption from '../toolbar/FileOption'
-import GlobalNotification from '../../global/GlobalNotification'
 import RemoveFile from '../toolbar/RemoveFile'
 import RunFile from '../toolbar/RunFile'
 import ViewLink from '../toolbar/ViewLink'
@@ -152,6 +152,22 @@ const ToolBar = (props: {
     )
     if (input) {
       input.value = currentPage.get('name') || ''
+    }
+
+    if (currentPage.get('authentication') !== 'owner') {
+      const updateValue = () => {
+        setName(currentPage.get('name') || '')
+        setType(currentPage.get('type') || '')
+        updateType(currentPage.get('type') || '')
+        if (input) {
+          input.value = currentPage.get('name') || ''
+        }
+      }
+
+      window.addEventListener('updateStorage', updateValue, false)
+      return () => {
+        window.removeEventListener('updateStorage', updateValue)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])

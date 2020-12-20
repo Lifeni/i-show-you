@@ -1,4 +1,4 @@
-package router
+package api
 
 import (
 	"context"
@@ -218,6 +218,7 @@ func UpdateFile(c echo.Context) error {
 
 func UpdateFilePatch(c echo.Context) error {
 	id, key := c.Param("id"), c.Param("key")
+
 	if util.VerifyToken(c) == "ghost" {
 		res := new(ResponseError)
 		res.Message = "Permission Denied"

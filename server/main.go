@@ -8,7 +8,8 @@ import (
 	"net/http"
 	"regexp"
 	"server/database"
-	"server/router"
+	apiRouter "server/router/api"
+	websocketRouter "server/router/websocket"
 	"server/util"
 )
 
@@ -28,7 +29,7 @@ func main() {
 		}
 
 		util.InitConfig()
-		router.InitFileCollection()
+		apiRouter.InitFileCollection()
 
 		e.Static("/", "./public/")
 		e.GET("/:path", func(c echo.Context) error {
@@ -42,14 +43,20 @@ func main() {
 
 		api := e.Group("/api")
 
-		api.GET("/file/:id", router.QueryFile)
-		api.GET("/file/:id/raw", router.QueryRawFile)
-		api.POST("/file", router.CreateFile)
-		api.PUT("/file/:id", router.UpdateFile)
-		api.PATCH("/file/:id/:key", router.UpdateFilePatch)
-		api.DELETE("/file/:id", router.RemoveFile)
+		api.GET("/file/:id", apiRouter.QueryFile)
+		api.GET("/file/:id/raw", apiRouter.QueryRawFile)
+		api.POST("/file", apiRouter.CreateFile)
+		api.PUT("/file/:id", apiRouter.UpdateFile)
+		api.PATCH("/file/:id/:key", apiRouter.UpdateFilePatch)
+		api.DELETE("/file/:id", apiRouter.RemoveFile)
 
 		api.GET("/ping", func(c echo.Context) error {
+			return c.String(http.StatusOK, "pong")
+		})
+
+		websocket := e.Group("/websocket")
+		websocket.GET("/file/:id", websocketRouter.FetchFile)
+		websocket.GET("/ping", func(c echo.Context) error {
 			return c.String(http.StatusOK, "pong")
 		})
 	}

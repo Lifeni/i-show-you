@@ -6,6 +6,7 @@ import store from 'store2'
 import styled from 'styled-components'
 import { validate } from 'uuid'
 import { isMobile as check } from '../utils/is-mobile'
+import { closeUpdate, updateFile } from '../utils/update-file'
 import HeaderBar from './app/layout/HeaderBar'
 import TextEditor from './app/layout/TextEditor'
 import GlobalNotification from './global/GlobalNotification'
@@ -55,6 +56,7 @@ const App = () => {
 
   useEffect(() => {
     setPageId(id)
+    closeUpdate()
     if (id === 'new') {
       const now = new Date()
       fetch('/api/file', {
@@ -131,6 +133,8 @@ const App = () => {
             currentPage.set('authentication', data.authentication, true)
             currentPage.set('options', data.data.options)
             setLoading(false)
+
+            await updateFile(id)
           } else if (res.status === 404) {
             if (!currentPage.get('authentication')) {
               setRedirect('404')

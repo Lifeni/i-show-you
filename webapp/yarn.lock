@@ -1451,6 +1451,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@koale/useworker@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@koale/useworker/-/useworker-3.2.1.tgz#3d45593887e1df7ae8b469f1512fbaff85e4db2f"
+  integrity sha512-oTATxVRYceI0ZrlcAYGwhXU5l+rHd14yFlAyQfgbwi+vfFnnMX9EwU85RlGHIKf0BT4rrIIJm73L9lgz/+/EnA==
+  dependencies:
+    dequal "^1.0.0"
+
 "@monaco-editor/react@^3.7.2":
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-3.7.2.tgz#66e4f2301981355f0794402118d947780c0c260b"
@@ -4352,6 +4359,11 @@ depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+dequal@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.1.tgz#dbbf9795ec626e9da8bd68782f4add1d23700d8b"
+  integrity sha512-Fx8jxibzkJX2aJgyfSdLhr9tlRoTnHKrRJuu2XHlAgKioN2j19/Bcbe0d4mFXYZ3+wpE2KVobUVTfDutcD17xQ==
 
 des.js@^1.0.0:
   version "1.0.1"
