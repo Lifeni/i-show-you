@@ -6,7 +6,7 @@ import {
 import React, { useContext } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
-import { GlobalContext } from '../App'
+import { GlobalContext } from '../../App'
 
 const TooltipWrapper = styled.div`
   padding: 0 18px;

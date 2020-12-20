@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import { isMobile as check } from '../../utils/is-mobile'
+import { MobileTipsInline } from '../global/MobileTips'
 import FileCard from './FileCard'
 import HomeActions from './HomeActions'
-import { MobileTipsInline } from './MobileTips'
 
 const Container = styled.div`
   width: 100%;
@@ -61,7 +62,7 @@ const FileList = () => {
   useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
-        setMobile(window.innerWidth < 672)
+        setMobile(check)
       })
     }
 

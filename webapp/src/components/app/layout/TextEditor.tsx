@@ -4,8 +4,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
-import { GlobalContext } from '../App'
-import GlobalNotification from './GlobalNotification'
+import { GlobalContext } from '../../App'
+import GlobalNotification from '../../global/GlobalNotification'
 import ToolBar from './ToolBar'
 
 const Wrapper = styled.div`

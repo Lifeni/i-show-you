@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import ImportFile from './ImportFile'
-import NewFile from './NewFile'
+import ImportFile from '../app/header/ImportFile'
+import NewFile from '../app/header/NewFile'
 
 const ButtonWrapper = styled.div`
   max-width: 960px;

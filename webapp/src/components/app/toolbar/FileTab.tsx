@@ -16,7 +16,7 @@ import { Link, LinkProps } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
-import { GlobalContext } from '../App'
+import { GlobalContext } from '../../App'
 
 const IconWrapper = styled.span`
   svg {

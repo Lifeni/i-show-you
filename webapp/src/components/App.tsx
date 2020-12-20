@@ -5,10 +5,11 @@ import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { validate } from 'uuid'
-import GlobalNotification from './components/GlobalNotification'
-import HeaderBar from './components/HeaderBar'
-import { MobileTips } from './components/MobileTips'
-import TextEditor from './components/TextEditor'
+import { isMobile as check } from '../utils/is-mobile'
+import HeaderBar from './app/layout/HeaderBar'
+import TextEditor from './app/layout/TextEditor'
+import GlobalNotification from './global/GlobalNotification'
+import { MobileTips } from './global/MobileTips'
 
 const context: IGlobalData = {
   isMobile: false,
@@ -171,7 +172,7 @@ const App = () => {
   useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
-        setMobile(window.innerWidth < 672)
+        setMobile(check)
       })
     }
 

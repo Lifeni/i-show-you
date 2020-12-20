@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
-import Admin from './Admin'
-import App from './App'
-import Home from './Home'
+import Admin from './components/Admin'
+import App from './components/App'
+import Home from './components/Home'
 import './index.scss'
 import './global.css'
 

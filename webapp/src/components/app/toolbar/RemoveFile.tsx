@@ -9,8 +9,8 @@ import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
-import { GlobalContext } from '../App'
-import GlobalNotification from './GlobalNotification'
+import { GlobalContext } from '../../App'
+import GlobalNotification from '../../global/GlobalNotification'
 
 const Group = styled.div`
   display: flex;

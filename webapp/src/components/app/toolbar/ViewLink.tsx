@@ -18,7 +18,7 @@ import QRCode from 'react-qr-code'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
-import { GlobalContext } from '../App'
+import { GlobalContext } from '../../App'
 
 const CodeSnippetWrapper = styled.div`
   margin: 12px 0;

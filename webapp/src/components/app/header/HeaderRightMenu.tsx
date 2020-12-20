@@ -19,7 +19,7 @@ import {
 import React, { useState } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import store from 'store2'
-import packageFile from '../../package.json'
+import packageFile from '../../../../package.json'
 
 const HeaderRightMenu = () => {
   const [switcher, setSwitcher] = useState(false)

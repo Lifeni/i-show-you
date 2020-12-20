@@ -17,7 +17,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Link, LinkProps, useLocation } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
-import packageFile from '../../package.json'
+import packageFile from '../../../package.json'
 
 const Container = styled.aside`
   width: 100%;

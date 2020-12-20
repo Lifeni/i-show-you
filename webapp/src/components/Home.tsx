@@ -3,9 +3,9 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import React from 'react'
 import styled from 'styled-components'
-import FileList from './components/FileList'
-import HeaderBar from './components/HeaderBar'
-import SideBar from './components/SideBar'
+import FileList from './home/FileList'
+import HeaderBar from './app/layout/HeaderBar'
+import SideBar from './home/SideBar'
 
 dayjs.extend(relativeTime)
 

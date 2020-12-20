@@ -12,10 +12,10 @@ import React from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { HeaderFileTab, SideNavFileTab } from './FileTab'
-import HeaderRightMenu from './HeaderRightMenu'
-import HorizontalScroller from './HorizontalScroller'
-import SwitchLanguage from './SwitchLanguage'
+import { HeaderFileTab, SideNavFileTab } from '../toolbar/FileTab'
+import HeaderRightMenu from '../header/HeaderRightMenu'
+import HorizontalScroller from '../header/HorizontalScroller'
+import SwitchLanguage from '../header/SwitchLanguage'
 
 const StyledHeader = styled(Header)`
   position: relative;
