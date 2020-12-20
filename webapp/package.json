@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "private": true,
   "description": "The frontend of i-show-you",
   "dependencies": {
