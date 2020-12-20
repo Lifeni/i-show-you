@@ -1,13 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import ImportFile from '../app/header/ImportFile'
-import NewFile from '../app/header/NewFile'
+import ImportFile from './ImportFile'
+import NewFile from './NewFile'
 
 const ButtonWrapper = styled.div`
-  max-width: 960px;
+  max-width: 976px;
   margin: 12px auto 36px auto;
   display: flex;
-  gap: 16px;
 
   @media (max-width: 410px) {
     margin: 0 0 16px 0;
@@ -15,6 +14,10 @@ const ButtonWrapper = styled.div`
 
   a {
     text-decoration: none;
+  }
+
+  button {
+    margin: 0 8px;
   }
 `
 

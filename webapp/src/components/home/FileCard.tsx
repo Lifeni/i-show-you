@@ -9,12 +9,12 @@ const StyledTile = styled(ClickableTile)`
   width: 100%;
   min-width: 240px;
   max-width: 300px;
+  margin: 8px;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 12px;
   border-radius: 4px;
 
   @media (max-width: 410px) {
@@ -49,7 +49,7 @@ const StyledTile = styled(ClickableTile)`
 
   h2 {
     width: 100%;
-    padding: 0 24px;
+    padding: 12px 24px;
     font-size: 1rem;
     font-weight: bold;
     white-space: nowrap;

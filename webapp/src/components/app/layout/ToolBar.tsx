@@ -242,7 +242,7 @@ const ToolBar = (props: {
           ) : (
             <NameLabel>
               {isMobile && <Tag type="blue">Read Only</Tag>}
-              {name}
+              {name || 'Untitled'}
             </NameLabel>
           )}
         </ToolBarCenterWrapper>

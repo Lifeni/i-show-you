@@ -23,7 +23,7 @@ const Container = styled.div`
 `
 
 const EmptyBox = styled.div`
-  max-width: 960px;
+  max-width: 976px;
   margin: 0 auto 12px auto;
   height: calc(100vh - 180px);
   min-height: 50vh;
@@ -37,12 +37,11 @@ const EmptyBox = styled.div`
 `
 
 const FileBox = styled.div`
-  max-width: 960px;
+  max-width: 976px;
   margin: 0 auto 12px auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 16px;
 `
 
 const FileList = () => {

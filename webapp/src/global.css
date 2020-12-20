@@ -56,3 +56,11 @@
 .bx--tooltip__trigger.bx--tooltip--bottom .bx--assistive-text {
   padding: 0.5rem 1rem;
 }
+
+.bx--snippet--multi .bx--snippet-container {
+  min-height: unset;
+}
+
+.bx--snippet--multi .bx--snippet-container pre {
+  padding-bottom: 0;
+}

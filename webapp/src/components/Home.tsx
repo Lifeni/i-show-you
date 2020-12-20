@@ -2,6 +2,7 @@ import { Column, Grid, Row } from 'carbon-components-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import React from 'react'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import styled from 'styled-components'
 import FileList from './home/FileList'
 import HeaderBar from './app/layout/HeaderBar'
@@ -40,21 +41,26 @@ const StyledRow = styled(Row)`
 
 const Home = () => {
   return (
-    <Container>
-      <StyledGrid condensed>
-        <StyledRow>
-          <Column sm={4} md={0} lg={0} xlg={0} max={0}>
-            <HeaderBar noNav={true} />
-          </Column>
-          <Column sm={0} md={2} lg={3} xlg={2} max={2}>
-            <SideBar />
-          </Column>
-          <Column sm={4} md={6} lg={9} xlg={10} max={10}>
-            <FileList />
-          </Column>
-        </StyledRow>
-      </StyledGrid>
-    </Container>
+    <HelmetProvider>
+      <Helmet>
+        <title>Home | I Show You</title>
+      </Helmet>
+      <Container>
+        <StyledGrid condensed>
+          <StyledRow>
+            <Column sm={4} md={0} lg={0} xlg={0} max={0}>
+              <HeaderBar noNav={true} />
+            </Column>
+            <Column sm={0} md={2} lg={3} xlg={2} max={2}>
+              <SideBar />
+            </Column>
+            <Column sm={4} md={6} lg={9} xlg={10} max={10}>
+              <FileList />
+            </Column>
+          </StyledRow>
+        </StyledGrid>
+      </Container>
+    </HelmetProvider>
   )
 }
 
