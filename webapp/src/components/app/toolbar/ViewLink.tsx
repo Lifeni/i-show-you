@@ -178,9 +178,9 @@ const ViewLink = () => {
         open={open}
         modalHeading="Your Share Link"
         modalLabel="Share"
-        primaryButtonText="Copy Link and Close"
+        primaryButtonText="Copy and Close"
         secondaryButtonText="Close"
-        size="sm"
+        size="xs"
         onRequestClose={close}
         onRequestSubmit={() => {
           handleCopy().then(() => {

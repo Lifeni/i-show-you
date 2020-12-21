@@ -116,29 +116,32 @@ const ToolBar = (props: {
           updated_at: new Date(),
         })
       )
-      setFileStatus('Saving')
-      fetch(`/api/file/${pageId}/name`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          updated_at: currentPage.get('updated-at'),
-          name: currentPage.get('name'),
-          type: currentPage.get('type'),
-        }),
-        headers: new Headers({
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
-        }),
-      }).then(async res => {
-        if (res.status === 200) {
-          setFileStatus('Auto Saved')
-        } else {
-          setFileStatus('Error')
-          setNotificationKind('error')
-          setNotificationTitle(`Save Error ${res.status}`)
-          setNotificationSubtitle((await res.json()).message)
-          setOpenNotification(true)
-        }
-      })
+
+      if (currentPage.get('options').auto_save) {
+        setFileStatus('Saving')
+        fetch(`/api/file/${pageId}/name`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            updated_at: currentPage.get('updated-at'),
+            name: currentPage.get('name'),
+            type: currentPage.get('type'),
+          }),
+          headers: new Headers({
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
+          }),
+        }).then(async res => {
+          if (res.status === 200) {
+            setFileStatus('Auto Saved')
+          } else {
+            setFileStatus('Error')
+            setNotificationKind('error')
+            setNotificationTitle(`Save Error ${res.status}`)
+            setNotificationSubtitle((await res.json()).message)
+            setOpenNotification(true)
+          }
+        })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName, debouncedType])

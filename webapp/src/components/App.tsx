@@ -48,7 +48,14 @@ const App = () => {
           name: '',
           type: '',
           content: '',
-          options: {},
+          options: {
+            auto_save: true,
+            word_wrap: false,
+            font_family:
+              "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
+            font_size: 14,
+            line_height: 22,
+          },
         }),
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -77,7 +84,14 @@ const App = () => {
           currentPage.set('type', '')
           currentPage.set('content', '')
           currentPage.set('authentication', 'owner')
-          currentPage.set('options', '{}')
+          currentPage.set('options', {
+            auto_save: true,
+            word_wrap: false,
+            font_family:
+              "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
+            font_size: 14,
+            line_height: 22,
+          })
           setRedirect(uuid)
           setLoading(false)
         } else {
@@ -115,7 +129,9 @@ const App = () => {
             currentPage.set('options', data.data.options)
             setLoading(false)
 
-            await updateFile(id)
+            if (currentPage.get('options').auto_save) {
+              await updateFile(id)
+            }
           } else if (res.status === 404) {
             if (!currentPage.get('authentication')) {
               setRedirect('404')

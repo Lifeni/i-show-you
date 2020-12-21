@@ -7,9 +7,11 @@ import (
 )
 
 type FileOptions struct {
-	FontSize   string `json:"font_size"`
-	LineHeight string `json:"line_height"`
-	LineNumber bool   `json:"line_number"`
+	AutoSave   bool   `json:"auto_save"`
+	WordWrap   bool   `json:"word_wrap"`
+	FontFamily string `json:"font_family"`
+	FontSize   int    `json:"font_size"`
+	LineHeight int    `json:"line_height"`
 }
 
 type File struct {

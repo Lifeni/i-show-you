@@ -33,6 +33,14 @@ interface IFileIndexData {
   header: string
 }
 
+interface IFileOptions {
+  auto_save: boolean
+  word_wrap: boolean
+  font_family: string
+  font_size: number
+  line_height: number
+}
+
 interface ITableParams {
   rows
   headers: Array<IFileIndexData>

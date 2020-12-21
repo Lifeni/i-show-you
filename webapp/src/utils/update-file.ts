@@ -49,6 +49,7 @@ const updateFile = async (id: string) => {
       currentPage.set('name', data.name, true)
       currentPage.set('type', data.type, true)
       currentPage.set('content', data.content, true)
+      currentPage.set('options', data.options, true)
       window.dispatchEvent(new Event('updateStorage'))
     }
   }

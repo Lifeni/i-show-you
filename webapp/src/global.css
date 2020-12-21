@@ -116,3 +116,26 @@
 .bx--side-nav__items {
   padding: 1rem 0;
 }
+
+@media (min-width: 66rem) {
+  .bx--modal-container--xs {
+    max-height: unset;
+  }
+}
+
+.bx--form-item {
+  display: flex;
+  flex-direction: row;
+  flex: 0;
+  height: 32px;
+  align-items: center;
+}
+
+.bx--form-item.bx--text-input-wrapper {
+  flex: 1;
+  margin: 0 0 0 1rem;
+}
+
+.bx--toggle-input__label .bx--toggle__switch {
+  margin: 0 2rem 0 0;
+}

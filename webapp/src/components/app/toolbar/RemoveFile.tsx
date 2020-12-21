@@ -116,7 +116,7 @@ const RemoveFile = (props: { reRender: Function }) => {
         secondaryButtonText="Cancel"
         danger
         alert
-        size="sm"
+        size="xs"
         onRequestSubmit={() => handleDelete()}
         onRequestClose={() => setOpen(false)}
       >
