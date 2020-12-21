@@ -87,7 +87,7 @@
 }
 
 .bx--table-sort.bx--table-sort--active {
-  background-color: #e5e5e5;
+  background: #e5e5e5;
 }
 
 .bx--data-table .bx--table-header-label {
@@ -107,4 +107,12 @@
 
 .bx--toolbar-content {
   justify-content: space-between;
+}
+
+.bx--side-nav__navigation {
+  height: calc(100vh - 48px);
+}
+
+.bx--side-nav__items {
+  padding: 1rem 0;
 }

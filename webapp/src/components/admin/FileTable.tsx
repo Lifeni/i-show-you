@@ -23,6 +23,7 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import { isMobile } from '../../utils/is-mobile'
 import GlobalNotification from '../global/GlobalNotification'
 
 const headerData = [
@@ -38,6 +39,10 @@ const StyledTableContainer = styled(TableContainer)`
   width: 100%;
   height: auto;
   padding: 24px 24px 0 24px;
+
+  @media (max-width: 410px) {
+    padding: 24px 16px 0 16px;
+  }
 
   table {
     white-space: nowrap;
@@ -226,29 +231,59 @@ const FileTable = (props: { data: Array<IFileData> }) => {
                   onChange={onInputChange}
                 />
                 <ButtonWrapper>
-                  <Button
-                    tabIndex={
-                      getBatchActionProps().shouldShowBatchActions ? -1 : 0
-                    }
-                    onClick={handleGetData}
-                    renderIcon={Renew20}
-                    kind="primary"
-                    disabled={loading}
-                  >
-                    {loading ? 'Loading' : 'Update Data'}
-                  </Button>
-                  <Button
-                    hasIconOnly
-                    renderIcon={Logout20}
-                    tooltipAlignment="end"
-                    tooltipPosition="top"
-                    iconDescription="Logout"
-                    tabIndex={
-                      getBatchActionProps().shouldShowBatchActions ? -1 : 0
-                    }
-                    kind="secondary"
-                    onClick={handleLogout}
-                  />
+                  {isMobile() ? (
+                    <Button
+                      hasIconOnly
+                      renderIcon={Renew20}
+                      tooltipAlignment="end"
+                      tooltipPosition="top"
+                      iconDescription="Update Data"
+                      tabIndex={
+                        getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                      }
+                      kind="ghost"
+                      onClick={handleGetData}
+                    />
+                  ) : (
+                    <Button
+                      tabIndex={
+                        getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                      }
+                      onClick={handleGetData}
+                      renderIcon={Renew20}
+                      kind="primary"
+                      disabled={loading}
+                    >
+                      {loading ? 'Loading' : 'Update Data'}
+                    </Button>
+                  )}
+                  {isMobile() ? (
+                    <Button
+                      hasIconOnly
+                      renderIcon={Logout20}
+                      tooltipAlignment="end"
+                      tooltipPosition="top"
+                      iconDescription="Logout"
+                      tabIndex={
+                        getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                      }
+                      kind="ghost"
+                      onClick={handleLogout}
+                    />
+                  ) : (
+                    <Button
+                      hasIconOnly
+                      renderIcon={Logout20}
+                      tooltipAlignment="end"
+                      tooltipPosition="top"
+                      iconDescription="Logout"
+                      tabIndex={
+                        getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                      }
+                      kind="secondary"
+                      onClick={handleLogout}
+                    />
+                  )}
                 </ButtonWrapper>
               </TableToolbarContent>
             </TableToolbar>
