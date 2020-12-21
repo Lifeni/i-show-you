@@ -1,4 +1,4 @@
-import { Link20, Renew20, TrashCan20 } from '@carbon/icons-react'
+import { Link20, Logout20, Renew20, TrashCan20 } from '@carbon/icons-react'
 import {
   Button,
   DataTable,
@@ -20,6 +20,7 @@ import {
   TableToolbarSearch,
 } from 'carbon-components-react'
 import React, { useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import GlobalNotification from '../global/GlobalNotification'
@@ -53,12 +54,17 @@ const StyledTableContainer = styled(TableContainer)`
   }
 `
 
+const ButtonWrapper = styled.div`
+  height: 100%;
+`
+
 const FileTable = (props: { data: Array<IFileData> }) => {
   let { data } = props
   const [fileData, setFileData] = useState(data)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(false)
+  const [redirect, setRedirect] = useState(false)
 
   const adminPage = store.namespace('admin-page')
   const [openNotification, setOpenNotification] = useState(false)
@@ -92,6 +98,11 @@ const FileTable = (props: { data: Array<IFileData> }) => {
     setRowData(getRowData())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize, fileData])
+
+  const handleLogout = () => {
+    adminPage.remove('token')
+    setRedirect(true)
+  }
 
   const handlePageChange = (e: { page: number; pageSize: number }) => {
     setPage(e.page)
@@ -170,6 +181,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
 
   return (
     <>
+      {redirect && <Redirect to={`/`} />}
       <GlobalNotification
         open={openNotification}
         close={() => setOpenNotification(false)}
@@ -213,18 +225,31 @@ const FileTable = (props: { data: Array<IFileData> }) => {
                   }
                   onChange={onInputChange}
                 />
-                <Button
-                  tabIndex={
-                    getBatchActionProps().shouldShowBatchActions ? -1 : 0
-                  }
-                  onClick={handleGetData}
-                  renderIcon={Renew20}
-                  size="small"
-                  kind="primary"
-                  disabled={loading}
-                >
-                  {loading ? 'Loading' : 'Update Data'}
-                </Button>
+                <ButtonWrapper>
+                  <Button
+                    tabIndex={
+                      getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                    }
+                    onClick={handleGetData}
+                    renderIcon={Renew20}
+                    kind="primary"
+                    disabled={loading}
+                  >
+                    {loading ? 'Loading' : 'Update Data'}
+                  </Button>
+                  <Button
+                    hasIconOnly
+                    renderIcon={Logout20}
+                    tooltipAlignment="end"
+                    tooltipPosition="top"
+                    iconDescription="Logout"
+                    tabIndex={
+                      getBatchActionProps().shouldShowBatchActions ? -1 : 0
+                    }
+                    kind="secondary"
+                    onClick={handleLogout}
+                  />
+                </ButtonWrapper>
               </TableToolbarContent>
             </TableToolbar>
             <Table isSortable={true}>

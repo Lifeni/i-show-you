@@ -104,3 +104,7 @@
 .bx--pagination {
   border-top: none;
 }
+
+.bx--toolbar-content {
+  justify-content: space-between;
+}
