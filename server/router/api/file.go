@@ -9,50 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"net/http"
-	"server/database"
 	"server/util"
 	"time"
 )
-
-type FileOptions struct {
-	FontSize   string `json:"font_size"`
-	LineHeight string `json:"line_height"`
-	LineNumber bool   `json:"line_number"`
-}
-
-type File struct {
-	Id        string      `json:"id"`
-	CreatedAt string      `json:"created_at"`
-	UpdatedAt string      `json:"updated_at"`
-	Name      string      `json:"name"`
-	Type      string      `json:"type"`
-	Content   string      `json:"content"`
-	Options   FileOptions `json:"options"`
-}
-
-type RequestData struct {
-	CreatedAt string      `json:"created_at"`
-	UpdatedAt string      `json:"updated_at"`
-	Name      string      `json:"name"`
-	Type      string      `json:"type"`
-	Content   string      `json:"content"`
-	Options   FileOptions `json:"options"`
-}
-
-type ResponseError struct {
-	Message       string `json:"message"`
-	Documentation string `json:"documentation"`
-}
-
-var (
-	FileCollection *mongo.Collection
-	Config         *util.Config
-)
-
-func InitFileCollection() {
-	FileCollection = database.GetCollection("file")
-	Config = util.ConfigFile
-}
 
 func CreateFile(c echo.Context) error {
 	id := uuid.NewV4()
@@ -103,7 +62,7 @@ func CreateFile(c echo.Context) error {
 func QueryFile(c echo.Context) error {
 	id := c.Param("id")
 
-	authentication := util.VerifyToken(c)
+	authentication := util.VerifyFileToken(c)
 
 	type QueryData struct {
 		Id string `json:"id"`
@@ -138,7 +97,6 @@ func QueryFile(c echo.Context) error {
 	res.Data = file
 	res.Authentication = authentication
 	return c.JSON(http.StatusOK, &res)
-
 }
 
 func QueryRawFile(c echo.Context) error {
@@ -174,7 +132,7 @@ func QueryRawFile(c echo.Context) error {
 func UpdateFile(c echo.Context) error {
 	id := c.Param("id")
 
-	if util.VerifyToken(c) == "ghost" {
+	if util.VerifyFileToken(c) == "ghost" {
 		res := new(ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
@@ -196,7 +154,15 @@ func UpdateFile(c echo.Context) error {
 	req := new(UpdateData)
 	err := c.Bind(req)
 
-	_, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+	result, err := FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+
+	if result != nil && result.MatchedCount == 0 {
+		log.Println(err)
+		res := new(ResponseError)
+		res.Message = "File Not Found"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusNotFound, &res)
+	}
 
 	if err != nil {
 		log.Println(err)
@@ -219,7 +185,7 @@ func UpdateFile(c echo.Context) error {
 func UpdateFilePatch(c echo.Context) error {
 	id, key := c.Param("id"), c.Param("key")
 
-	if util.VerifyToken(c) == "ghost" {
+	if util.VerifyFileToken(c) == "ghost" {
 		res := new(ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
@@ -231,6 +197,7 @@ func UpdateFilePatch(c echo.Context) error {
 	}
 
 	var err error
+	var result *mongo.UpdateResult
 
 	if key == "name" {
 		type UpdateData struct {
@@ -242,7 +209,15 @@ func UpdateFilePatch(c echo.Context) error {
 		req := new(UpdateData)
 		err = c.Bind(req)
 
-		_, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		if err != nil {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "Invalid Request"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusBadRequest, &res)
+		}
+
+		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
 	} else if key == "content" {
 		type UpdateData struct {
 			Content   string `json:"content"`
@@ -252,7 +227,15 @@ func UpdateFilePatch(c echo.Context) error {
 		req := new(UpdateData)
 		err = c.Bind(req)
 
-		_, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		if err != nil {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "Invalid Request"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusBadRequest, &res)
+		}
+
+		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
 	} else if key == "options" {
 		type UpdateData struct {
 			Options   FileOptions `json:"options"`
@@ -262,13 +245,29 @@ func UpdateFilePatch(c echo.Context) error {
 		req := new(UpdateData)
 		err = c.Bind(req)
 
-		_, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		if err != nil {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "Invalid Request"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusBadRequest, &res)
+		}
+
+		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
 	} else {
 		log.Println(err)
 		res := new(ResponseError)
 		res.Message = "Invalid Request"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusForbidden, &res)
+		return c.JSON(http.StatusBadRequest, &res)
+	}
+
+	if result != nil && result.MatchedCount == 0 {
+		log.Println(err)
+		res := new(ResponseError)
+		res.Message = "File Not Found"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusNotFound, &res)
 	}
 
 	if err != nil {
@@ -292,7 +291,7 @@ func UpdateFilePatch(c echo.Context) error {
 func RemoveFile(c echo.Context) error {
 	id := c.Param("id")
 
-	if util.VerifyToken(c) == "ghost" {
+	if util.VerifyFileToken(c) == "ghost" {
 		res := new(ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"

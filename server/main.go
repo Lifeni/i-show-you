@@ -50,6 +50,11 @@ func main() {
 		api.PATCH("/file/:id/:key", apiRouter.UpdateFilePatch)
 		api.DELETE("/file/:id", apiRouter.RemoveFile)
 
+		api.GET("/admin", apiRouter.QueryFileAdmin)
+		api.POST("/admin", apiRouter.AdminLogin)
+		api.DELETE("/admin/file/:id", apiRouter.RemoveFileAdmin)
+		api.DELETE("/admin/files", apiRouter.RemoveMultipleFilesAdmin)
+
 		api.GET("/ping", func(c echo.Context) error {
 			return c.String(http.StatusOK, "pong")
 		})

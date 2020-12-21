@@ -20,16 +20,33 @@ interface ITabData {
   authentication: string
 }
 
+interface IFileData {
+  name: string
+  created_at: string
+  updated_at: string
+  id: string
+  type: string
+}
+
+interface IFileIndexData {
+  key: string
+  header: string
+}
+
+interface ITableParams {
+  rows
+  headers: Array<IFileIndexData>
+  getHeaderProps
+  getRowProps
+  getSelectionProps
+  getBatchActionProps
+  onInputChange
+  selectedRows
+}
+
 interface IURLParams {
   id: string
 }
-
-interface IResponseData {
-  message: string
-  data?: any
-  documentation?: string
-}
-
 declare module 'react-qr-code' {
   import * as React from 'react'
 

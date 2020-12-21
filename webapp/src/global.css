@@ -53,6 +53,18 @@
   border: none;
 }
 
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-start
+  .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-center
+  .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-end
+  .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-start
+  .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-center
+  .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-end
+  .bx--assistive-text,
 .bx--tooltip__trigger.bx--tooltip--bottom .bx--assistive-text {
   padding: 0.5rem 1rem;
 }
@@ -63,4 +75,32 @@
 
 .bx--snippet--multi .bx--snippet-container pre {
   padding-bottom: 0;
+}
+
+.bx--table-sort:hover {
+  background: #e5e5e5;
+}
+
+.bx--data-table th.bx--table-column-checkbox,
+.bx--table-sort {
+  background: #f4f4f4;
+}
+
+.bx--table-sort.bx--table-sort--active {
+  background-color: #e5e5e5;
+}
+
+.bx--data-table .bx--table-header-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bx--data-table tbody td.bx--table-column-checkbox {
+  width: 3.25rem;
+  padding-right: 1rem;
+}
+
+.bx--pagination {
+  border-top: none;
 }

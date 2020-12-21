@@ -19,6 +19,7 @@ import SwitchLanguage from '../header/SwitchLanguage'
 
 const StyledHeader = styled(Header)`
   position: relative;
+  width: 100%;
 `
 
 const HeaderNameWrapper = styled.div`
@@ -32,8 +33,12 @@ const StyledHeaderMenuButton = styled(HeaderMenuButton)`
   height: 48px;
 `
 
-const HeaderBar = (props: { noNav: boolean }) => {
-  const { noNav } = props
+const HeaderBar = (props: {
+  noNav: boolean
+  title?: string
+  prefix?: string
+}) => {
+  const { noNav, title, prefix } = props
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
@@ -47,8 +52,12 @@ const HeaderBar = (props: { noNav: boolean }) => {
             />
           )}
           <HeaderNameWrapper>
-            <HeaderName<LinkProps> element={Link} prefix="I Show" to="/">
-              You
+            <HeaderName<LinkProps>
+              element={Link}
+              prefix={prefix || 'I Show'}
+              to="/"
+            >
+              {title || 'You'}
             </HeaderName>
           </HeaderNameWrapper>
 

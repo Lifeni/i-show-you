@@ -1,14 +1,14 @@
-import { Loading, NotificationKind } from 'carbon-components-react'
+import { NotificationKind } from 'carbon-components-react'
 import React, { createContext, useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
-import styled from 'styled-components'
 import { validate } from 'uuid'
 import { isMobile as check } from '../utils/is-mobile'
 import { closeUpdate, updateFile } from '../utils/update-file'
 import HeaderBar from './app/layout/HeaderBar'
 import TextEditor from './app/layout/TextEditor'
+import GlobalLoading from './global/GlobalLoading'
 import GlobalNotification from './global/GlobalNotification'
 import { MobileTips } from './global/MobileTips'
 
@@ -18,25 +18,6 @@ const context: IGlobalData = {
 }
 
 const GlobalContext = createContext(context)
-
-const LoadingWrapper = styled.div`
-  position: fixed;
-  z-index: 99999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 100vh;
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f4f4f4;
-
-  svg {
-    transform: scale(0.5);
-  }
-`
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -195,9 +176,7 @@ const App = () => {
           <Helmet>
             <title>I Show You</title>
           </Helmet>
-          <LoadingWrapper>
-            <Loading description="Loading ..." withOverlay={false} />
-          </LoadingWrapper>
+          <GlobalLoading />
         </>
       ) : (
         <>

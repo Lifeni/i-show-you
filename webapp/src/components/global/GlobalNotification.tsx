@@ -38,7 +38,7 @@ const GlobalNotification = (props: {
   const { open, close, kind, title, subtitle } = props
 
   return (
-    <NotificationWrapper>
+    <NotificationWrapper style={{ zIndex: new Date().getTime() }}>
       {open ? (
         <InlineNotification
           kind={kind as NotificationKind}
