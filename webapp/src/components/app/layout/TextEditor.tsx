@@ -31,12 +31,38 @@ const TextEditor = () => {
 
   const editorRef = useRef()
 
+  const [autoSave, setAutoSave] = useState(
+    currentPage.get('options') ? currentPage.get('options').auto_save : true
+  )
+  const [wordWrap, setWordWrap] = useState(
+    currentPage.get('options') ? currentPage.get('options').word_wrap : false
+  )
+  const [fontFamily, setFontFamily] = useState(
+    currentPage.get('options')
+      ? currentPage.get('options').font_family
+      : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+  )
+  const [fontSize, setFontSize] = useState(
+    currentPage.get('options') ? currentPage.get('options').font_size : 14
+  )
+  const [lineHeight, setLineHeight] = useState(
+    currentPage.get('options') ? currentPage.get('options').line_height : 22
+  )
+
   useEffect(() => {
     setValue(currentPage.get('content') || '')
 
     const updateValue = () => {
       setValue(currentPage.get('content') || '')
       setEditorId(new Date().getTime())
+      setAutoSave(currentPage.get('options').auto_save)
+      setWordWrap(currentPage.get('options').word_wrap)
+      setFontFamily(
+        currentPage.get('options').font_family ||
+          "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+      )
+      setFontSize(currentPage.get('options').font_size || 14)
+      setLineHeight(currentPage.get('options').line_height || 22)
     }
 
     window.addEventListener('updateStorage', updateValue, false)
@@ -173,12 +199,10 @@ const TextEditor = () => {
         }
         value={value}
         options={{
-          wordWrap: currentPage.get('options').word_wrap ? 'on' : 'off',
-          fontFamily:
-            currentPage.get('options').font_family ||
-            "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
-          fontSize: currentPage.get('options').font_size || 14,
-          lineHeight: currentPage.get('options').line_height || 22,
+          wordWrap: wordWrap ? 'on' : 'off',
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+          lineHeight: lineHeight,
           padding: {
             top: 16,
             bottom: 16,

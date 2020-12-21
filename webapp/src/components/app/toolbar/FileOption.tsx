@@ -64,17 +64,22 @@ const FileOption = () => {
     'Unknown Notification'
   )
 
-  const [autoSave, setAutoSave] = useState(currentPage.get('options').auto_save)
-  const [wordWrap, setWordWrap] = useState(currentPage.get('options').word_wrap)
+  const [autoSave, setAutoSave] = useState(
+    currentPage.get('options') ? currentPage.get('options').auto_save : true
+  )
+  const [wordWrap, setWordWrap] = useState(
+    currentPage.get('options') ? currentPage.get('options').word_wrap : false
+  )
   const [fontFamily, setFontFamily] = useState(
-    currentPage.get('options').font_family ||
-      "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+    currentPage.get('options')
+      ? currentPage.get('options').font_family
+      : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
   )
   const [fontSize, setFontSize] = useState(
-    currentPage.get('options').font_size || 14
+    currentPage.get('options') ? currentPage.get('options').font_size : 14
   )
   const [lineHeight, setLineHeight] = useState(
-    currentPage.get('options').line_height || 22
+    currentPage.get('options') ? currentPage.get('options').line_height : 22
   )
 
   const handleOptionsSave = () => {
