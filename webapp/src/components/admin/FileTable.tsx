@@ -1,4 +1,4 @@
-import { Home20, Link20, TrashCan20 } from '@carbon/icons-react'
+import { Link20, Renew20, TrashCan20 } from '@carbon/icons-react'
 import {
   Button,
   DataTable,
@@ -58,6 +58,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
   const [fileData, setFileData] = useState(data)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [loading, setLoading] = useState(false)
 
   const adminPage = store.namespace('admin-page')
   const [openNotification, setOpenNotification] = useState(false)
@@ -89,6 +90,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
   const [rowData, setRowData] = useState(getRowData())
   useEffect(() => {
     setRowData(getRowData())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize, fileData])
 
   const handlePageChange = (e: { page: number; pageSize: number }) => {
@@ -123,7 +125,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
 
   const handleRemoveMultipleFiles = (rows: Array<any>) => {
     const files = rows.map(row => row.id)
-    const ans = window.confirm(`Remove ${files}?`)
+    const ans = window.confirm(`Remove ${files.join('\n')}?`)
     if (ans) {
       fetch(`/api/admin/files`, {
         method: 'DELETE',
@@ -149,6 +151,21 @@ const FileTable = (props: { data: Array<IFileData> }) => {
         }
       })
     }
+  }
+
+  const handleGetData = () => {
+    setLoading(true)
+    fetch('/api/admin', {
+      headers: new Headers({
+        Authorization: 'Bearer ' + adminPage.get('token') || 'no-token',
+      }),
+    }).then(async res => {
+      const data = await res.json()
+      if (res.status === 200) {
+        setFileData(data.data)
+      }
+      setLoading(false)
+    })
   }
 
   return (
@@ -200,13 +217,13 @@ const FileTable = (props: { data: Array<IFileData> }) => {
                   tabIndex={
                     getBatchActionProps().shouldShowBatchActions ? -1 : 0
                   }
-                  onClick={() => console.log('clicked')}
-                  renderIcon={Home20}
+                  onClick={handleGetData}
+                  renderIcon={Renew20}
                   size="small"
                   kind="primary"
-                  href="/"
+                  disabled={loading}
                 >
-                  Back Home
+                  {loading ? 'Loading' : 'Update Data'}
                 </Button>
               </TableToolbarContent>
             </TableToolbar>

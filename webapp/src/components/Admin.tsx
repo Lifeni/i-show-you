@@ -77,7 +77,6 @@ const Admin = () => {
         if (res.status === 200) {
           setLogged(true)
           setData(data.data)
-          // console.log(data.data)
         } else {
           setLogged(false)
         }
