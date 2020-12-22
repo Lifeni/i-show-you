@@ -10,6 +10,7 @@ import GlobalNotification from '../../global/GlobalNotification'
 import FileHistory from '../toolbar/FileHistory'
 import FileMeta from '../toolbar/FileMeta'
 import FileOption from '../toolbar/FileOption'
+import ForkFile from '../toolbar/ForkFile'
 import RemoveFile from '../toolbar/RemoveFile'
 import RunFile from '../toolbar/RunFile'
 import ViewLink from '../toolbar/ViewLink'
@@ -65,16 +66,13 @@ const ToolBar = (props: {
 
   const changeLanguage = (e: { target: { value: string } }) => {
     setName(e.target.value)
-    tabs.set(
-      pageId,
-      JSON.stringify({
-        name: e.target.value,
-        created_at: store.namespace(pageId).get('created-at'),
-        updated_at: store.namespace(pageId).get('updated-at'),
-        id: pageId,
-        authentication: store.namespace(pageId).get('authentication'),
-      })
-    )
+    tabs.set(pageId, {
+      name: e.target.value,
+      created_at: store.namespace(pageId).get('created-at'),
+      updated_at: store.namespace(pageId).get('updated-at'),
+      id: pageId,
+      authentication: store.namespace(pageId).get('authentication'),
+    })
     window.dispatchEvent(new Event('storage'))
     const arr = e.target.value.split('.')
     if (e.target.value.includes('.') && arr.length > 0) {
@@ -106,16 +104,14 @@ const ToolBar = (props: {
     ) {
       currentPage.set('name', debouncedName)
       currentPage.set('type', debouncedType)
+      updateType(debouncedType)
       currentPage.set('updated-at', new Date())
       const pre = tabs.get(pageId)
-      tabs.set(
-        pageId,
-        JSON.stringify({
-          ...JSON.parse(pre),
-          name: debouncedName,
-          updated_at: new Date(),
-        })
-      )
+      tabs.set(pageId, {
+        ...pre,
+        name: debouncedName,
+        updated_at: new Date(),
+      })
 
       if (currentPage.get('options').auto_save) {
         setFileStatus('Saving')
@@ -150,6 +146,7 @@ const ToolBar = (props: {
     setName(currentPage.get('name') || '')
     setType(currentPage.get('type') || '')
     updateType(currentPage.get('type') || '')
+
     const input: HTMLInputElement | null = document.querySelector(
       '#editor-file-name'
     )
@@ -251,6 +248,7 @@ const ToolBar = (props: {
         </ToolBarCenterWrapper>
         <ToolBarRightWrapper className="fixed-width">
           {!isMobile && <RunFile type={findBySlug(type)} />}
+          {!isMobile && <ForkFile />}
           {isMobile && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />
           )}
