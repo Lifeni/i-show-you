@@ -36,14 +36,11 @@ const updateFile = async (id: string) => {
       ws.send('pong')
     } else if (JSON.parse(event.data) && JSON.parse(event.data).id === id) {
       const data = JSON.parse(event.data)
-      tabs.set(
-        id,
-        JSON.stringify({
-          ...JSON.parse(tabs.get(id)),
-          name: data.name,
-          updated_at: data.updated_at,
-        })
-      )
+      tabs.set(id, {
+        ...tabs.get(id),
+        name: data.name,
+        updated_at: data.updated_at,
+      })
 
       currentPage.set('updated-at', data.updated_at, true)
       currentPage.set('name', data.name, true)

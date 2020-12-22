@@ -29,25 +29,20 @@ const HeaderFileTab = forwardRef((_, ref) => {
   const tabs = store.namespace('tabs')
 
   const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll())
-      .map(v => JSON.parse(v))
-      .sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )
+    Object.values(tabs.getAll()).sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
   )
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
       setTabData(
-        Object.values(tabs.getAll())
-          .map(v => JSON.parse(v))
-          .sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          )
+        Object.values(tabs.getAll()).sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
       )
     }
 
@@ -63,13 +58,11 @@ const HeaderFileTab = forwardRef((_, ref) => {
     if (currentPage.get('authentication') !== 'owner') {
       const updateTabData = () => {
         setTabData(
-          Object.values(tabs.getAll())
-            .map(v => JSON.parse(v))
-            .sort(
-              (a, b) =>
-                new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-            )
+          Object.values(tabs.getAll()).sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          )
         )
       }
       window.addEventListener('updateStorage', updateTabData, false)
@@ -116,25 +109,20 @@ const SideNavFileTab = () => {
   const tabs = store.namespace('tabs')
 
   const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll())
-      .map(v => JSON.parse(v))
-      .sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )
+    Object.values(tabs.getAll()).sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
   )
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
       setTabData(
-        Object.values(tabs.getAll())
-          .map(v => JSON.parse(v))
-          .sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          )
+        Object.values(tabs.getAll()).sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
       )
     }
 
@@ -150,13 +138,11 @@ const SideNavFileTab = () => {
     if (currentPage.get('authentication') !== 'owner') {
       const updateTabData = () => {
         setTabData(
-          Object.values(tabs.getAll())
-            .map(v => JSON.parse(v))
-            .sort(
-              (a, b) =>
-                new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-            )
+          Object.values(tabs.getAll()).sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          )
         )
       }
       window.addEventListener('updateStorage', updateTabData, false)

@@ -50,20 +50,31 @@ const TextEditor = () => {
   )
 
   useEffect(() => {
-    setValue(currentPage.get('content') || '')
-
     const updateValue = () => {
       setValue(currentPage.get('content') || '')
       setEditorId(new Date().getTime())
-      setAutoSave(currentPage.get('options').auto_save)
-      setWordWrap(currentPage.get('options').word_wrap)
-      setFontFamily(
-        currentPage.get('options').font_family ||
-          "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+      setAutoSave(
+        currentPage.get('options') ? currentPage.get('options').auto_save : true
       )
-      setFontSize(currentPage.get('options').font_size || 14)
-      setLineHeight(currentPage.get('options').line_height || 22)
+      setWordWrap(
+        currentPage.get('options')
+          ? currentPage.get('options').word_wrap
+          : false
+      )
+      setFontFamily(
+        currentPage.get('options')
+          ? currentPage.get('options').font_family
+          : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+      )
+      setFontSize(
+        currentPage.get('options') ? currentPage.get('options').font_size : 14
+      )
+      setLineHeight(
+        currentPage.get('options') ? currentPage.get('options').line_height : 22
+      )
     }
+
+    updateValue()
 
     window.addEventListener('updateStorage', updateValue, false)
 
@@ -139,13 +150,10 @@ const TextEditor = () => {
       currentPage.set('updated-at', new Date())
       const tabs = store.namespace('tabs')
       const pre = tabs.get(pageId)
-      tabs.set(
-        pageId,
-        JSON.stringify({
-          ...JSON.parse(pre),
-          updated_at: new Date(),
-        })
-      )
+      tabs.set(pageId, {
+        ...pre,
+        updated_at: new Date(),
+      })
 
       if (currentPage.get('options').auto_save) {
         setStatus('Saving')

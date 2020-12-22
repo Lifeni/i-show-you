@@ -67,16 +67,13 @@ const App = () => {
           const token = data.token
           const tabs = store.namespace('tabs')
           const currentPage = store.namespace(uuid)
-          tabs.set(
-            uuid,
-            JSON.stringify({
-              name: '',
-              created_at: now,
-              updated_at: now,
-              id: uuid,
-              authentication: 'owner',
-            })
-          )
+          tabs.set(uuid, {
+            name: '',
+            created_at: now,
+            updated_at: now,
+            id: uuid,
+            authentication: 'owner',
+          })
           currentPage.set('token', token)
           currentPage.set('created-at', now, false)
           currentPage.set('updated-at', now)
@@ -109,16 +106,13 @@ const App = () => {
           const data = await res.json()
           if (res.status === 200) {
             const tabs = store.namespace('tabs')
-            tabs.set(
-              id,
-              JSON.stringify({
-                name: data.data.name,
-                created_at: data.data.created_at,
-                updated_at: data.data.updated_at,
-                id: id,
-                authentication: data.authentication,
-              })
-            )
+            tabs.set(id, {
+              name: data.data.name,
+              created_at: data.data.created_at,
+              updated_at: data.data.updated_at,
+              id: id,
+              authentication: data.authentication,
+            })
 
             currentPage.set('created-at', data.data.created_at, true)
             currentPage.set('updated-at', data.data.updated_at, true)

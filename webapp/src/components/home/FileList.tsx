@@ -49,12 +49,10 @@ const FileList = () => {
   const [redirect, setRedirect] = useState('200')
 
   const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll())
-      .map(v => JSON.parse(v))
-      .sort(
-        (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      )
+    Object.values(tabs.getAll()).sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    )
   )
 
   const [isMobile, setMobile] = useState(false)
@@ -76,13 +74,10 @@ const FileList = () => {
   useEffect(() => {
     const updateTabData = () => {
       setTabData(
-        Object.values(tabs.getAll())
-          .map(v => JSON.parse(v))
-          .sort(
-            (a, b) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime()
-          )
+        Object.values(tabs.getAll()).sort(
+          (a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        )
       )
     }
 

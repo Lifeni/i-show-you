@@ -60,7 +60,7 @@ const ViewLink = () => {
   const [open, setOpen] = useState(false)
   const [pageSwitch, setPageSwitch] = useState('link')
 
-  const share = async () => {
+  const handleShareFile = async () => {
     await fetch('/api/file', {
       method: 'POST',
       body: JSON.stringify({
@@ -79,16 +79,13 @@ const ViewLink = () => {
         const data = await res.json()
         const tabs = store.namespace('tabs')
         currentPage.set('updated-at', new Date())
-        tabs.set(
-          data.data.id,
-          JSON.stringify({
-            name: currentPage.get('name'),
-            created_at: currentPage.get('created-at'),
-            updated_at: currentPage.get('updated-at'),
-            id: data.data.id,
-            authentication: currentPage.get('authentication'),
-          })
-        )
+        tabs.set(data.data.id, {
+          name: currentPage.get('name'),
+          created_at: currentPage.get('created-at'),
+          updated_at: currentPage.get('updated-at'),
+          id: data.data.id,
+          authentication: currentPage.get('authentication'),
+        })
         tabs.remove(pageId)
         const targetPage = store.namespace(data.data.id)
         targetPage.set('token', data.data.token)
@@ -108,11 +105,11 @@ const ViewLink = () => {
     })
   }
 
-  const show = () => {
+  const handleShowDialog = () => {
     setOpen(true)
   }
 
-  const close = () => {
+  const handleCloseDialog = () => {
     setOpen(false)
   }
 
@@ -141,14 +138,14 @@ const ViewLink = () => {
             iconDescription="Get Share Link"
             kind="primary"
             size="field"
-            onClick={share}
+            onClick={handleShareFile}
           />
         ) : (
           <Button
             kind="primary"
             size="field"
             renderIcon={Link20}
-            onClick={share}
+            onClick={handleShareFile}
           >
             Get Share Link
           </Button>
@@ -162,14 +159,14 @@ const ViewLink = () => {
           iconDescription="View Link"
           kind="ghost"
           size="field"
-          onClick={show}
+          onClick={handleShowDialog}
         />
       ) : (
         <StyledButton
           kind="tertiary"
           size="field"
           renderIcon={Share20}
-          onClick={show}
+          onClick={handleShowDialog}
         >
           View Link
         </StyledButton>
@@ -181,10 +178,10 @@ const ViewLink = () => {
         primaryButtonText="Copy and Close"
         secondaryButtonText="Close"
         size="xs"
-        onRequestClose={close}
+        onRequestClose={handleCloseDialog}
         onRequestSubmit={() => {
           handleCopy().then(() => {
-            close()
+            handleCloseDialog()
           })
         }}
       >

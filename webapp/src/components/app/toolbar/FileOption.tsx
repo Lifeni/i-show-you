@@ -114,13 +114,10 @@ const FileOption = () => {
 
       const tabs = store.namespace('tabs')
       const pre = tabs.get(pageId)
-      tabs.set(
-        pageId,
-        JSON.stringify({
-          ...JSON.parse(pre),
-          updated_at: new Date(),
-        })
-      )
+      tabs.set(pageId, {
+        ...pre,
+        updated_at: new Date(),
+      })
       currentPage.set('updated-at', new Date())
     }
 
