@@ -6,10 +6,19 @@ import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
+import MarkdownPreview from '../text-editor/MarkdownPreview'
+import WebBrowser from '../text-editor/WebBrowser'
 import ToolBar from './ToolBar'
 
 const Wrapper = styled.div`
   overflow: hidden;
+`
+
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 88px);
+  display: flex;
 `
 
 const LoadingWrapper = styled.div`
@@ -22,6 +31,7 @@ const TextEditor = () => {
   const { isMobile, pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
 
+  const [view, setView] = useState('none')
   const [type, setType] = useState(currentPage.get('type') || '')
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
@@ -30,6 +40,7 @@ const TextEditor = () => {
 
   const editorRef = useRef()
 
+  // TODO change to currentPage.get('')?.auto_save
   const [autoSave, setAutoSave] = useState(
     currentPage.get('options') ? currentPage.get('options').auto_save : true
   )
@@ -51,6 +62,8 @@ const TextEditor = () => {
   const [status, setStatus] = useState(autoSave ? 'Ready' : 'Auto Save OFF')
 
   useEffect(() => {
+    setView('none')
+
     const updateValue = () => {
       setValue(currentPage.get('content') || '')
       setEditorId(new Date().getTime())
@@ -76,7 +89,7 @@ const TextEditor = () => {
       )
 
       setStatus(
-        currentPage.get('options').auto_save ? 'Ready' : 'Auto Save OFF'
+        currentPage.get('options')?.auto_save ? 'Ready' : 'Auto Save OFF'
       )
     }
 
@@ -176,6 +189,7 @@ const TextEditor = () => {
         }).then(async res => {
           if (res.status === 200) {
             setStatus('Auto Saved')
+            window.dispatchEvent(new Event('updateContent'))
           } else {
             setStatus('Error')
             setNotificationKind('error')
@@ -199,37 +213,49 @@ const TextEditor = () => {
         subtitle={notificationSubtitle}
         kind={notificationKind as NotificationKind}
       />
-      <ToolBar editor={editorRef} status={status} updateType={setType} />
-      <Editor
-        width="100%"
-        height="calc(100vh - 88px)"
-        className="editor"
-        theme="light"
-        language={type}
-        loading={
-          <LoadingWrapper>
-            <InlineLoading description="Editor Loading ..." />
-          </LoadingWrapper>
-        }
-        value={value}
-        options={{
-          wordWrap: wordWrap ? 'on' : 'off',
-          fontFamily: fontFamily,
-          fontSize: fontSize,
-          lineHeight: lineHeight,
-          padding: {
-            top: 16,
-            bottom: 16,
-          },
-          minimap: {
-            enabled: !isMobile,
-            scale: 1,
-            maxColumn: 150,
-          },
-          readOnly: currentPage.get('authentication') !== 'owner',
-        }}
-        editorDidMount={handleEditorDidMount}
+      <ToolBar
+        editor={editorRef}
+        status={status}
+        updateType={setType}
+        updateView={setView}
       />
+      <Container>
+        <Editor
+          width={view === 'none' ? '100%' : '50%'}
+          height="100%"
+          className="editor"
+          theme="light"
+          language={type}
+          loading={
+            <LoadingWrapper>
+              <InlineLoading description="Editor Loading ..." />
+            </LoadingWrapper>
+          }
+          value={value}
+          options={{
+            wordWrap: wordWrap ? 'on' : 'off',
+            fontFamily: fontFamily,
+            fontSize: fontSize,
+            lineHeight: lineHeight,
+            padding: {
+              top: 16,
+              bottom: 16,
+            },
+            minimap: {
+              enabled: !isMobile,
+              scale: 1,
+              maxColumn: 150,
+            },
+            readOnly: currentPage.get('authentication') !== 'owner',
+          }}
+          editorDidMount={handleEditorDidMount}
+        />
+        {view === 'html' ? (
+          <WebBrowser />
+        ) : view === 'markdown' ? (
+          <MarkdownPreview />
+        ) : null}
+      </Container>
     </Wrapper>
   )
 }

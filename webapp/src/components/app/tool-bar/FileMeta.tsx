@@ -1,8 +1,4 @@
-import {
-  InlineLoading,
-  TooltipDefinition,
-  TooltipIcon,
-} from 'carbon-components-react'
+import { InlineLoading } from 'carbon-components-react'
 import React, { useContext } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
@@ -18,7 +14,7 @@ const TooltipWrapper = styled.div`
 `
 
 const FileMeta = (props: { status: string; type: IFileMap }) => {
-  const { status, type } = props
+  const { status } = props
   const { pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
   return (

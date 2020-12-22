@@ -7,13 +7,13 @@ import { useDebounce } from 'use-debounce'
 import { findByExt, findBySlug } from '../../../utils/check-file-type'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
-import FileHistory from '../toolbar/FileHistory'
-import FileMeta from '../toolbar/FileMeta'
-import FileOption from '../toolbar/FileOption'
-import ForkFile from '../toolbar/ForkFile'
-import RemoveFile from '../toolbar/RemoveFile'
-import RunFile from '../toolbar/RunFile'
-import ViewLink from '../toolbar/ViewLink'
+import FileHistory from '../tool-bar/FileHistory'
+import FileMeta from '../tool-bar/FileMeta'
+import FileOption from '../tool-bar/FileOption'
+import ForkFile from '../tool-bar/ForkFile'
+import RemoveFile from '../tool-bar/RemoveFile'
+import RunFile from '../tool-bar/RunFile'
+import ViewLink from '../tool-bar/ViewLink'
 
 const ToolBarWrapper = styled.div`
   width: 100%;
@@ -50,8 +50,9 @@ const ToolBar = (props: {
   editor: MutableRefObject<undefined>
   status: string
   updateType: Function
+  updateView: Function
 }) => {
-  const { editor, status, updateType } = props
+  const { editor, status, updateType, updateView } = props
   const { isMobile, pageId } = useContext(GlobalContext)
 
   const currentPage = store.namespace(pageId)
@@ -247,7 +248,9 @@ const ToolBar = (props: {
           )}
         </ToolBarCenterWrapper>
         <ToolBarRightWrapper className="fixed-width">
-          {!isMobile && <RunFile type={findBySlug(type)} />}
+          {!isMobile && (
+            <RunFile type={findBySlug(type)} updateView={updateView} />
+          )}
           {!isMobile && <ForkFile />}
           {isMobile && (
             <RemoveFile reRender={() => setReRender(reRender + 1)} />

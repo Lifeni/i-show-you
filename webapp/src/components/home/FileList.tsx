@@ -23,7 +23,7 @@ const Container = styled.div`
 `
 
 const EmptyBox = styled.div`
-  max-width: 976px;
+  max-width: 960px;
   margin: 0 auto 12px auto;
   height: calc(100vh - 180px);
   min-height: 50vh;
