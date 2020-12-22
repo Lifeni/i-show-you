@@ -26,7 +26,6 @@ const TextEditor = () => {
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
 
-  const [status, setStatus] = useState('Ready')
   const [editorId, setEditorId] = useState(new Date().getTime())
 
   const editorRef = useRef()
@@ -49,10 +48,13 @@ const TextEditor = () => {
     currentPage.get('options') ? currentPage.get('options').line_height : 22
   )
 
+  const [status, setStatus] = useState(autoSave ? 'Ready' : 'Auto Save OFF')
+
   useEffect(() => {
     const updateValue = () => {
       setValue(currentPage.get('content') || '')
       setEditorId(new Date().getTime())
+
       setAutoSave(
         currentPage.get('options') ? currentPage.get('options').auto_save : true
       )
@@ -72,6 +74,10 @@ const TextEditor = () => {
       setLineHeight(
         currentPage.get('options') ? currentPage.get('options').line_height : 22
       )
+
+      setStatus(
+        currentPage.get('options').auto_save ? 'Ready' : 'Auto Save OFF'
+      )
     }
 
     updateValue()
@@ -89,7 +95,7 @@ const TextEditor = () => {
         fetch(`/api/file/${pageId}`, {
           method: 'PUT',
           body: JSON.stringify({
-            updated_at: currentPage.get('updated-at'),
+            updated_at: currentPage.get('updated_at'),
             content: currentPage.get('content'),
             name: currentPage.get('name'),
             type: currentPage.get('type'),
@@ -147,7 +153,7 @@ const TextEditor = () => {
       debouncedValue !== currentPage.get('content')
     ) {
       currentPage.set('content', debouncedValue)
-      currentPage.set('updated-at', new Date())
+      currentPage.set('updated_at', new Date())
       const tabs = store.namespace('tabs')
       const pre = tabs.get(pageId)
       tabs.set(pageId, {
@@ -155,12 +161,12 @@ const TextEditor = () => {
         updated_at: new Date(),
       })
 
-      if (currentPage.get('options').auto_save) {
+      if (autoSave) {
         setStatus('Saving')
         fetch(`/api/file/${pageId}/content`, {
           method: 'PATCH',
           body: JSON.stringify({
-            updated_at: currentPage.get('updated-at'),
+            updated_at: currentPage.get('updated_at'),
             content: currentPage.get('content'),
           }),
           headers: new Headers({

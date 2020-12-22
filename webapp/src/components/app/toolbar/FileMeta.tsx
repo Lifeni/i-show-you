@@ -10,7 +10,11 @@ import { GlobalContext } from '../../App'
 
 const TooltipWrapper = styled.div`
   padding: 0 18px;
-  font-size: 1rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.34;
+  letter-spacing: 0.32px;
+  color: #525252;
 `
 
 const FileMeta = (props: { status: string; type: IFileMap }) => {
@@ -20,22 +24,10 @@ const FileMeta = (props: { status: string; type: IFileMap }) => {
   return (
     <>
       <TooltipWrapper>
-        {currentPage.get('token') === '' ? (
-          <TooltipDefinition
-            align="start"
-            direction="bottom"
-            tooltipText={
-              'This is a local file and the data is stored in the browser.'
-            }
-          >
-            {type.id === -1 ? 'Local File' : type.name}
-          </TooltipDefinition>
-        ) : currentPage.get('authentication') === 'owner' ? (
-          <TooltipIcon
-            align="start"
-            direction="bottom"
-            tooltipText={'The file will be saved to both local and server.'}
-          >
+        {currentPage.get('authentication') === 'owner' ? (
+          status === 'Auto Save OFF' ? (
+            status
+          ) : (
             <InlineLoading
               description={status}
               status={
@@ -46,15 +38,9 @@ const FileMeta = (props: { status: string; type: IFileMap }) => {
                   : 'finished'
               }
             />
-          </TooltipIcon>
+          )
         ) : (
-          <TooltipDefinition
-            align="start"
-            direction="bottom"
-            tooltipText={'You cannot edit this file.'}
-          >
-            Read Only
-          </TooltipDefinition>
+          'Read Only'
         )}
       </TooltipWrapper>
     </>

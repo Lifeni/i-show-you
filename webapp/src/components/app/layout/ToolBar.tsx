@@ -68,8 +68,8 @@ const ToolBar = (props: {
     setName(e.target.value)
     tabs.set(pageId, {
       name: e.target.value,
-      created_at: store.namespace(pageId).get('created-at'),
-      updated_at: store.namespace(pageId).get('updated-at'),
+      created_at: store.namespace(pageId).get('created_at'),
+      updated_at: store.namespace(pageId).get('updated_at'),
       id: pageId,
       authentication: store.namespace(pageId).get('authentication'),
     })
@@ -105,7 +105,7 @@ const ToolBar = (props: {
       currentPage.set('name', debouncedName)
       currentPage.set('type', debouncedType)
       updateType(debouncedType)
-      currentPage.set('updated-at', new Date())
+      currentPage.set('updated_at', new Date())
       const pre = tabs.get(pageId)
       tabs.set(pageId, {
         ...pre,
@@ -118,7 +118,7 @@ const ToolBar = (props: {
         fetch(`/api/file/${pageId}/name`, {
           method: 'PATCH',
           body: JSON.stringify({
-            updated_at: currentPage.get('updated-at'),
+            updated_at: currentPage.get('updated_at'),
             name: currentPage.get('name'),
             type: currentPage.get('type'),
           }),

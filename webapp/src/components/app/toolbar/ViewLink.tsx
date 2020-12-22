@@ -64,8 +64,8 @@ const ViewLink = () => {
     await fetch('/api/file', {
       method: 'POST',
       body: JSON.stringify({
-        created_at: currentPage.get('created-at'),
-        updated_at: currentPage.get('updated-at'),
+        created_at: currentPage.get('created_at'),
+        updated_at: currentPage.get('updated_at'),
         name: currentPage.get('name'),
         type: currentPage.get('type'),
         content: currentPage.get('content'),
@@ -78,11 +78,11 @@ const ViewLink = () => {
       if (res.ok) {
         const data = await res.json()
         const tabs = store.namespace('tabs')
-        currentPage.set('updated-at', new Date())
+        currentPage.set('updated_at', new Date())
         tabs.set(data.data.id, {
           name: currentPage.get('name'),
-          created_at: currentPage.get('created-at'),
-          updated_at: currentPage.get('updated-at'),
+          created_at: currentPage.get('created_at'),
+          updated_at: currentPage.get('updated_at'),
           id: data.data.id,
           authentication: currentPage.get('authentication'),
         })
@@ -90,8 +90,8 @@ const ViewLink = () => {
         const targetPage = store.namespace(data.data.id)
         targetPage.set('token', data.data.token)
         targetPage.set('name', currentPage.get('name'))
-        targetPage.set('created-at', currentPage.get('created-at'))
-        targetPage.set('updated-at', currentPage.get('updated-at'))
+        targetPage.set('created_at', currentPage.get('created_at'))
+        targetPage.set('updated_at', currentPage.get('updated_at'))
         targetPage.set('type', currentPage.get('type'))
         targetPage.set('content', currentPage.get('content'))
         targetPage.set('authentication', currentPage.get('authentication'))

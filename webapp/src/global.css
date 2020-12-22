@@ -53,18 +53,13 @@
   border: none;
 }
 
-.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-start
-  .bx--assistive-text,
-.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-center
-  .bx--assistive-text,
-.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-end
-  .bx--assistive-text,
-.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-start
-  .bx--assistive-text,
-.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-center
-  .bx--assistive-text,
-.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-end
-  .bx--assistive-text,
+/* prettier-ignore */
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-start .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-center .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--top.bx--tooltip--align-end .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-start .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-center .bx--assistive-text,
+.bx--tooltip__trigger.bx--tooltip--bottom.bx--tooltip--align-end .bx--assistive-text,
 .bx--tooltip__trigger.bx--tooltip--bottom .bx--assistive-text {
   padding: 0.5rem 1rem;
 }
@@ -142,4 +137,9 @@
 
 .bx--tooltip__trigger svg.bx--inline-loading__checkmark-container {
   fill: #24a148;
+}
+
+.bx--tooltip__trigger:hover svg,
+.bx--tooltip__trigger:focus svg {
+  fill: none;
 }

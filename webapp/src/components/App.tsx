@@ -75,8 +75,8 @@ const App = () => {
             authentication: 'owner',
           })
           currentPage.set('token', token)
-          currentPage.set('created-at', now, false)
-          currentPage.set('updated-at', now)
+          currentPage.set('created_at', now, false)
+          currentPage.set('updated_at', now)
           currentPage.set('name', '')
           currentPage.set('type', '')
           currentPage.set('content', '')
@@ -114,8 +114,8 @@ const App = () => {
               authentication: data.authentication,
             })
 
-            currentPage.set('created-at', data.data.created_at, true)
-            currentPage.set('updated-at', data.data.updated_at, true)
+            currentPage.set('created_at', data.data.created_at, true)
+            currentPage.set('updated_at', data.data.updated_at, true)
             currentPage.set('name', data.data.name, true)
             currentPage.set('type', data.data.type, true)
             currentPage.set('content', data.data.content, true)

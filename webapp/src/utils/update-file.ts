@@ -42,7 +42,7 @@ const updateFile = async (id: string) => {
         updated_at: data.updated_at,
       })
 
-      currentPage.set('updated-at', data.updated_at, true)
+      currentPage.set('updated_at', data.updated_at, true)
       currentPage.set('name', data.name, true)
       currentPage.set('type', data.type, true)
       currentPage.set('content', data.content, true)

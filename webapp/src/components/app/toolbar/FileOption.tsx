@@ -118,7 +118,7 @@ const FileOption = () => {
         ...pre,
         updated_at: new Date(),
       })
-      currentPage.set('updated-at', new Date())
+      currentPage.set('updated_at', new Date())
     }
 
     currentPage.set('options', options)
