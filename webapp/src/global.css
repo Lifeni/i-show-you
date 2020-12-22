@@ -139,3 +139,7 @@
 .bx--toggle-input__label .bx--toggle__switch {
   margin: 0 2rem 0 0;
 }
+
+.bx--tooltip__trigger svg.bx--inline-loading__checkmark-container {
+  fill: #24a148;
+}

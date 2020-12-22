@@ -17,7 +17,7 @@ const StyledTile = styled(ClickableTile)`
   justify-content: flex-start;
   border-radius: 4px;
 
-  @media (max-width: 410px) {
+  @media (max-width: 672px) {
     max-width: unset;
   }
 

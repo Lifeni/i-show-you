@@ -179,6 +179,11 @@ const FileTable = (props: { data: Array<IFileData> }) => {
       const data = await res.json()
       if (res.status === 200) {
         setFileData(data.data)
+      } else {
+        setNotificationKind('error')
+        setNotificationTitle(`Fetch Error ${res.status}`)
+        setNotificationSubtitle(data.message)
+        setOpenNotification(true)
       }
       setLoading(false)
     })

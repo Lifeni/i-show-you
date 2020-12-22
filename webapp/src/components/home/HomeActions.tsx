@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import ImportFile from './ImportFile'
 import NewFile from './NewFile'
 
 const ButtonWrapper = styled.div`
@@ -25,7 +24,7 @@ const HomeActions = () => {
   return (
     <ButtonWrapper>
       <NewFile />
-      <ImportFile />
+      {/*<ImportFile />*/}
     </ButtonWrapper>
   )
 }
