@@ -40,6 +40,7 @@ const RemoveFile = (props: { reRender: Function }) => {
   const [removeRemote, setRemoveRemote] = useState(false)
   const [redirect, setRedirect] = useState(false)
 
+  // TODO simplify api
   const [openNotification, setOpenNotification] = useState(false)
   const [notificationKind, setNotificationKind] = useState('info')
   const [notificationTitle, setNotificationTitle] = useState(
@@ -48,6 +49,28 @@ const RemoveFile = (props: { reRender: Function }) => {
   const [notificationSubtitle, setNotificationSubtitle] = useState(
     'Unknown Notification'
   )
+
+  const [url, setUrl] = useState('')
+
+  const removeLocalFile = () => {
+    const tabs = store.namespace('tabs')
+    const arr = Object.values(tabs.getAll()).sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    const index = arr.findIndex(value => value.id === pageId)
+    if (arr.length === 1) {
+      setUrl('')
+    } else if (index !== arr.length - 1) {
+      setUrl(arr[index + 1].id)
+    } else {
+      setUrl(arr[index - 1].id)
+    }
+    currentPage.clear()
+    tabs.remove(pageId)
+    setOpen(false)
+    setRedirect(true)
+  }
 
   const handleDelete = async () => {
     if (removeRemote) {
@@ -68,9 +91,7 @@ const RemoveFile = (props: { reRender: Function }) => {
             setNotificationSubtitle('You can re-share it any time.')
             setOpenNotification(true)
           } else {
-            currentPage.clear()
-            store.namespace('tabs').remove(pageId)
-            setRedirect(true)
+            removeLocalFile()
           }
         } else {
           setNotificationKind('error')
@@ -80,15 +101,13 @@ const RemoveFile = (props: { reRender: Function }) => {
         }
       })
     } else if (removeLocal) {
-      currentPage.clear()
-      store.namespace('tabs').remove(pageId)
-      setRedirect(true)
+      removeLocalFile()
     }
   }
 
   return (
     <>
-      {redirect && <Redirect to={`/`} />}
+      {redirect && <Redirect to={`/${url}`} />}
       <GlobalNotification
         open={openNotification}
         close={() => setOpenNotification(false)}
