@@ -143,3 +143,16 @@
 .bx--tooltip__trigger:focus svg {
   fill: none;
 }
+
+.bx--tab-content {
+  padding: 0 0 1rem 0;
+}
+
+.bx--tabs--scrollable .bx--tabs--scrollable__nav-link {
+  width: auto;
+}
+
+.bx--modal-container--lg .bx--modal-content {
+  padding: 0 1rem;
+  margin: 0;
+}

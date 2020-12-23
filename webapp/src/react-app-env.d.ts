@@ -28,6 +28,16 @@ interface IFileData {
   type: string
 }
 
+interface IFileAllData {
+  name: string
+  created_at: string
+  updated_at: string
+  id: string
+  type: string
+  content: string
+  options: IFileOptions
+}
+
 interface IFileIndexData {
   key: string
   header: string

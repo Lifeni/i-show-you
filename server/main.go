@@ -45,6 +45,7 @@ func main() {
 
 		api.GET("/file/:id", apiRouter.QueryFile)
 		api.GET("/file/:id/raw", apiRouter.QueryRawFile)
+		api.GET("/file/:id/history", apiRouter.QueryFileHistory)
 		api.POST("/file", apiRouter.CreateFile)
 		api.PUT("/file/:id", apiRouter.UpdateFile)
 		api.PATCH("/file/:id/:key", apiRouter.UpdateFilePatch)

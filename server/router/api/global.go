@@ -47,11 +47,13 @@ type ResponseError struct {
 }
 
 var (
-	FileCollection *mongo.Collection
-	Config         *util.Config
+	FileCollection    *mongo.Collection
+	HistoryCollection *mongo.Collection
+	Config            *util.Config
 )
 
 func InitFileCollection() {
 	FileCollection = database.GetCollection("file")
+	HistoryCollection = database.GetCollection("history")
 	Config = util.ConfigFile
 }

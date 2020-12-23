@@ -13,6 +13,10 @@ import (
 	"time"
 )
 
+var (
+	archivePeriod = 60 * time.Second
+)
+
 func CreateFile(c echo.Context) error {
 	id := uuid.NewV4()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -154,15 +158,26 @@ func UpdateFile(c echo.Context) error {
 	req := new(UpdateData)
 	err := c.Bind(req)
 
-	result, err := FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+	var pre File
+	err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 
-	if result != nil && result.MatchedCount == 0 {
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "File Not Found"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusNotFound, &res)
+		}
+
 		log.Println(err)
 		res := new(ResponseError)
-		res.Message = "File Not Found"
+		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusNotFound, &res)
+		return c.JSON(http.StatusInternalServerError, &res)
 	}
+
+	t, err := time.Parse(time.RFC3339, pre.UpdatedAt)
 
 	if err != nil {
 		log.Println(err)
@@ -170,6 +185,18 @@ func UpdateFile(c echo.Context) error {
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
+	}
+
+	if time.Now().After(t.Add(archivePeriod)) && req.Content != pre.Content {
+		_, err = HistoryCollection.InsertOne(context.TODO(), &pre)
+
+		if err != nil {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "Database Error"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusInternalServerError, &res)
+		}
 	}
 
 	type ResponseData struct {
@@ -197,7 +224,9 @@ func UpdateFilePatch(c echo.Context) error {
 	}
 
 	var err error
-	var result *mongo.UpdateResult
+	var pre File
+
+	flag := false
 
 	if key == "name" {
 		type UpdateData struct {
@@ -217,7 +246,7 @@ func UpdateFilePatch(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
-		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else if key == "content" {
 		type UpdateData struct {
 			Content   string `json:"content"`
@@ -235,11 +264,11 @@ func UpdateFilePatch(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
-		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		flag = true
+		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else if key == "options" {
 		type UpdateData struct {
-			Options   FileOptions `json:"options"`
-			UpdatedAt string      `json:"updated_at"`
+			Options FileOptions `json:"options"`
 		}
 
 		req := new(UpdateData)
@@ -253,7 +282,7 @@ func UpdateFilePatch(c echo.Context) error {
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
-		result, err = FileCollection.UpdateOne(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}})
+		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else {
 		log.Println(err)
 		res := new(ResponseError)
@@ -262,13 +291,23 @@ func UpdateFilePatch(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, &res)
 	}
 
-	if result != nil && result.MatchedCount == 0 {
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "File Not Found"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusNotFound, &res)
+		}
+
 		log.Println(err)
 		res := new(ResponseError)
-		res.Message = "File Not Found"
+		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusNotFound, &res)
+		return c.JSON(http.StatusInternalServerError, &res)
 	}
+
+	t, err := time.Parse(time.RFC3339, pre.UpdatedAt)
 
 	if err != nil {
 		log.Println(err)
@@ -276,6 +315,18 @@ func UpdateFilePatch(c echo.Context) error {
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
+	}
+
+	if time.Now().After(t.Add(archivePeriod)) && flag {
+		_, err = HistoryCollection.InsertOne(context.TODO(), &pre)
+
+		if err != nil {
+			log.Println(err)
+			res := new(ResponseError)
+			res.Message = "Database Error"
+			res.Documentation = "https://lifeni.github.io/i-show-you/api"
+			return c.JSON(http.StatusInternalServerError, &res)
+		}
 	}
 
 	type ResponseData struct {
