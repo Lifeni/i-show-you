@@ -53,8 +53,8 @@ const updateFile = async (id: string) => {
         true
       )
 
-      window.dispatchEvent(new Event('updateStorage'))
-      window.dispatchEvent(new Event('updateContent'))
+      window.dispatchEvent(new Event('updateFileEvent'))
+      window.dispatchEvent(new Event('updateViewEvent'))
     }
   }
 }

@@ -48,11 +48,9 @@ const FileList = () => {
   const tabs = store.namespace('tabs')
   const [redirect, setRedirect] = useState('200')
 
-  const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll()).sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-    )
+  const tabData = Object.values(tabs.getAll()).sort(
+    (a, b) =>
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
   )
 
   const [isMobile, setMobile] = useState(false)
@@ -70,23 +68,6 @@ const FileList = () => {
       window.removeEventListener('resize', checkWidth)
     }
   }, [])
-
-  useEffect(() => {
-    const updateTabData = () => {
-      setTabData(
-        Object.values(tabs.getAll()).sort(
-          (a, b) =>
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-        )
-      )
-    }
-
-    window.addEventListener('storage', updateTabData)
-
-    return () => {
-      window.removeEventListener('storage', updateTabData)
-    }
-  }, [tabs])
 
   return (
     <Container>

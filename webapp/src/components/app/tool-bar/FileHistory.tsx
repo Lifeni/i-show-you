@@ -15,7 +15,7 @@ import GlobalNotification from '../../global/GlobalNotification'
 import HistoryView from '../text-editor/HistoryView'
 
 const StyledRecentlyViewed20 = styled(RecentlyViewed20)`
-  margin: -3px 1rem -3px 4px;
+  margin: -4px 1rem -4px 4px;
 `
 
 const FileHistory = () => {
@@ -88,7 +88,7 @@ const FileHistory = () => {
         modalHeading={
           <>
             <StyledRecentlyViewed20 />
-            {`History | ${store.namespace(pageId).get('name')}`}
+            {`${store.namespace(pageId).get('name')}`}
           </>
         }
         passiveModal

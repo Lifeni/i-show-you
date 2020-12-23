@@ -25,9 +25,9 @@ const WebBrowser = () => {
       setContent(currentPage.get('content'))
     }
     updateValue()
-    window.addEventListener('updateContent', updateValue, false)
+    window.addEventListener('updateViewEvent', updateValue, false)
     return () => {
-      window.removeEventListener('updateContent', updateValue)
+      window.removeEventListener('updateViewEvent', updateValue)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])

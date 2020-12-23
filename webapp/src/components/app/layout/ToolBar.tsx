@@ -75,7 +75,7 @@ const ToolBar = (props: {
       id: pageId,
       authentication: store.namespace(pageId).get('authentication'),
     })
-    window.dispatchEvent(new Event('storage'))
+    window.dispatchEvent(new Event('updateFileEvent'))
     const arr = e.target.value.split('.')
     if (e.target.value.includes('.') && arr.length > 0) {
       const lang = findByExt(arr[arr.length - 1])
@@ -152,9 +152,9 @@ const ToolBar = (props: {
         updateType(currentPage.get('type') || '')
       }
 
-      window.addEventListener('updateStorage', updateValue, false)
+      window.addEventListener('updateFileEvent', updateValue, false)
       return () => {
-        window.removeEventListener('updateStorage', updateValue)
+        window.removeEventListener('updateFileEvent', updateValue)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

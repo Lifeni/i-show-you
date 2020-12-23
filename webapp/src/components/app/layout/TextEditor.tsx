@@ -40,7 +40,7 @@ const TextEditor = () => {
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
 
-  const [editorId, setEditorId] = useState(new Date().getTime())
+  // const [editorId, setEditorId] = useState(new Date().getTime())
 
   const editorRef = useRef()
 
@@ -57,17 +57,13 @@ const TextEditor = () => {
 
     const updateValue = () => {
       setValue(currentPage.get('content') || '')
-      setEditorId(new Date().getTime())
-
       setOptions(currentPage.get('options') || defaultFileOptions)
       setStatus(options.auto_save ? 'Ready' : 'Auto Save OFF')
     }
 
     updateValue()
 
-    window.addEventListener('updateStorage', updateValue, false)
-
-    const save = (e: KeyboardEvent) => {
+    const uploadEntireFile = (e: KeyboardEvent) => {
       if (
         currentPage.get('authentication') === 'owner' &&
         e.ctrlKey &&
@@ -104,11 +100,12 @@ const TextEditor = () => {
       }
     }
 
-    window.addEventListener('keydown', save)
+    window.addEventListener('updateFileEvent', updateValue, false)
+    window.addEventListener('keydown', uploadEntireFile)
 
     return () => {
-      window.removeEventListener('updateStorage', updateValue)
-      window.removeEventListener('keydown', save)
+      window.removeEventListener('updateFileEvent', updateValue)
+      window.removeEventListener('keydown', uploadEntireFile)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,7 +151,7 @@ const TextEditor = () => {
         }).then(async res => {
           if (res.status === 200) {
             setStatus('Auto Saved')
-            window.dispatchEvent(new Event('updateContent'))
+            window.dispatchEvent(new Event('updateViewEvent'))
           } else {
             setStatus('Error')
             setNotice({

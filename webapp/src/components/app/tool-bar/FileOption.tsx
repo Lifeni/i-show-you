@@ -103,7 +103,7 @@ const FileOption = () => {
     currentPage.set('options', options)
 
     setOpen(false)
-    window.dispatchEvent(new Event('updateStorage'))
+    window.dispatchEvent(new Event('updateFileEvent'))
   }
 
   return (

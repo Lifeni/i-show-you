@@ -24,54 +24,32 @@ const IconWrapper = styled.span`
   }
 `
 
-const HeaderFileTab = forwardRef((_, ref) => {
+const HeaderFileTab = forwardRef(_ => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll()).sort(
+  const getTabData = () => {
+    return Object.values(tabs.getAll()).sort(
       (a, b) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-  )
+  }
+
+  const [tabData, setTabData] = useState(getTabData)
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(
-        Object.values(tabs.getAll()).sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
-      )
+      setTabData(getTabData)
     }
 
-    window.addEventListener('storage', updateTabData, false)
+    updateTabData()
+    window.addEventListener('updateFileEvent', updateTabData, false)
     return () => {
-      window.removeEventListener('storage', updateTabData)
+      window.removeEventListener('updateFileEvent', updateTabData)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    const currentPage = store.namespace(pageId)
-    if (currentPage.get('authentication') !== 'owner') {
-      const updateTabData = () => {
-        setTabData(
-          Object.values(tabs.getAll()).sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          )
-        )
-      }
-      window.addEventListener('updateStorage', updateTabData, false)
-      return () => {
-        window.removeEventListener('updateStorage', updateTabData)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageId])
 
   return (
     <>
@@ -108,50 +86,28 @@ const SideNavFileTab = () => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const [tabData, setTabData] = useState(
-    Object.values(tabs.getAll()).sort(
+  const getTabData = () => {
+    return Object.values(tabs.getAll()).sort(
       (a, b) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-  )
+  }
+
+  const [tabData, setTabData] = useState(getTabData)
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(
-        Object.values(tabs.getAll()).sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
-      )
+      setTabData(getTabData)
     }
 
-    window.addEventListener('storage', updateTabData, false)
+    updateTabData()
+    window.addEventListener('updateFileEvent', updateTabData, false)
     return () => {
-      window.removeEventListener('storage', updateTabData)
+      window.removeEventListener('updateFileEvent', updateTabData)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    const currentPage = store.namespace(pageId)
-    if (currentPage.get('authentication') !== 'owner') {
-      const updateTabData = () => {
-        setTabData(
-          Object.values(tabs.getAll()).sort(
-            (a, b) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-          )
-        )
-      }
-      window.addEventListener('updateStorage', updateTabData, false)
-      return () => {
-        window.removeEventListener('updateStorage', updateTabData)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageId])
 
   return (
     <>

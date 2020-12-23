@@ -67,6 +67,7 @@ const StyledTile = styled(ClickableTile)`
     line-height: 1rem;
     overflow: hidden;
     white-space: pre;
+    color: #616161;
     background-color: #f4f4f4;
     transition: all 0.15s cubic-bezier(0.2, 0, 0.38, 0.9);
 
@@ -89,7 +90,7 @@ const StyledTile = styled(ClickableTile)`
   }
 
   :hover pre {
-    color: #616161;
+    color: #000;
     background-color: #e5e5e5;
 
     ::after {
