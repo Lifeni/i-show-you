@@ -28,24 +28,22 @@ const NotificationWrapper = styled.div`
   } ;
 `
 
-const GlobalNotification = (props: {
-  open: boolean
-  close: Function
-  kind: NotificationKind
-  title: string
-  subtitle: string
-}) => {
-  const { open, close, kind, title, subtitle } = props
+const GlobalNotification = (props: { options: INoticeOptions }) => {
+  const { options } = props
 
   return (
     <NotificationWrapper style={{ zIndex: new Date().getTime() }}>
-      {open ? (
+      {options.open ? (
         <InlineNotification
-          kind={kind as NotificationKind}
-          title={title}
-          subtitle={subtitle}
+          kind={options.kind as NotificationKind}
+          title={options.title}
+          subtitle={options.subtitle}
           iconDescription="Close Notification"
-          onCloseButtonClick={() => close()}
+          onCloseButtonClick={() => {
+            if (options.close) {
+              options.close()
+            }
+          }}
         />
       ) : null}
     </NotificationWrapper>

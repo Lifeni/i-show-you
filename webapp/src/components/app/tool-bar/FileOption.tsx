@@ -19,6 +19,10 @@ import {
 import React, { useContext, useEffect, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
+import {
+  defaultFileOptions,
+  defaultNoticeOptions,
+} from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 
@@ -33,6 +37,7 @@ const FormItem = styled.section`
   span {
     display: flex;
     align-items: center;
+    white-space: nowrap;
 
     svg {
       margin: 0 0.75rem 0 0;
@@ -52,66 +57,22 @@ const FormItemBlock = styled(FormItem)`
 
 const FileOption = () => {
   const [open, setOpen] = useState(false)
-  const { pageId } = useContext(GlobalContext)
+  const { isMobile, pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
-  const [autoSave, setAutoSave] = useState(
-    currentPage.get('options') ? currentPage.get('options').auto_save : true
-  )
-  const [wordWrap, setWordWrap] = useState(
-    currentPage.get('options') ? currentPage.get('options').word_wrap : false
-  )
-  const [fontFamily, setFontFamily] = useState(
-    currentPage.get('options')
-      ? currentPage.get('options').font_family
-      : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
-  )
-  const [fontSize, setFontSize] = useState(
-    currentPage.get('options') ? currentPage.get('options').font_size : 14
-  )
-  const [lineHeight, setLineHeight] = useState(
-    currentPage.get('options') ? currentPage.get('options').line_height : 22
+  const [options, setOptions] = useState(
+    currentPage.get('options') || defaultFileOptions
   )
 
   useEffect(() => {
-    setAutoSave(
-      currentPage.get('options') ? currentPage.get('options').auto_save : true
-    )
-    setWordWrap(
-      currentPage.get('options') ? currentPage.get('options').word_wrap : false
-    )
-    setFontFamily(
-      currentPage.get('options')
-        ? currentPage.get('options').font_family
-        : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
-    )
-    setFontSize(
-      currentPage.get('options') ? currentPage.get('options').font_size : 14
-    )
-    setLineHeight(
-      currentPage.get('options') ? currentPage.get('options').line_height : 22
-    )
+    setOptions(currentPage.get('options') || defaultFileOptions)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 
   const handleOptionsSave = () => {
-    const options: IFileOptions = {
-      auto_save: autoSave,
-      word_wrap: wordWrap,
-      font_family: fontFamily,
-      font_size: Number(fontSize),
-      line_height: Number(lineHeight),
-    }
     if (currentPage.get('authentication') === 'owner') {
       fetch(`/api/file/${pageId}/options`, {
         method: 'PATCH',
@@ -122,15 +83,19 @@ const FileOption = () => {
         }),
       }).then(async res => {
         if (res.status === 200) {
-          setNotificationKind('success')
-          setNotificationTitle(`Options Saved`)
-          setNotificationSubtitle('I remember it all.')
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'success',
+            title: 'Options Saved',
+            subtitle: 'I remember it all.',
+          })
         } else {
-          setNotificationKind('error')
-          setNotificationTitle(`Save Error ${res.status}`)
-          setNotificationSubtitle((await res.json()).message)
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'error',
+            title: `Save Error ${res.status}`,
+            subtitle: (await res.json()).message,
+          })
         }
       })
     }
@@ -144,11 +109,13 @@ const FileOption = () => {
   return (
     <>
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
 
       <Button
@@ -186,9 +153,9 @@ const FileOption = () => {
               </span>
               <Toggle
                 aria-label="Auto Save"
-                toggled={autoSave}
+                toggled={options.auto_save}
                 id="auto-save"
-                onToggle={e => setAutoSave(e)}
+                onToggle={e => setOptions({ ...options, auto_save: e })}
               />
             </FormItem>
           ) : null}
@@ -201,8 +168,8 @@ const FileOption = () => {
             <Toggle
               aria-label="Word Wrap"
               id="word-wrap"
-              toggled={wordWrap}
-              onToggle={e => setWordWrap(e)}
+              toggled={options.word_wrap}
+              onToggle={e => setOptions({ ...options, word_wrap: e })}
             />
           </FormItem>
           <FormItemBlock>
@@ -212,10 +179,10 @@ const FileOption = () => {
             </span>
             <TextArea
               id="font-family"
-              value={fontFamily}
+              value={options.font_family}
               labelText=""
               aria-label="Font Family"
-              onChange={e => setFontFamily(e.target.value)}
+              onChange={e => setOptions({ ...options, font_family: e })}
             />
           </FormItemBlock>
           <FormItem>
@@ -225,12 +192,16 @@ const FileOption = () => {
             </span>
             <NumberInput
               id="font-size"
-              value={fontSize}
+              value={options.font_size}
               size="sm"
               aria-label="Font Size"
+              isMobile={isMobile}
               onChange={e => {
-                // @ts-ignore
-                setFontSize(e.imaginaryTarget.value)
+                setOptions({
+                  ...options,
+                  // @ts-ignore
+                  font_size: Number(e.imaginaryTarget.value),
+                })
               }}
             />
           </FormItem>
@@ -241,12 +212,16 @@ const FileOption = () => {
             </span>
             <NumberInput
               id="line-height"
-              value={lineHeight}
+              value={options.line_height}
               size="sm"
               aria-label="Line Height"
+              isMobile={isMobile}
               onChange={e => {
-                // @ts-ignore
-                setLineHeight(e.imaginaryTarget.value)
+                setOptions({
+                  ...options,
+                  // @ts-ignore
+                  line_height: Number(e.imaginaryTarget.value),
+                })
               }}
             />
           </FormItem>

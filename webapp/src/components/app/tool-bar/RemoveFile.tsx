@@ -9,6 +9,7 @@ import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 
@@ -40,15 +41,7 @@ const RemoveFile = (props: { reRender: Function }) => {
   const [removeRemote, setRemoveRemote] = useState(false)
   const [redirect, setRedirect] = useState(false)
 
-  // TODO simplify api
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   const [url, setUrl] = useState('')
 
@@ -86,18 +79,22 @@ const RemoveFile = (props: { reRender: Function }) => {
           setRemoveRemote(false)
           if (!removeLocal) {
             reRender()
-            setNotificationKind('success')
-            setNotificationTitle(`File Removed`)
-            setNotificationSubtitle('You can re-share it any time.')
-            setOpenNotification(true)
+            setNotice({
+              open: true,
+              kind: 'success',
+              title: 'File Removed',
+              subtitle: 'You can re-share it any time.',
+            })
           } else {
             removeLocalFile()
           }
         } else {
-          setNotificationKind('error')
-          setNotificationTitle(`Remove Error ${res.status}`)
-          setNotificationSubtitle((await res.json()).message)
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'error',
+            title: `Remove Error ${res.status}`,
+            subtitle: (await res.json()).message,
+          })
         }
       })
     } else if (removeLocal) {
@@ -109,11 +106,13 @@ const RemoveFile = (props: { reRender: Function }) => {
     <>
       {redirect && <Redirect to={`/${url}`} />}
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
 
       <Button

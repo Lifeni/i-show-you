@@ -23,6 +23,7 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import { defaultNoticeOptions } from '../../utils/global-variable'
 import { isMobile } from '../../utils/is-mobile'
 import GlobalNotification from '../global/GlobalNotification'
 
@@ -72,14 +73,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
   const [redirect, setRedirect] = useState(false)
 
   const adminPage = store.namespace('admin-page')
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   useEffect(() => {
     setFileData(data)
@@ -124,16 +118,20 @@ const FileTable = (props: { data: Array<IFileData> }) => {
         }),
       }).then(async res => {
         if (res.status === 200) {
-          setNotificationKind('success')
-          setNotificationTitle(`File Removed`)
-          setNotificationSubtitle('I have the final say.')
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'success',
+            title: 'File Removed',
+            subtitle: 'I have the final say.',
+          })
           setFileData(fileData.filter(f => f.id !== id))
         } else {
-          setNotificationKind('error')
-          setNotificationTitle(`Remove Error ${res.status}`)
-          setNotificationSubtitle((await res.json()).message)
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'error',
+            title: `Remove Error ${res.status}`,
+            subtitle: (await res.json()).message,
+          })
         }
       })
     }
@@ -154,16 +152,20 @@ const FileTable = (props: { data: Array<IFileData> }) => {
         }),
       }).then(async res => {
         if (res.status === 200) {
-          setNotificationKind('success')
-          setNotificationTitle(`File Removed`)
-          setNotificationSubtitle('I have the final say.')
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'success',
+            title: 'File Removed',
+            subtitle: 'I have the final say.',
+          })
           setFileData(fileData.filter(f => !files.includes(f.id)))
         } else {
-          setNotificationKind('error')
-          setNotificationTitle(`Remove Error ${res.status}`)
-          setNotificationSubtitle((await res.json()).message)
-          setOpenNotification(true)
+          setNotice({
+            open: true,
+            kind: 'error',
+            title: `Remove Error ${res.status}`,
+            subtitle: (await res.json()).message,
+          })
         }
       })
     }
@@ -180,10 +182,12 @@ const FileTable = (props: { data: Array<IFileData> }) => {
       if (res.status === 200) {
         setFileData(data.data)
       } else {
-        setNotificationKind('error')
-        setNotificationTitle(`Fetch Error ${res.status}`)
-        setNotificationSubtitle(data.message)
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'error',
+          title: `Fetch Error ${res.status}`,
+          subtitle: data.message,
+        })
       }
       setLoading(false)
     })
@@ -193,11 +197,13 @@ const FileTable = (props: { data: Array<IFileData> }) => {
     <>
       {redirect && <Redirect to={`/`} />}
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
       <DataTable
         rows={rowData}

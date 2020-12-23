@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import store from 'store2'
 import styled from 'styled-components'
+import { defaultNoticeOptions } from '../utils/global-variable'
 import FileTable from './admin/FileTable'
 import GlobalLoading from './global/GlobalLoading'
 import GlobalNotification from './global/GlobalNotification'
@@ -54,14 +55,7 @@ const Admin = () => {
   const [password, setPassword] = useState('')
   const [data, setData] = useState([])
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    '只是一个通知占位符。'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   const adminPage = store.namespace('admin-page')
 
@@ -104,7 +98,6 @@ const Admin = () => {
         adminPage.set('token', data.data.token)
         setLogged(true)
         setPassword('')
-
         setLoading(true)
         await fetch('/api/admin', {
           headers: new Headers({
@@ -121,10 +114,12 @@ const Admin = () => {
         })
       } else {
         setLoading(false)
-        setNotificationKind('error')
-        setNotificationTitle(`Login Error`)
-        setNotificationSubtitle(data.message)
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'error',
+          title: 'Login Error',
+          subtitle: data.message,
+        })
       }
     })
   }
@@ -148,11 +143,13 @@ const Admin = () => {
           ) : (
             <LoginContainer>
               <GlobalNotification
-                open={openNotification}
-                close={() => setOpenNotification(false)}
-                title={notificationTitle}
-                subtitle={notificationSubtitle}
-                kind={notificationKind as NotificationKind}
+                options={{
+                  open: notice.open,
+                  close: () => setNotice({ ...notice, open: false }),
+                  title: notice.title,
+                  subtitle: notice.subtitle,
+                  kind: notice.kind as NotificationKind,
+                }}
               />
               <StyledH1>
                 I Show You <strong>Admin</strong>

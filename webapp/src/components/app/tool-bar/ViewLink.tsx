@@ -163,7 +163,7 @@ const ViewLink = () => {
         />
       ) : (
         <StyledButton
-          kind="tertiary"
+          kind="primary"
           size="field"
           renderIcon={Share20}
           onClick={handleShowDialog}

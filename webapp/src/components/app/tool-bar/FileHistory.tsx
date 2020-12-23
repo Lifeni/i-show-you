@@ -7,23 +7,23 @@ import {
   Tabs,
 } from 'carbon-components-react'
 import React, { useContext, useState } from 'react'
+import store from 'store2'
+import styled from 'styled-components'
+import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 import HistoryView from '../text-editor/HistoryView'
+
+const StyledRecentlyViewed20 = styled(RecentlyViewed20)`
+  margin: -3px 1rem -3px 4px;
+`
 
 const FileHistory = () => {
   const { pageId } = useContext(GlobalContext)
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState([])
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   const handleOpenHistory = () => {
     fetch(`/api/file/${pageId}/history`).then(async res => {
@@ -43,15 +43,19 @@ const FileHistory = () => {
         setFiles(temp)
         setOpen(true)
       } else if (res.status === 404) {
-        setNotificationKind('info')
-        setNotificationTitle(`No History`)
-        setNotificationSubtitle('Files older than 3 minutes will be saved.')
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'info',
+          title: 'No History',
+          subtitle: 'Try to change this file.',
+        })
       } else {
-        setNotificationKind('error')
-        setNotificationTitle(`Get History Error ${res.status}`)
-        setNotificationSubtitle((await res.json()).message)
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'error',
+          title: `Get History Error ${res.status}`,
+          subtitle: (await res.json()).message,
+        })
       }
     })
   }
@@ -59,11 +63,13 @@ const FileHistory = () => {
   return (
     <>
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
 
       <Button
@@ -79,8 +85,12 @@ const FileHistory = () => {
 
       <Modal
         open={open}
-        modalHeading="File History"
-        modalLabel="View"
+        modalHeading={
+          <>
+            <StyledRecentlyViewed20 />
+            {`History | ${store.namespace(pageId).get('name')}`}
+          </>
+        }
         passiveModal
         size="lg"
         onRequestClose={() => setOpen(false)}

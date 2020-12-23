@@ -51,6 +51,14 @@ interface IFileOptions {
   line_height: number
 }
 
+interface INoticeOptions {
+  open: boolean
+  close?: Function
+  kind: 'error' | 'info' | 'info-square' | 'success' | 'warning' | 'warning-alt'
+  title: string
+  subtitle: string
+}
+
 interface ITableParams {
   rows
   headers: Array<IFileIndexData>

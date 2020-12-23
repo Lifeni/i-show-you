@@ -4,6 +4,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
+import {
+  defaultFileOptions,
+  defaultNoticeOptions,
+} from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 import MarkdownPreview from '../text-editor/MarkdownPreview'
@@ -40,26 +44,13 @@ const TextEditor = () => {
 
   const editorRef = useRef()
 
-  // TODO change to currentPage.get('')?.auto_save
-  const [autoSave, setAutoSave] = useState(
-    currentPage.get('options') ? currentPage.get('options').auto_save : true
-  )
-  const [wordWrap, setWordWrap] = useState(
-    currentPage.get('options') ? currentPage.get('options').word_wrap : false
-  )
-  const [fontFamily, setFontFamily] = useState(
-    currentPage.get('options')
-      ? currentPage.get('options').font_family
-      : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
-  )
-  const [fontSize, setFontSize] = useState(
-    currentPage.get('options') ? currentPage.get('options').font_size : 14
-  )
-  const [lineHeight, setLineHeight] = useState(
-    currentPage.get('options') ? currentPage.get('options').line_height : 22
+  const [options, setOptions] = useState(
+    currentPage.get('options') || defaultFileOptions
   )
 
-  const [status, setStatus] = useState(autoSave ? 'Ready' : 'Auto Save OFF')
+  const [status, setStatus] = useState(
+    options.auto_save ? 'Ready' : 'Auto Save OFF'
+  )
 
   useEffect(() => {
     setView('none')
@@ -68,29 +59,8 @@ const TextEditor = () => {
       setValue(currentPage.get('content') || '')
       setEditorId(new Date().getTime())
 
-      setAutoSave(
-        currentPage.get('options') ? currentPage.get('options').auto_save : true
-      )
-      setWordWrap(
-        currentPage.get('options')
-          ? currentPage.get('options').word_wrap
-          : false
-      )
-      setFontFamily(
-        currentPage.get('options')
-          ? currentPage.get('options').font_family
-          : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
-      )
-      setFontSize(
-        currentPage.get('options') ? currentPage.get('options').font_size : 14
-      )
-      setLineHeight(
-        currentPage.get('options') ? currentPage.get('options').line_height : 22
-      )
-
-      setStatus(
-        currentPage.get('options')?.auto_save ? 'Ready' : 'Auto Save OFF'
-      )
+      setOptions(currentPage.get('options') || defaultFileOptions)
+      setStatus(options.auto_save ? 'Ready' : 'Auto Save OFF')
     }
 
     updateValue()
@@ -123,10 +93,12 @@ const TextEditor = () => {
             setStatus('Saved')
           } else {
             setStatus('Error')
-            setNotificationKind('error')
-            setNotificationTitle(`Save Error ${res.status}`)
-            setNotificationSubtitle((await res.json()).message)
-            setOpenNotification(true)
+            setNotice({
+              open: true,
+              kind: 'error',
+              title: `Save Error ${res.status}`,
+              subtitle: (await res.json()).message,
+            })
           }
         })
       }
@@ -151,14 +123,7 @@ const TextEditor = () => {
     })
   }
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   useEffect(() => {
     if (
@@ -174,7 +139,7 @@ const TextEditor = () => {
         updated_at: new Date(),
       })
 
-      if (autoSave) {
+      if (options.auto_save) {
         setStatus('Saving')
         fetch(`/api/file/${pageId}/content`, {
           method: 'PATCH',
@@ -192,10 +157,12 @@ const TextEditor = () => {
             window.dispatchEvent(new Event('updateContent'))
           } else {
             setStatus('Error')
-            setNotificationKind('error')
-            setNotificationTitle(`Save Error ${res.status}`)
-            setNotificationSubtitle((await res.json()).message)
-            setOpenNotification(true)
+            setNotice({
+              open: true,
+              kind: 'error',
+              title: `Save Error ${res.status}`,
+              subtitle: (await res.json()).message,
+            })
           }
         })
       }
@@ -207,11 +174,13 @@ const TextEditor = () => {
   return (
     <Wrapper>
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
       <ToolBar
         editor={editorRef}
@@ -233,10 +202,10 @@ const TextEditor = () => {
           }
           value={value}
           options={{
-            wordWrap: wordWrap ? 'on' : 'off',
-            fontFamily: fontFamily,
-            fontSize: fontSize,
-            lineHeight: lineHeight,
+            wordWrap: options.word_wrap ? 'on' : 'off',
+            fontFamily: options.font_family,
+            fontSize: options.font_size,
+            lineHeight: options.line_height,
             padding: {
               top: 16,
               bottom: 16,

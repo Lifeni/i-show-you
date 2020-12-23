@@ -4,6 +4,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
 import { validate } from 'uuid'
+import { defaultNoticeOptions } from '../utils/global-variable'
 import { isMobile as check } from '../utils/is-mobile'
 import { closeUpdate, updateFile } from '../utils/update-file'
 import HeaderBar from './app/layout/HeaderBar'
@@ -26,14 +27,7 @@ const App = () => {
   const { id }: IURLParams = useParams()
   const [pageId, setPageId] = useState(id)
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    '只是一个通知占位符。'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   useEffect(() => {
     setPageId(id)
@@ -74,21 +68,25 @@ const App = () => {
             id: uuid,
             authentication: 'owner',
           })
-          currentPage.set('token', token)
-          currentPage.set('created_at', now, false)
-          currentPage.set('updated_at', now)
-          currentPage.set('name', '')
-          currentPage.set('type', '')
-          currentPage.set('content', '')
-          currentPage.set('authentication', 'owner')
-          currentPage.set('options', {
-            auto_save: true,
-            word_wrap: false,
-            font_family:
-              "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
-            font_size: 14,
-            line_height: 22,
+
+          currentPage.setAll({
+            token: token,
+            created_at: now,
+            updated_at: now,
+            name: '',
+            type: '',
+            content: '',
+            authentication: 'owner',
+            options: {
+              auto_save: true,
+              word_wrap: false,
+              font_family:
+                "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
+              font_size: 14,
+              line_height: 22,
+            },
           })
+
           setRedirect(uuid)
           setLoading(false)
         } else {
@@ -114,16 +112,22 @@ const App = () => {
               authentication: data.authentication,
             })
 
-            currentPage.set('created_at', data.data.created_at, true)
-            currentPage.set('updated_at', data.data.updated_at, true)
-            currentPage.set('name', data.data.name, true)
-            currentPage.set('type', data.data.type, true)
-            currentPage.set('content', data.data.content, true)
-            currentPage.set('authentication', data.authentication, true)
-            currentPage.set('options', data.data.options)
+            currentPage.setAll(
+              {
+                created_at: data.data.created_at,
+                updated_at: data.data.updated_at,
+                name: data.data.name,
+                type: data.data.type,
+                content: data.data.content,
+                authentication: data.authentication,
+                options: data.data.options,
+              },
+              true
+            )
+
             setLoading(false)
 
-            if (currentPage.get('options').auto_save) {
+            if (currentPage.get('options')?.auto_save) {
               await updateFile(id)
             }
           } else if (res.status === 404) {
@@ -131,12 +135,12 @@ const App = () => {
               setRedirect('404')
             } else {
               setLoading(false)
-              setNotificationKind('warning')
-              setNotificationTitle(`Show Local Cache`)
-              setNotificationSubtitle(
-                'The file on the server has been deleted.'
-              )
-              setOpenNotification(true)
+              setNotice({
+                open: true,
+                kind: 'warning',
+                title: 'Show Local Cache',
+                subtitle: 'The file on the server has been deleted.',
+              })
             }
           } else {
             setRedirect('500')
@@ -151,10 +155,12 @@ const App = () => {
           setLoading(false)
           if (res.status === 404) {
             currentPage.set('token', '', true)
-            setNotificationKind('warning')
-            setNotificationTitle(`Link Lost`)
-            setNotificationSubtitle('The file on the server has been deleted.')
-            setOpenNotification(true)
+            setNotice({
+              open: true,
+              kind: 'warning',
+              title: 'Link Lost',
+              subtitle: 'The file on the server has been deleted.',
+            })
           }
         })
       }
@@ -191,11 +197,13 @@ const App = () => {
       ) : (
         <>
           <GlobalNotification
-            open={openNotification}
-            close={() => setOpenNotification(false)}
-            title={notificationTitle}
-            subtitle={notificationSubtitle}
-            kind={notificationKind as NotificationKind}
+            options={{
+              open: notice.open,
+              close: () => setNotice({ ...notice, open: false }),
+              title: notice.title,
+              subtitle: notice.subtitle,
+              kind: notice.kind as NotificationKind,
+            }}
           />
           <GlobalContext.Provider
             value={{ isMobile: isMobile, pageId: pageId }}

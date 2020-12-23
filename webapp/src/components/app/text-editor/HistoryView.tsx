@@ -26,10 +26,10 @@ const HistoryView = (props: { type: string; data: string }) => {
           modified={currentPage.get('content')}
           modifiedLanguage={currentPage.get('type')}
           options={{
-            wordWrap: currentPage.get('options').word_wrap ? 'on' : 'off',
-            fontFamily: currentPage.get('options').font_family,
-            fontSize: currentPage.get('options').font_size,
-            lineHeight: currentPage.get('options').line_height,
+            wordWrap: currentPage.get('options')?.word_wrap ? 'on' : 'off',
+            fontFamily: currentPage.get('options')?.font_family,
+            fontSize: currentPage.get('options')?.font_size,
+            lineHeight: currentPage.get('options')?.line_height,
             padding: {
               top: 16,
               bottom: 16,

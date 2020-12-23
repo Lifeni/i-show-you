@@ -3,6 +3,7 @@ import { Button, NotificationKind } from 'carbon-components-react'
 import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
+import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 
@@ -13,14 +14,7 @@ const ForkFile = () => {
   const [redirect, setRedirect] = useState(false)
   const [uuid, setUuid] = useState('')
 
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    '只是一个通知占位符。'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   const handleForkFile = async () => {
     await fetch('/api/file', {
@@ -62,16 +56,20 @@ const ForkFile = () => {
         setUuid(data.data.id)
         setRedirect(true)
 
-        setNotificationKind('success')
-        setNotificationTitle(`Forked`)
-        setNotificationSubtitle('You can modify this file now.')
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'success',
+          title: 'Forked',
+          subtitle: 'You can modify this file now.',
+        })
       } else {
         const data = await res.json()
-        setNotificationKind('error')
-        setNotificationTitle(`Fork Failed`)
-        setNotificationSubtitle(data.message)
-        setOpenNotification(true)
+        setNotice({
+          open: true,
+          kind: 'error',
+          title: 'Fork Failed',
+          subtitle: data.message,
+        })
       }
     })
   }
@@ -79,11 +77,13 @@ const ForkFile = () => {
     <>
       {redirect && <Redirect to={`/${uuid}`} />}
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
       <Button
         hasIconOnly

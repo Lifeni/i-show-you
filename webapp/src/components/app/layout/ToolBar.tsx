@@ -5,6 +5,7 @@ import store from 'store2'
 import styled from 'styled-components'
 import { useDebounce } from 'use-debounce'
 import { findByExt, findBySlug } from '../../../utils/check-file-type'
+import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 import FileHistory from '../tool-bar/FileHistory'
@@ -84,14 +85,7 @@ const ToolBar = (props: {
   }
 
   const [fileStatus, setFileStatus] = useState(status)
-  const [openNotification, setOpenNotification] = useState(false)
-  const [notificationKind, setNotificationKind] = useState('info')
-  const [notificationTitle, setNotificationTitle] = useState(
-    'Unknown Notification'
-  )
-  const [notificationSubtitle, setNotificationSubtitle] = useState(
-    'Unknown Notification'
-  )
+  const [notice, setNotice] = useState(defaultNoticeOptions)
 
   useEffect(() => {
     setFileStatus(status)
@@ -115,7 +109,7 @@ const ToolBar = (props: {
         updated_at: new Date(),
       })
 
-      if (currentPage.get('options').auto_save) {
+      if (currentPage.get('options')?.auto_save) {
         setFileStatus('Saving')
         fetch(`/api/file/${pageId}/name`, {
           method: 'PATCH',
@@ -133,10 +127,12 @@ const ToolBar = (props: {
             setFileStatus('Auto Saved')
           } else {
             setFileStatus('Error')
-            setNotificationKind('error')
-            setNotificationTitle(`Save Error ${res.status}`)
-            setNotificationSubtitle((await res.json()).message)
-            setOpenNotification(true)
+            setNotice({
+              open: true,
+              kind: 'error',
+              title: `Save Error ${res.status}`,
+              subtitle: (await res.json()).message,
+            })
           }
         })
       }
@@ -197,11 +193,13 @@ const ToolBar = (props: {
         <title>{name || 'Untitled File'}</title>
       </Helmet>
       <GlobalNotification
-        open={openNotification}
-        close={() => setOpenNotification(false)}
-        title={notificationTitle}
-        subtitle={notificationSubtitle}
-        kind={notificationKind as NotificationKind}
+        options={{
+          open: notice.open,
+          close: () => setNotice({ ...notice, open: false }),
+          title: notice.title,
+          subtitle: notice.subtitle,
+          kind: notice.kind as NotificationKind,
+        }}
       />
       <ToolBarWrapper>
         <ToolBarLeftWrapper className="fixed-width">

@@ -14,19 +14,19 @@ const updateFile = async (id: string) => {
 
   let interval: number
 
-  ws.onopen = event => {
+  ws.onopen = () => {
     console.log('Connected.')
     interval = setInterval(() => {
       ws.send('ping')
     }, 10000)
   }
 
-  ws.onclose = event => {
+  ws.onclose = () => {
     console.log('Connect Closed.')
     clearInterval(interval)
   }
 
-  ws.onerror = event => {
+  ws.onerror = () => {
     console.log('Connect Error.')
     clearInterval(interval)
   }
@@ -42,11 +42,16 @@ const updateFile = async (id: string) => {
         updated_at: data.updated_at,
       })
 
-      currentPage.set('updated_at', data.updated_at, true)
-      currentPage.set('name', data.name, true)
-      currentPage.set('type', data.type, true)
-      currentPage.set('content', data.content, true)
-      currentPage.set('options', data.options, true)
+      currentPage.setAll(
+        {
+          updated_at: data.updated_at,
+          name: data.name,
+          type: data.type,
+          content: data.content,
+          options: data.options,
+        },
+        true
+      )
 
       window.dispatchEvent(new Event('updateStorage'))
       window.dispatchEvent(new Event('updateContent'))
