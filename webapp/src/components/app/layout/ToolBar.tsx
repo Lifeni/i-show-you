@@ -106,6 +106,7 @@ const ToolBar = (props: {
       currentPage.set('name', debouncedName)
       currentPage.set('type', debouncedType)
       updateType(debouncedType)
+
       currentPage.set('updated_at', new Date())
       const pre = tabs.get(pageId)
       tabs.set(pageId, {
@@ -141,28 +142,18 @@ const ToolBar = (props: {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedName, debouncedType])
+  }, [debouncedName])
 
   useEffect(() => {
     setName(currentPage.get('name') || '')
     setType(currentPage.get('type') || '')
     updateType(currentPage.get('type') || '')
 
-    const input: HTMLInputElement | null = document.querySelector(
-      '#editor-file-name'
-    )
-    if (input) {
-      input.value = currentPage.get('name') || ''
-    }
-
     if (currentPage.get('authentication') !== 'owner') {
       const updateValue = () => {
         setName(currentPage.get('name') || '')
         setType(currentPage.get('type') || '')
         updateType(currentPage.get('type') || '')
-        if (input) {
-          input.value = currentPage.get('name') || ''
-        }
       }
 
       window.addEventListener('updateStorage', updateValue, false)
@@ -230,7 +221,7 @@ const ToolBar = (props: {
               placeholder="Untitled"
               onChange={changeLanguage}
               onKeyPress={focusEditor}
-              defaultValue={name}
+              value={name}
               title={name}
               autoComplete="off"
               maxLength={100}

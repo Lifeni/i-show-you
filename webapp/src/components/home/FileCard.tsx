@@ -132,7 +132,7 @@ const FileCard = (props: {
       <pre>
         <code>
           {store.namespace(data.id).get('content')
-            ? store.namespace(data.id).get('content').slice(0, 200)
+            ? store.namespace(data.id).get('content')
             : ''}
         </code>
       </pre>

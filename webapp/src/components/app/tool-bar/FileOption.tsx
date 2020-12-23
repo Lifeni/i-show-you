@@ -115,7 +115,7 @@ const FileOption = () => {
     if (currentPage.get('authentication') === 'owner') {
       fetch(`/api/file/${pageId}/options`, {
         method: 'PATCH',
-        body: JSON.stringify({ options: options, updated_at: new Date() }),
+        body: JSON.stringify({ options: options }),
         headers: new Headers({
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + currentPage.get('token') || 'no-token',
@@ -133,14 +133,6 @@ const FileOption = () => {
           setOpenNotification(true)
         }
       })
-
-      const tabs = store.namespace('tabs')
-      const pre = tabs.get(pageId)
-      tabs.set(pageId, {
-        ...pre,
-        updated_at: new Date(),
-      })
-      currentPage.set('updated_at', new Date())
     }
 
     currentPage.set('options', options)
