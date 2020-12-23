@@ -16,7 +16,7 @@ import {
   TextArea,
   Toggle,
 } from 'carbon-components-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
 import { GlobalContext } from '../../App'
@@ -81,6 +81,28 @@ const FileOption = () => {
   const [lineHeight, setLineHeight] = useState(
     currentPage.get('options') ? currentPage.get('options').line_height : 22
   )
+
+  useEffect(() => {
+    setAutoSave(
+      currentPage.get('options') ? currentPage.get('options').auto_save : true
+    )
+    setWordWrap(
+      currentPage.get('options') ? currentPage.get('options').word_wrap : false
+    )
+    setFontFamily(
+      currentPage.get('options')
+        ? currentPage.get('options').font_family
+        : "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace"
+    )
+    setFontSize(
+      currentPage.get('options') ? currentPage.get('options').font_size : 14
+    )
+    setLineHeight(
+      currentPage.get('options') ? currentPage.get('options').line_height : 22
+    )
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId])
 
   const handleOptionsSave = () => {
     const options: IFileOptions = {
@@ -172,7 +194,7 @@ const FileOption = () => {
               </span>
               <Toggle
                 aria-label="Auto Save"
-                defaultToggled={autoSave}
+                toggled={autoSave}
                 id="auto-save"
                 onToggle={e => setAutoSave(e)}
               />
@@ -187,7 +209,7 @@ const FileOption = () => {
             <Toggle
               aria-label="Word Wrap"
               id="word-wrap"
-              defaultToggled={wordWrap}
+              toggled={wordWrap}
               onToggle={e => setWordWrap(e)}
             />
           </FormItem>
@@ -198,7 +220,7 @@ const FileOption = () => {
             </span>
             <TextArea
               id="font-family"
-              defaultValue={fontFamily}
+              value={fontFamily}
               labelText=""
               aria-label="Font Family"
               onChange={e => setFontFamily(e.target.value)}
