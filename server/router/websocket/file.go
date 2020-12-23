@@ -15,6 +15,7 @@ type FileOptions struct {
 	FontFamily string `json:"font_family"`
 	FontSize   int    `json:"font_size"`
 	LineHeight int    `json:"line_height"`
+	UpdatedAt  string `json:"updated_at"`
 }
 
 type File struct {
@@ -35,10 +36,11 @@ var (
 )
 
 const (
-	writeWait  = 10 * time.Second
-	pongWait   = 60 * time.Second
-	pingPeriod = (pongWait * 9) / 10
-	filePeriod = 1 * time.Second
+	writeWait    = 10 * time.Second
+	pongWait     = 60 * time.Second
+	pingPeriod   = (pongWait * 9) / 10
+	filePeriod   = 1 * time.Second
+	optionPeriod = 2 * time.Second
 )
 
 func checkModified(id string) (File, bool) {
@@ -49,19 +51,28 @@ func checkModified(id string) (File, bool) {
 	var file File
 
 	err := api.FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+
 	t, err := time.Parse(time.RFC3339, file.UpdatedAt)
-	if (err != nil) || (time.Now().After(t.Add(filePeriod))) {
+	ot, err := time.Parse(time.RFC3339, file.Options.UpdatedAt)
+	nt := time.Now()
+
+	if err != nil {
 		return file, false
 	}
+
+	if nt.After(t.Add(filePeriod)) && nt.After(ot.Add(optionPeriod)) {
+		return file, false
+	}
+
 	return file, true
 }
 
 func reader(ws *websocket.Conn) {
 	defer ws.Close()
 	ws.SetReadLimit(512)
-	ws.SetReadDeadline(time.Now().Add(pongWait))
+	err := ws.SetReadDeadline(time.Now().Add(pongWait))
 	ws.SetPongHandler(func(string) error {
-		ws.SetReadDeadline(time.Now().Add(pongWait))
+		err = ws.SetReadDeadline(time.Now().Add(pongWait))
 		return nil
 	})
 	for {
@@ -79,7 +90,7 @@ func writer(ws *websocket.Conn, id string) {
 	defer func() {
 		pingTicker.Stop()
 		fileTicker.Stop()
-		ws.Close()
+		_ = ws.Close()
 	}()
 	for {
 		select {
@@ -89,14 +100,14 @@ func writer(ws *websocket.Conn, id string) {
 
 			p, up = checkModified(id)
 			if up {
-				ws.SetWriteDeadline(time.Now().Add(writeWait))
-				if err := ws.WriteJSON(p); err != nil {
+				err := ws.SetWriteDeadline(time.Now().Add(writeWait))
+				if err = ws.WriteJSON(p); err != nil {
 					return
 				}
 			}
 		case <-pingTicker.C:
-			ws.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := ws.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
+			err := ws.SetWriteDeadline(time.Now().Add(writeWait))
+			if err = ws.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
 				return
 			}
 		}

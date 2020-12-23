@@ -155,7 +155,13 @@ const FileOption = () => {
                 aria-label="Auto Save"
                 toggled={options.auto_save}
                 id="auto-save"
-                onToggle={e => setOptions({ ...options, auto_save: e })}
+                onToggle={e =>
+                  setOptions({
+                    ...options,
+                    auto_save: e,
+                    updated_at: new Date(),
+                  })
+                }
               />
             </FormItem>
           ) : null}
@@ -169,7 +175,9 @@ const FileOption = () => {
               aria-label="Word Wrap"
               id="word-wrap"
               toggled={options.word_wrap}
-              onToggle={e => setOptions({ ...options, word_wrap: e })}
+              onToggle={e =>
+                setOptions({ ...options, word_wrap: e, updated_at: new Date() })
+              }
             />
           </FormItem>
           <FormItemBlock>
@@ -182,7 +190,13 @@ const FileOption = () => {
               value={options.font_family}
               labelText=""
               aria-label="Font Family"
-              onChange={e => setOptions({ ...options, font_family: e })}
+              onChange={e =>
+                setOptions({
+                  ...options,
+                  font_family: e,
+                  updated_at: new Date(),
+                })
+              }
             />
           </FormItemBlock>
           <FormItem>
@@ -201,6 +215,7 @@ const FileOption = () => {
                   ...options,
                   // @ts-ignore
                   font_size: Number(e.imaginaryTarget.value),
+                  updated_at: new Date(),
                 })
               }}
             />
@@ -221,6 +236,7 @@ const FileOption = () => {
                   ...options,
                   // @ts-ignore
                   line_height: Number(e.imaginaryTarget.value),
+                  updated_at: new Date(),
                 })
               }}
             />

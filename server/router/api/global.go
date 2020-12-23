@@ -12,6 +12,7 @@ type FileOptions struct {
 	FontFamily string `json:"font_family"`
 	FontSize   int    `json:"font_size"`
 	LineHeight int    `json:"line_height"`
+	UpdatedAt  string `json:"updated_at"`
 }
 
 type File struct {

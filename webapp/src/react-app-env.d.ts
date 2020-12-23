@@ -49,6 +49,7 @@ interface IFileOptions {
   font_family: string
   font_size: number
   line_height: number
+  updated_at: string
 }
 
 interface INoticeOptions {

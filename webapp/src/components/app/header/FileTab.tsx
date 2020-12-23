@@ -24,7 +24,7 @@ const IconWrapper = styled.span`
   }
 `
 
-const HeaderFileTab = forwardRef(_ => {
+const HeaderFileTab = forwardRef((_, ref) => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 

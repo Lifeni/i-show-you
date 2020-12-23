@@ -49,6 +49,7 @@ const App = () => {
               "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
             font_size: 14,
             line_height: 22,
+            updated_at: now,
           },
         }),
         headers: new Headers({
@@ -84,6 +85,7 @@ const App = () => {
                 "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
               font_size: 14,
               line_height: 22,
+              updated_at: now,
             },
           })
 

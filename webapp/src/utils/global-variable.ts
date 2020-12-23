@@ -5,6 +5,7 @@ const defaultFileOptions: IFileOptions = {
     "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono','Bitstream Vera Sans Mono', Courier, monospace",
   font_size: 14,
   line_height: 22,
+  updated_at: '',
 }
 
 const defaultNoticeOptions: INoticeOptions = {
