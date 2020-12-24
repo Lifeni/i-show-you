@@ -48,12 +48,16 @@ const FileList = () => {
   const tabs = store.namespace('tabs')
   const [redirect, setRedirect] = useState('200')
 
-  const tabData = Object.values(tabs.getAll()).sort(
-    (a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-  )
+  const getTabData = (): Array<any> => {
+    return Object.values(tabs.getAll()).sort(
+      (a, b) =>
+        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    )
+  }
 
+  const [tabData, setTabData] = useState(getTabData())
   const [isMobile, setMobile] = useState(false)
+
   useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
@@ -61,9 +65,14 @@ const FileList = () => {
       })
     }
 
-    checkWidth()
-    window.addEventListener('resize', checkWidth)
+    const checkTabData = () => {
+      setTabData(getTabData())
+    }
 
+    checkWidth()
+    checkTabData()
+
+    window.addEventListener('resize', checkWidth)
     return () => {
       window.removeEventListener('resize', checkWidth)
     }

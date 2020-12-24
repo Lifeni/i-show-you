@@ -5,7 +5,7 @@ import {
   NotificationKind,
   SelectableTile,
 } from 'carbon-components-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
@@ -40,18 +40,18 @@ const RemoveFile = (props: { reRender: Function }) => {
   const [removeLocal, setRemoveLocal] = useState(false)
   const [removeRemote, setRemoveRemote] = useState(false)
   const [redirect, setRedirect] = useState(false)
+  const [url, setUrl] = useState(pageId)
 
   const [notice, setNotice] = useState(defaultNoticeOptions)
 
-  const [url, setUrl] = useState('')
-
-  const removeLocalFile = () => {
+  const removeLocalFile = (id: string) => {
     const tabs = store.namespace('tabs')
     const arr = Object.values(tabs.getAll()).sort(
       (a, b) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-    const index = arr.findIndex(value => value.id === pageId)
+
+    const index = arr.findIndex(value => value.id === id)
     if (arr.length === 1) {
       setUrl('')
     } else if (index !== arr.length - 1) {
@@ -59,9 +59,9 @@ const RemoveFile = (props: { reRender: Function }) => {
     } else {
       setUrl(arr[index - 1].id)
     }
-    currentPage.clear()
-    tabs.remove(pageId)
-    setOpen(false)
+
+    store.namespace(id).clear()
+    tabs.remove(id)
     setRedirect(true)
   }
 
@@ -86,7 +86,7 @@ const RemoveFile = (props: { reRender: Function }) => {
               subtitle: 'You can re-share it any time.',
             })
           } else {
-            removeLocalFile()
+            removeLocalFile(pageId)
           }
         } else {
           setNotice({
@@ -98,13 +98,19 @@ const RemoveFile = (props: { reRender: Function }) => {
         }
       })
     } else if (removeLocal) {
-      removeLocalFile()
+      setOpen(false)
+      removeLocalFile(pageId)
     }
   }
 
+  useEffect(() => {
+    setRedirect(false)
+    setUrl(pageId)
+  }, [pageId])
+
   return (
     <>
-      {redirect && <Redirect to={`/${url}`} />}
+      {redirect ? <Redirect to={`/${url}`} /> : null}
       <GlobalNotification
         options={{
           open: notice.open,
@@ -114,7 +120,6 @@ const RemoveFile = (props: { reRender: Function }) => {
           kind: notice.kind as NotificationKind,
         }}
       />
-
       <Button
         hasIconOnly
         renderIcon={TrashCan20}
