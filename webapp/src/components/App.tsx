@@ -1,6 +1,5 @@
 import { NotificationKind } from 'carbon-components-react'
 import React, { createContext, useEffect, useState } from 'react'
-import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Redirect, useParams } from 'react-router-dom'
 import store from 'store2'
 import { validate } from 'uuid'
@@ -188,14 +187,9 @@ const App = () => {
   }, [id])
 
   return (
-    <HelmetProvider>
+    <>
       {loading ? (
-        <>
-          <Helmet>
-            <title>I Show You</title>
-          </Helmet>
-          <GlobalLoading />
-        </>
+        <GlobalLoading />
       ) : (
         <>
           <GlobalNotification
@@ -220,7 +214,7 @@ const App = () => {
         </>
       )}
       {redirect !== '200' && <Redirect to={{ pathname: redirect }} />}
-    </HelmetProvider>
+    </>
   )
 }
 

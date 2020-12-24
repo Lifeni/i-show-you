@@ -54,12 +54,14 @@ const Admin = () => {
   const [loading, setLoading] = useState(true)
   const [password, setPassword] = useState('')
   const [data, setData] = useState([])
+  const [date, setDate] = useState(new Date())
 
   const [notice, setNotice] = useState(defaultNoticeOptions)
 
   const adminPage = store.namespace('admin-page')
 
   useEffect(() => {
+    setDate(new Date())
     setLoading(true)
     if (adminPage.has('token')) {
       fetch('/api/admin', {
@@ -128,6 +130,7 @@ const Admin = () => {
     <HelmetProvider>
       <Helmet>
         <title>Admin | I Show You</title>
+        <meta content={date.getTime().toString()} />
       </Helmet>
       {loading ? (
         <GlobalLoading />

@@ -78,6 +78,7 @@ const SideBar = () => {
 
   const [message, setMessage] = useState('I Show You')
   const [status, setStatus] = useState('normal')
+  const [date, setDate] = useState(new Date())
 
   const handleClearAllData = () => {
     const ans = window.confirm('Really?')
@@ -88,6 +89,7 @@ const SideBar = () => {
   }
 
   useEffect(() => {
+    setDate(new Date())
     switch (path) {
       case '/': {
         setMessage('I Show You')
@@ -113,6 +115,7 @@ const SideBar = () => {
         <title>
           {message === 'I Show You' ? 'Home' : message} | I Show You
         </title>
+        <meta content={date.getTime().toString()} />
       </Helmet>
       <Container>
         <StyledH1>
