@@ -8,6 +8,8 @@
 
 ## 介绍
 
+**应用处于测试阶段，数据结构与 API 设计可能会发生变动，请不要储存重要数据。**
+
 - [x] 💻 现代化的界面，基于 IBM 的 Carbon 设计系统。
 - [x] 🚀 可以自托管，使用 docker-compose 构建自己的应用。
 - [ ] 📱 移动界面友好, 支持响应式设计和渐进式 Web 应用。
@@ -60,7 +62,7 @@
 
 ### 你的设备可能不支持编辑（Your device may not support editing）
 
-应用使用  [Monaco Editor](https://microsoft.github.io/monaco-editor/) 作为编辑器，而这个编辑器目前并不支持移动浏览器移动框架。如果仍要进行编辑，可能会出现无法删除、文字丢失等问题。
+应用使用  [Monaco Editor](https://microsoft.github.io/monaco-editor/) 作为编辑器，而这个编辑器目前并不支持移动浏览器和移动框架。如果仍要进行编辑，可能会出现无法删除、文字丢失等问题。
 
 关于 Monaco Editor 的更多信息，可以查看 [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor) 。
 
