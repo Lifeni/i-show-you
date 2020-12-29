@@ -1,6 +1,6 @@
 import { Play20 } from '@carbon/icons-react'
 import { Button } from 'carbon-components-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import store from 'store2'
 import { GlobalContext } from '../../App'
 
@@ -11,6 +11,13 @@ const RunFile = (props: { type: IFileMap; updateView: Function }) => {
   const { pageId } = useContext(GlobalContext)
   const currentPage = store.namespace(pageId)
   const [view, setView] = useState('none')
+  const [canRun, setCanRun] = useState(false)
+
+  useEffect(() => {
+    if (canRunList.includes(type.name)) {
+      setCanRun(true)
+    }
+  }, [pageId])
 
   const handleRunFile = (lang: string) => {
     if (lang === 'JavaScript') {
@@ -41,7 +48,7 @@ const RunFile = (props: { type: IFileMap; updateView: Function }) => {
 
   return (
     <>
-      {canRunList.includes(type.name) && (
+      {canRun && (
         <Button
           hasIconOnly
           renderIcon={Play20}

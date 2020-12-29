@@ -24,6 +24,7 @@ const MarkdownPreview = () => {
   const [content, setContent] = useState('<div>Loading ...</div>')
 
   useEffect(() => {
+    setContent('<div>Loading ...</div>')
     const updateValue = () => {
       fetch('https://api.github.com/markdown', {
         method: 'POST',
