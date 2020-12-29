@@ -1,9 +1,10 @@
-package api
+package router
 
 import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"server/database"
 	"server/util"
+	"time"
 )
 
 type FileOptions struct {
@@ -50,11 +51,17 @@ type ResponseError struct {
 var (
 	FileCollection    *mongo.Collection
 	HistoryCollection *mongo.Collection
-	Config            *util.Config
+	ArchivePeriod     time.Duration
+	AdminTryCount     int
+	AdminBanPeriod    time.Duration
+	AdminBanAt        time.Time
 )
 
-func InitFileCollection() {
+func Init() {
 	FileCollection = database.GetCollection("file")
 	HistoryCollection = database.GetCollection("history")
-	Config = util.ConfigFile
+	ArchivePeriod = time.Duration(util.ConfigFile.App.History.SavePeriod) * time.Second
+	AdminTryCount = util.ConfigFile.App.Admin.TryCount
+	AdminBanPeriod = time.Duration(util.ConfigFile.App.Admin.BanPeriod) * time.Minute
+	AdminBanAt = time.Now().Add(-AdminBanPeriod)
 }

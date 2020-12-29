@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"regexp"
 	"server/database"
+	"server/router"
 	apiRouter "server/router/api"
 	websocketRouter "server/router/websocket"
 	"server/util"
@@ -23,13 +24,14 @@ func main() {
 		e.File("/favicon.ico", "./public/favicon.ico")
 		e.File("/logo.svg", "./public/assets/logo.svg")
 	} else {
+		util.InitConfig()
+
 		err := database.ConnectDB()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		util.InitConfig()
-		apiRouter.InitFileCollection()
+		router.Init()
 
 		e.Static("/", "./public/")
 		e.GET("/:path", func(c echo.Context) error {
@@ -52,9 +54,12 @@ func main() {
 		api.DELETE("/file/:id", apiRouter.RemoveFile)
 
 		api.GET("/admin", apiRouter.QueryFileAdmin)
-		api.POST("/admin", apiRouter.AdminLogin)
-		api.DELETE("/admin/file/:id", apiRouter.RemoveFileAdmin)
-		api.DELETE("/admin/files", apiRouter.RemoveMultipleFilesAdmin)
+
+		if util.ConfigFile.App.Admin.Enable {
+			api.POST("/admin", apiRouter.AdminLogin)
+			api.DELETE("/admin/file/:id", apiRouter.RemoveFileAdmin)
+			api.DELETE("/admin/files", apiRouter.RemoveMultipleFilesAdmin)
+		}
 
 		api.GET("/ping", func(c echo.Context) error {
 			return c.String(http.StatusOK, "pong")

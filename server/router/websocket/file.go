@@ -5,7 +5,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
 	"log"
-	"server/router/api"
+	"server/router"
 	"time"
 )
 
@@ -50,7 +50,7 @@ func checkModified(id string) (File, bool) {
 
 	var file File
 
-	err := api.FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+	err := router.FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
 
 	t, err := time.Parse(time.RFC3339, file.UpdatedAt)
 	ot, err := time.Parse(time.RFC3339, file.Options.UpdatedAt)

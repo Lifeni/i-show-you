@@ -1,4 +1,4 @@
-import { RecentlyViewed20 } from '@carbon/icons-react'
+import { RecentlyViewed16, RecentlyViewed20 } from '@carbon/icons-react'
 import {
   Button,
   Modal,
@@ -9,12 +9,13 @@ import {
 import React, { useContext, useState } from 'react'
 import store from 'store2'
 import styled from 'styled-components'
+import { addBlank } from '../../../utils/add-blank'
 import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
 import HistoryView from '../text-editor/HistoryView'
 
-const StyledRecentlyViewed20 = styled(RecentlyViewed20)`
+const StyledRecentlyViewed16 = styled(RecentlyViewed16)`
   margin: -4px 1rem -4px 4px;
 `
 
@@ -48,6 +49,13 @@ const FileHistory = () => {
           kind: 'info',
           title: 'No History',
           subtitle: 'Try to change this file.',
+        })
+      } else if (res.status === 400) {
+        setNotice({
+          open: true,
+          kind: 'info',
+          title: 'No History',
+          subtitle: 'History is closed.',
         })
       } else {
         setNotice({
@@ -85,9 +93,9 @@ const FileHistory = () => {
 
       <Modal
         open={open}
-        modalHeading={
+        modalLabel={
           <>
-            <StyledRecentlyViewed20 />
+            <StyledRecentlyViewed16 />
             {`${store.namespace(pageId).get('name')}`}
           </>
         }
@@ -95,23 +103,18 @@ const FileHistory = () => {
         size="lg"
         onRequestClose={() => setOpen(false)}
         modalAriaLabel="File History"
+        aria-label="File History"
       >
         {files.length === 0 ? (
           <p>No History</p>
         ) : (
-          <Tabs>
+          <Tabs type="container">
             {files.map((file: IFileAllData) => (
               <Tab
                 id={file.updated_at}
                 key={file.updated_at}
-                title={new Date(file.updated_at)
-                  .toLocaleString()
-                  .replace(/上午/, ' 上午 ')
-                  .replace(/下午/, ' 下午 ')}
-                label={new Date(file.updated_at)
-                  .toLocaleString()
-                  .replace(/上午/, ' 上午 ')
-                  .replace(/下午/, ' 下午 ')}
+                title={addBlank(file.updated_at)}
+                label={addBlank(file.updated_at)}
               >
                 <HistoryView type={file.type} data={file.content} />
               </Tab>

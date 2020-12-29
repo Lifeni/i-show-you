@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
+	"server/util"
 	"time"
 )
 
@@ -21,10 +22,11 @@ func GetCollection(name string) *mongo.Collection {
 func ConnectDB() error {
 	var err error
 
-	Client, err = mongo.NewClient(options.Client().ApplyURI("mongodb://mongo:27017"))
+	Client, err = mongo.NewClient(options.Client().ApplyURI("mongodb://" + util.ConfigFile.Database.Host + ":" + util.ConfigFile.Database.Port))
 	if err != nil {
 		return err
 	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	err = Client.Connect(ctx)

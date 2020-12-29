@@ -20,7 +20,7 @@ func VerifyFileToken(c echo.Context) string {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(ConfigFile.Server.JwtSecret.File), nil
+		return []byte(ConfigFile.Secret.JwtKey.File), nil
 	})
 
 	authentication := "ghost"
@@ -48,7 +48,7 @@ func VerifyAdminToken(c echo.Context) bool {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(ConfigFile.Server.JwtSecret.File), nil
+		return []byte(ConfigFile.Secret.JwtKey.File), nil
 	})
 
 	authentication := false

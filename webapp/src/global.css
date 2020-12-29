@@ -145,7 +145,7 @@
 }
 
 .bx--tab-content {
-  padding: 0 0 1rem 0;
+  padding: 0;
 }
 
 .bx--tabs--scrollable .bx--tabs--scrollable__nav-link {
@@ -153,6 +153,14 @@
 }
 
 .bx--modal-container--lg .bx--modal-content {
-  padding: 0 1rem;
+  padding: 0;
   margin: 0;
+}
+
+.bx--modal.is-visible .bx--modal-container {
+  background-color: #f4f4f4;
+}
+
+.bx--modal-header {
+  margin-bottom: 0.75rem;
 }

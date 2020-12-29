@@ -23,6 +23,7 @@ import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
+import { addBlank } from '../../utils/add-blank'
 import { defaultNoticeOptions } from '../../utils/global-variable'
 import { isMobile } from '../../utils/is-mobile'
 import GlobalNotification from '../global/GlobalNotification'
@@ -189,7 +190,9 @@ const FileTable = (props: { data: Array<IFileData> }) => {
           subtitle: data.message,
         })
       }
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 300)
     })
   }
 
@@ -317,10 +320,7 @@ const FileTable = (props: { data: Array<IFileData> }) => {
                       <TableCell key={cell.id}>
                         {cell.info.header === 'updated_at' ||
                         cell.info.header === 'created_at'
-                          ? new Date(cell.value)
-                              .toLocaleString()
-                              .replace(/上午/, ' 上午 ')
-                              .replace(/下午/, ' 下午 ')
+                          ? addBlank(cell.value)
                           : cell.value}
                       </TableCell>
                     ))}

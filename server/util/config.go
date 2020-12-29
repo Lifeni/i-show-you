@@ -7,15 +7,32 @@ import (
 )
 
 type Config struct {
-	Server struct {
-		JwtSecret struct {
+	Database struct {
+		Host string `yaml:"host"`
+		Port string `yaml:"port"`
+	} `yaml:"database"`
+
+	App struct {
+		History struct {
+			Enable     bool `yaml:"enable"`
+			SavePeriod int  `yaml:"save_period"`
+		} `yaml:"history"`
+
+		Admin struct {
+			Enable    bool `yaml:"enable"`
+			TryCount  int  `yaml:"try_count"`
+			BanPeriod int  `yaml:"ban_period"`
+		} `yaml:"admin"`
+	} `yaml:"app"`
+
+	Secret struct {
+		JwtKey struct {
 			File  string `yaml:"file"`
 			Admin string `yaml:"admin"`
-		}
-	}
-	Admin struct {
-		Password string `yaml:"password"`
-	}
+		} `yaml:"kwt_key"`
+
+		Admin string `yaml:"admin"`
+	} `yaml:"secret"`
 }
 
 var (

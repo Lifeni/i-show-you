@@ -1,7 +1,42 @@
-server:
-  jwt-secret:
-    file: golang
-    admin: password
+# More information: https://lifeni.github.io/i-show-you/config/
 
-admin:
-  password: 1234
+# host:                The name of the database configured in docker compose, the default: mongo
+# port:                The default MongoDB port: 27017
+
+database:
+  host: mongo
+  port: 27017
+
+# history:             Record the history of the file
+# history.enable:      The default: true
+# history.save_period: If the last save was __ (seconds) ago,
+#                        save the last save as history, the default: 60
+
+# admin:               Settings related to the administrator page
+# admin.enable:        The default: true
+# admin.try_count:     Maximum allowed number of attempts for incorrect password,
+#                        login will be banned after more than __ attempt(s), the default: 3
+# admin.ban_period:    Duration of login banned (minutes), the default: 120
+
+app:
+  history:
+    enable: true
+    save_period: 60
+
+  admin:
+    enable: true
+    try_count: 3
+    ban_period: 120
+
+# jwt_key:             Encryption key used for JWT
+# jwt_key.file:        JWT key used to verify file owner
+# jwt_key.admin:       JWT key used to authenticate the administrator
+
+# admin:               Administrator page password
+
+secret:
+  jwt_key:
+    file: your_file_key
+    admin: your_admin_key
+
+  admin: your_admin_password

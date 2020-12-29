@@ -1,4 +1,4 @@
-import { ArrowRight20 } from '@carbon/icons-react'
+import { ArrowRight20, Home20 } from '@carbon/icons-react'
 import {
   Button,
   Form,
@@ -7,6 +7,7 @@ import {
 } from 'carbon-components-react'
 import React, { useEffect, useState } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { Link } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { defaultNoticeOptions } from '../utils/global-variable'
@@ -49,8 +50,16 @@ const LoginWrapper = styled.div`
   gap: 12px;
 `
 
+const ButtonWrapper = styled.div`
+  margin: -16px 0;
+  a {
+    text-decoration: none;
+  }
+`
+
 const Admin = () => {
   const [logged, setLogged] = useState(false)
+  const [enable, setEnable] = useState(true)
   const [loading, setLoading] = useState(true)
   const [password, setPassword] = useState('')
   const [data, setData] = useState([])
@@ -63,26 +72,25 @@ const Admin = () => {
   useEffect(() => {
     setDate(new Date())
     setLoading(true)
-    if (adminPage.has('token')) {
-      fetch('/api/admin', {
-        headers: new Headers({
-          Authorization: 'Bearer ' + adminPage.get('token') || 'no-token',
-        }),
-      }).then(async res => {
-        const data = await res.json()
-        if (res.status === 200) {
-          setLogged(true)
-          setData(data.data)
-        } else {
-          setLogged(false)
-        }
+    fetch('/api/admin', {
+      headers: new Headers({
+        Authorization: 'Bearer ' + adminPage.get('token') || 'no-token',
+      }),
+    }).then(async res => {
+      const data = await res.json()
+      if (res.status === 200) {
+        setLogged(true)
+        setData(data.data)
+      } else if (res.status === 400) {
+        setLogged(false)
+        setEnable(false)
+      } else {
+        setLogged(false)
+      }
+      setTimeout(() => {
         setLoading(false)
-      })
-    } else {
-      setLogged(false)
-      setPassword('')
-      setLoading(false)
-    }
+      }, 300)
+    })
   }, [adminPage])
 
   const handleLogin = () => {
@@ -136,7 +144,18 @@ const Admin = () => {
         <GlobalLoading />
       ) : (
         <>
-          {logged ? (
+          {!enable ? (
+            <LoginContainer>
+              <StyledH1>The Administrator Page is Not Available</StyledH1>
+              <ButtonWrapper>
+                <Link to="/">
+                  <Button kind="ghost" renderIcon={Home20}>
+                    Back to Home
+                  </Button>
+                </Link>
+              </ButtonWrapper>
+            </LoginContainer>
+          ) : logged ? (
             <AdminContainer>
               <StyledH1>
                 I Show You <strong>Admin</strong>

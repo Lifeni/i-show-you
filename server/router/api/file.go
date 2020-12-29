@@ -9,12 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"net/http"
+	"server/router"
 	"server/util"
 	"time"
-)
-
-var (
-	archivePeriod = 60 * time.Second
 )
 
 func CreateFile(c echo.Context) error {
@@ -24,12 +21,12 @@ func CreateFile(c echo.Context) error {
 		"nbf": time.Now().Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(Config.Server.JwtSecret.File))
+	tokenString, err := token.SignedString([]byte(util.ConfigFile.Secret.JwtKey.File))
 
-	req := new(RequestData)
+	req := new(router.RequestData)
 	err = c.Bind(req)
 
-	_, err = FileCollection.InsertOne(context.TODO(), File{
+	_, err = router.FileCollection.InsertOne(context.TODO(), router.File{
 		Id:        id.String(),
 		CreatedAt: req.CreatedAt,
 		UpdatedAt: req.UpdatedAt,
@@ -41,7 +38,7 @@ func CreateFile(c echo.Context) error {
 
 	if err != nil {
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
@@ -72,28 +69,28 @@ func QueryFile(c echo.Context) error {
 		Id string `json:"id"`
 	}
 
-	var file File
+	var file router.File
 
-	err := FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+	err := router.FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "File Not Found"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
 	}
 
 	type ResponseData struct {
-		Message        string `json:"message"`
-		Data           File   `json:"data"`
-		Authentication string `json:"authentication"`
+		Message        string      `json:"message"`
+		Data           router.File `json:"data"`
+		Authentication string      `json:"authentication"`
 	}
 
 	res := new(ResponseData)
@@ -111,20 +108,20 @@ func QueryRawFile(c echo.Context) error {
 		Id string `json:"id"`
 	}
 
-	var file File
+	var file router.File
 
-	err := FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
+	err := router.FileCollection.FindOne(context.TODO(), QueryData{Id: id}).Decode(&file)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "File Not Found"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
 
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
@@ -137,7 +134,7 @@ func UpdateFile(c echo.Context) error {
 	id := c.Param("id")
 
 	if util.VerifyFileToken(c) == "ghost" {
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusUnauthorized, &res)
@@ -148,30 +145,30 @@ func UpdateFile(c echo.Context) error {
 	}
 
 	type UpdateData struct {
-		UpdatedAt string      `json:"updated_at"`
-		Name      string      `json:"name"`
-		Type      string      `json:"type"`
-		Content   string      `json:"content"`
-		Options   FileOptions `json:"options"`
+		UpdatedAt string             `json:"updated_at"`
+		Name      string             `json:"name"`
+		Type      string             `json:"type"`
+		Content   string             `json:"content"`
+		Options   router.FileOptions `json:"options"`
 	}
 
 	req := new(UpdateData)
 	err := c.Bind(req)
 
-	var pre File
-	err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
+	var pre router.File
+	err = router.FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "File Not Found"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
 
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
@@ -181,18 +178,18 @@ func UpdateFile(c echo.Context) error {
 
 	if err != nil {
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
 	}
 
-	if time.Now().After(t.Add(archivePeriod)) && req.Content != pre.Content {
-		_, err = HistoryCollection.InsertOne(context.TODO(), &pre)
+	if util.ConfigFile.App.History.Enable && time.Now().After(t.Add(router.ArchivePeriod)) && req.Content != pre.Content {
+		_, err = router.HistoryCollection.InsertOne(context.TODO(), &pre)
 
 		if err != nil {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "Database Error"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusInternalServerError, &res)
@@ -213,7 +210,7 @@ func UpdateFilePatch(c echo.Context) error {
 	id, key := c.Param("id"), c.Param("key")
 
 	if util.VerifyFileToken(c) == "ghost" {
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusUnauthorized, &res)
@@ -224,7 +221,7 @@ func UpdateFilePatch(c echo.Context) error {
 	}
 
 	var err error
-	var pre File
+	var pre router.File
 
 	flag := false
 
@@ -240,13 +237,13 @@ func UpdateFilePatch(c echo.Context) error {
 
 		if err != nil {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "Invalid Request"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
-		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
+		err = router.FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else if key == "content" {
 		type UpdateData struct {
 			Content   string `json:"content"`
@@ -258,17 +255,17 @@ func UpdateFilePatch(c echo.Context) error {
 
 		if err != nil {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "Invalid Request"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
 		flag = true
-		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
+		err = router.FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else if key == "options" {
 		type UpdateData struct {
-			Options FileOptions `json:"options"`
+			Options router.FileOptions `json:"options"`
 		}
 
 		req := new(UpdateData)
@@ -276,16 +273,16 @@ func UpdateFilePatch(c echo.Context) error {
 
 		if err != nil {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "Invalid Request"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusBadRequest, &res)
 		}
 
-		err = FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
+		err = router.FileCollection.FindOneAndUpdate(context.TODO(), QueryData{Id: id}, bson.D{{"$set", &req}}).Decode(&pre)
 	} else {
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Invalid Request"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusBadRequest, &res)
@@ -294,14 +291,14 @@ func UpdateFilePatch(c echo.Context) error {
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "File Not Found"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
 
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
@@ -311,18 +308,18 @@ func UpdateFilePatch(c echo.Context) error {
 
 	if err != nil {
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
 	}
 
-	if time.Now().After(t.Add(archivePeriod)) && flag {
-		_, err = HistoryCollection.InsertOne(context.TODO(), &pre)
+	if util.ConfigFile.App.History.Enable && time.Now().After(t.Add(router.ArchivePeriod)) && flag {
+		_, err = router.HistoryCollection.InsertOne(context.TODO(), &pre)
 
 		if err != nil {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "Database Error"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusInternalServerError, &res)
@@ -343,7 +340,7 @@ func RemoveFile(c echo.Context) error {
 	id := c.Param("id")
 
 	if util.VerifyFileToken(c) == "ghost" {
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusUnauthorized, &res)
@@ -353,18 +350,18 @@ func RemoveFile(c echo.Context) error {
 		Id string `json:"id"`
 	}
 
-	_, err := FileCollection.DeleteOne(context.TODO(), QueryData{Id: id})
+	_, err := router.FileCollection.DeleteOne(context.TODO(), QueryData{Id: id})
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			res := new(ResponseError)
+			res := new(router.ResponseError)
 			res.Message = "File Not Found"
 			res.Documentation = "https://lifeni.github.io/i-show-you/api"
 			return c.JSON(http.StatusNotFound, &res)
 		}
 
 		log.Println(err)
-		res := new(ResponseError)
+		res := new(router.ResponseError)
 		res.Message = "Database Error"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
