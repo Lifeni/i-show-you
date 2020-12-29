@@ -12,7 +12,7 @@ const updateFile = async (id: string) => {
     }/websocket/file/${id}`
   )
 
-  let interval: number
+  let interval: NodeJS.Timeout
 
   ws.onopen = () => {
     console.log('Connected.')
