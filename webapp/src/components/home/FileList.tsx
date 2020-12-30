@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import store from 'store2'
 import styled from 'styled-components'
 import { isMobile as check } from '../../utils/is-mobile'
-import { MobileTipsInline } from '../global/MobileTips'
 import FileCard from './FileCard'
 import HomeActions from './HomeActions'
 
@@ -18,7 +17,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 410px) {
-    padding: 24px 8px 0 8px;
+    padding: 12px 8px 0 8px;
   }
 `
 
@@ -76,12 +75,14 @@ const FileList = () => {
     return () => {
       window.removeEventListener('resize', checkWidth)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <Container>
       {redirect === '200' ? null : <Redirect to={redirect} />}
-      {isMobile ? <MobileTipsInline /> : <HomeActions />}
+      {isMobile ? null : <HomeActions />}
       {tabData.length === 0 ? (
         <EmptyBox>No File</EmptyBox>
       ) : (

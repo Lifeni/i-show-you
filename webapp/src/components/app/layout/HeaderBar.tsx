@@ -10,13 +10,14 @@ import {
   SideNav,
   SkipToContent,
 } from 'carbon-components-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { GlobalContext } from '../../App'
 
 import { HeaderFileTab, SideNavFileTab } from '../header/FileTab'
 import HeaderRightMenu from '../header/HeaderRightMenu'
-import HorizontalScroller from '../header/HorizontalScroller'
+import HorizontalScroller from '../../global/HorizontalScroller'
 import SwitchLanguage from '../header/SwitchLanguage'
 
 const StyledHeader = styled(Header)`
@@ -32,6 +33,10 @@ const HeaderNameWrapper = styled.div`
   a {
     text-decoration: none;
   }
+
+  .back-home {
+    padding: 0 1rem;
+  }
 `
 
 const StyledHeaderMenuButton = styled(HeaderMenuButton)`
@@ -46,6 +51,7 @@ const HeaderBar = (props: {
   prefix?: string
 }) => {
   const { noNav, title, prefix } = props
+  const { isMobile } = useContext(GlobalContext)
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
@@ -59,17 +65,23 @@ const HeaderBar = (props: {
             />
           )}
           <HeaderNameWrapper>
-            <Link to="/new">
-              <HeaderGlobalAction
-                aria-label="New File"
-                className="fix-icon-position add-file"
-              >
-                <HeaderName element="span" prefix={prefix || 'I Show'}>
-                  {title || 'You'}
-                </HeaderName>
-                <Add20 />
-              </HeaderGlobalAction>
-            </Link>
+            <HeaderName
+              href="/"
+              prefix={prefix || 'I Show'}
+              className="back-home"
+            >
+              {title || 'You'}
+            </HeaderName>
+            {isMobile ? null : (
+              <Link to="/new">
+                <HeaderGlobalAction
+                  aria-label="New File"
+                  className="fix-icon-position"
+                >
+                  <Add20 />
+                </HeaderGlobalAction>
+              </Link>
+            )}
           </HeaderNameWrapper>
 
           {noNav ? null : (

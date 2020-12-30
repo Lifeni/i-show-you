@@ -16,13 +16,15 @@ const RunFile = (props: { type: IFileMap; updateView: Function }) => {
   useEffect(() => {
     if (canRunList.includes(type.name)) {
       setCanRun(true)
+    } else {
+      setCanRun(false)
     }
-  }, [pageId])
+  }, [type.name])
 
   const handleRunFile = (lang: string) => {
     if (lang === 'JavaScript') {
       const ans = window.confirm(
-        'Executing JavaScript code is a dangerous operation, you better know what you are doing. 执行 JavaScript 代码是一个危险操作，你最好知道你在干什么。'
+        'Executing JavaScript code is a dangerous operation, you better know what you are doing. \n执行 JavaScript 代码是一个危险操作，你最好知道你在干什么。'
       )
       if (ans) {
         eval(currentPage.get('content'))

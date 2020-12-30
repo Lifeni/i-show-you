@@ -18,6 +18,11 @@ const NotificationWrapper = styled.div`
     gap: 4px;
   }
 
+  @media (max-width: 672px) {
+    width: calc(100% - 48px);
+    bottom: -24px;
+  }
+
   @keyframes show {
     from {
       bottom: -72px;
@@ -32,7 +37,9 @@ const GlobalNotification = (props: { options: INoticeOptions }) => {
   const { options } = props
 
   return (
-    <NotificationWrapper style={{ zIndex: new Date().getTime() }}>
+    <NotificationWrapper
+      style={{ zIndex: Math.ceil(new Date().getTime() / 1000) }}
+    >
       {options.open ? (
         <InlineNotification
           kind={options.kind as NotificationKind}

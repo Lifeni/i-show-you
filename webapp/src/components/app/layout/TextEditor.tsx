@@ -134,7 +134,7 @@ const TextEditor = () => {
         updated_at: new Date(),
       })
 
-      if (options.auto_save) {
+      if (currentPage.get('token') !== '' && options.auto_save) {
         setStatus('Saving')
         fetch(`/api/file/${pageId}/content`, {
           method: 'PATCH',

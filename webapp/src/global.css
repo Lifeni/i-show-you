@@ -192,3 +192,8 @@ a.bx--header__name:hover {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.bx--inline-notification {
+  max-width: unset;
+  margin: 0;
+}

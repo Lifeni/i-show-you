@@ -17,23 +17,23 @@ const IconWrapper = styled.span`
   }
 `
 
+const getTabData = (tabs: store.StoreAPI) => {
+  return Object.values(tabs.getAll()).sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
+}
+
 const HeaderFileTab = forwardRef((_, ref) => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const getTabData = () => {
-    return Object.values(tabs.getAll()).sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    )
-  }
-
-  const [tabData, setTabData] = useState(getTabData)
+  const [tabData, setTabData] = useState(getTabData(tabs))
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(getTabData)
+      setTabData(getTabData(tabs))
     }
 
     updateTabData()
@@ -73,19 +73,12 @@ const SideNavFileTab = () => {
   const { pageId } = useContext(GlobalContext)
   const tabs = store.namespace('tabs')
 
-  const getTabData = () => {
-    return Object.values(tabs.getAll()).sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    )
-  }
-
-  const [tabData, setTabData] = useState(getTabData)
+  const [tabData, setTabData] = useState(getTabData(tabs))
   const [debouncedTabData] = useDebounce(tabData, 300)
 
   useEffect(() => {
     const updateTabData = () => {
-      setTabData(getTabData)
+      setTabData(getTabData(tabs))
     }
 
     updateTabData()

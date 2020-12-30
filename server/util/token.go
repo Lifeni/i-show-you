@@ -10,7 +10,7 @@ import (
 func VerifyFileToken(c echo.Context) string {
 	id := c.Param("id")
 	var tokenString string
-	if c.Request().Header.Get("Authorization") != "" {
+	if c.Request().Header.Get("Authorization") != "" && c.Request().Header.Get("Authorization") != "Bearer" {
 		tokenString = strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
 	} else {
 		tokenString = "no-token"

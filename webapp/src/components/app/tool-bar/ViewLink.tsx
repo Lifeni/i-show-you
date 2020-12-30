@@ -99,7 +99,9 @@ const ViewLink = () => {
 
         currentPage.clearAll()
         setUuid(data.data.id)
-        setRedirect(true)
+        setTimeout(() => {
+          setRedirect(true)
+        }, 300)
         setOpen(true)
       }
     })

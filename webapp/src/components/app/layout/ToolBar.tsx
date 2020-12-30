@@ -8,6 +8,7 @@ import { findByExt, findBySlug } from '../../../utils/check-file-type'
 import { defaultNoticeOptions } from '../../../utils/global-variable'
 import { GlobalContext } from '../../App'
 import GlobalNotification from '../../global/GlobalNotification'
+import HorizontalScroller from '../../global/HorizontalScroller'
 import FileHistory from '../tool-bar/FileHistory'
 import FileMeta from '../tool-bar/FileMeta'
 import FileOption from '../tool-bar/FileOption'
@@ -30,6 +31,8 @@ const ToolBarLeftWrapper = styled.div`
 `
 
 const ToolBarCenterWrapper = styled.div`
+  width: 100%;
+  max-width: calc(100vw - 160px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,8 +46,10 @@ const ToolBarRightWrapper = styled.div`
 `
 
 const NameLabel = styled.div`
+  white-space: nowrap;
   display: flex;
   align-items: center;
+  margin: 0 auto;
 `
 
 const ToolBar = (props: {
@@ -109,7 +114,10 @@ const ToolBar = (props: {
         updated_at: new Date(),
       })
 
-      if (currentPage.get('options')?.auto_save) {
+      if (
+        currentPage.get('token') !== '' &&
+        currentPage.get('options')?.auto_save
+      ) {
         setFileStatus('Saving')
         fetch(`/api/file/${pageId}/name`, {
           method: 'PATCH',
@@ -230,10 +238,12 @@ const ToolBar = (props: {
               id="editor-file-name"
             />
           ) : (
-            <NameLabel>
-              {isMobile && <Tag type="blue">Read Only</Tag>}
-              {name || 'Untitled'}
-            </NameLabel>
+            <HorizontalScroller>
+              <NameLabel>
+                {isMobile && <Tag type="blue">Read Only</Tag>}
+                {name || 'Untitled'}
+              </NameLabel>
+            </HorizontalScroller>
           )}
         </ToolBarCenterWrapper>
         <ToolBarRightWrapper className="fixed-width">
