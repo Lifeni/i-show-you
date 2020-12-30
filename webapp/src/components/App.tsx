@@ -27,6 +27,7 @@ const App = () => {
   const [pageId, setPageId] = useState(id)
 
   const [notice, setNotice] = useState(defaultNoticeOptions)
+  const [isMobile, setMobile] = useState(false)
 
   useEffect(() => {
     setPageId(id)
@@ -90,6 +91,7 @@ const App = () => {
 
           setRedirect(uuid)
           setLoading(false)
+          window.dispatchEvent(new Event('updateFileEvent'))
         } else {
           setRedirect('500')
         }
@@ -126,6 +128,7 @@ const App = () => {
               true
             )
 
+            window.dispatchEvent(new Event('updateFileEvent'))
             setLoading(false)
 
             if (currentPage.get('options')?.auto_save) {
@@ -168,10 +171,7 @@ const App = () => {
     } else {
       setRedirect('404')
     }
-  }, [id])
 
-  const [isMobile, setMobile] = useState(false)
-  useEffect(() => {
     const checkWidth = () => {
       window.requestAnimationFrame(() => {
         setMobile(check)
@@ -182,6 +182,7 @@ const App = () => {
     window.addEventListener('resize', checkWidth)
 
     return () => {
+      console.log('leave')
       window.removeEventListener('resize', checkWidth)
     }
   }, [id])
@@ -209,11 +210,11 @@ const App = () => {
             store.namespace(pageId).get('authentication') === 'owner' ? (
               <MobileTips />
             ) : null}
-            <TextEditor />
+            {pageId && <TextEditor />}
           </GlobalContext.Provider>
         </>
       )}
-      {redirect !== '200' && <Redirect to={{ pathname: redirect }} />}
+      {redirect !== '200' && <Redirect to={{ pathname: `/${redirect}` }} />}
     </>
   )
 }

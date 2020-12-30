@@ -1,6 +1,8 @@
+import { Add20 } from '@carbon/icons-react'
 import {
   Header,
   HeaderContainer,
+  HeaderGlobalAction,
   HeaderGlobalBar,
   HeaderMenuButton,
   HeaderName,
@@ -9,7 +11,7 @@ import {
   SkipToContent,
 } from 'carbon-components-react'
 import React from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { HeaderFileTab, SideNavFileTab } from '../header/FileTab'
@@ -25,6 +27,8 @@ const StyledHeader = styled(Header)`
 const HeaderNameWrapper = styled.div`
   white-space: nowrap;
   text-decoration: none;
+  display: flex;
+  align-items: center;
 `
 
 const StyledHeaderMenuButton = styled(HeaderMenuButton)`
@@ -52,13 +56,17 @@ const HeaderBar = (props: {
             />
           )}
           <HeaderNameWrapper>
-            <HeaderName<LinkProps>
-              element={Link}
-              prefix={prefix || 'I Show'}
-              to="/"
-            >
+            <HeaderName prefix={prefix || 'I Show'}>
               {title || 'You'}
             </HeaderName>
+            <Link to="/new" key="add-file">
+              <HeaderGlobalAction
+                aria-label="New File"
+                className="fix-icon-position"
+              >
+                <Add20 />
+              </HeaderGlobalAction>
+            </Link>
           </HeaderNameWrapper>
 
           {noNav ? null : (

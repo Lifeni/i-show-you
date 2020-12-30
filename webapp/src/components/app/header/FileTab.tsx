@@ -1,12 +1,5 @@
+import { Cloud16, Cloud20, Screen16, Screen20 } from '@carbon/icons-react'
 import {
-  Add20,
-  Cloud16,
-  Cloud20,
-  Screen16,
-  Screen20,
-} from '@carbon/icons-react'
-import {
-  HeaderGlobalAction,
   HeaderMenuItem,
   SideNavItems,
   SideNavLink,
@@ -72,12 +65,6 @@ const HeaderFileTab = forwardRef((_, ref) => {
           {data.name === '' ? 'Untitled File' : data.name}
         </HeaderMenuItem>
       ))}
-
-      <Link to="/new" key="add-file">
-        <HeaderGlobalAction aria-label="New File" className="fix-icon-position">
-          <Add20 />
-        </HeaderGlobalAction>
-      </Link>
     </>
   )
 })
@@ -112,16 +99,6 @@ const SideNavFileTab = () => {
   return (
     <>
       <SideNavItems>
-        <SideNavLink<LinkProps>
-          element={Link}
-          to="/new"
-          renderIcon={Add20}
-          large
-          key="add-file"
-        >
-          New File
-        </SideNavLink>
-
         {debouncedTabData.map(data => (
           <SideNavLink<LinkProps>
             element={Link}

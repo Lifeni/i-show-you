@@ -40,8 +40,6 @@ const TextEditor = () => {
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
 
-  // const [editorId, setEditorId] = useState(new Date().getTime())
-
   const editorRef = useRef()
 
   const [options, setOptions] = useState(
@@ -215,7 +213,9 @@ const TextEditor = () => {
             readOnly: currentPage.get('authentication') !== 'owner',
           }}
           editorDidMount={handleEditorDidMount}
+          key={pageId}
         />
+
         {view === 'html' ? (
           <WebBrowser />
         ) : view === 'markdown' ? (

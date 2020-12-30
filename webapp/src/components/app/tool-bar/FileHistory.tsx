@@ -104,6 +104,7 @@ const FileHistory = () => {
         onRequestClose={() => setOpen(false)}
         modalAriaLabel="File History"
         aria-label="File History"
+        className="gray-header"
       >
         {files.length === 0 ? (
           <p>No History</p>

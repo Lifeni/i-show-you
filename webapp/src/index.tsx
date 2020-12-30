@@ -11,19 +11,19 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Switch>
-        <Route path="/404">
+        <Route exact path="/404">
           <Home />
         </Route>
-        <Route path="/500">
+        <Route exact path="/500">
           <Home />
         </Route>
-        <Route path="/admin">
+        <Route exact path="/admin">
           <Admin />
         </Route>
         <Route path="/:id">
           <App />
         </Route>
-        <Route path="/">
+        <Route exact path="/">
           <Home />
         </Route>
         <Route path="*">

@@ -45,6 +45,7 @@
 }
 
 .bx--header-panel--expanded {
+  width: 16rem;
   height: 290px;
   padding-bottom: 12px;
 }
@@ -157,7 +158,7 @@
   margin: 0;
 }
 
-.bx--modal.is-visible .bx--modal-container {
+.gray-header.bx--modal.is-visible .bx--modal-container {
   background-color: #f4f4f4;
 }
 

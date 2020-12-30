@@ -87,11 +87,7 @@ const FileList = () => {
       ) : (
         <FileBox>
           {tabData.map(data => (
-            <FileCard
-              data={data}
-              setRedirect={setRedirect}
-              key={data.created_at}
-            />
+            <FileCard data={data} setRedirect={setRedirect} key={data.id} />
           ))}
         </FileBox>
       )}

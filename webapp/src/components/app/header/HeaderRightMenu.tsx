@@ -17,7 +17,6 @@ import {
   SwitcherItem,
 } from 'carbon-components-react'
 import React, { useState } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
 import store from 'store2'
 import packageFile from '../../../../package.json'
 
@@ -44,21 +43,11 @@ const HeaderRightMenu = () => {
       </HeaderGlobalAction>
       <HeaderPanel aria-label="Header Panel" expanded={switcher}>
         <Switcher aria-label="Switcher Container">
-          <SwitcherItem<LinkProps>
-            element={Link}
-            aria-label="Home"
-            className="menu-item"
-            to="/"
-          >
+          <SwitcherItem aria-label="Home" className="menu-item" href="/">
             <StarFilled16 />
             <span>Home</span>
           </SwitcherItem>
-          <SwitcherItem<LinkProps>
-            element={Link}
-            aria-label="Admin"
-            className="menu-item"
-            to="/admin"
-          >
+          <SwitcherItem aria-label="Admin" className="menu-item" href="/admin">
             <UserAvatarFilled16 />
             <span>Admin</span>
           </SwitcherItem>
