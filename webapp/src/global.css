@@ -165,3 +165,30 @@
 .bx--modal-header {
   margin-bottom: 0.75rem;
 }
+
+.add-file {
+  display: flex;
+  width: 100%;
+}
+
+.bx--header__name,
+a.bx--header__name:hover {
+  color: #f4f4f4;
+}
+
+.bx--header__name {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 2rem 0 1rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0.1px;
+  text-decoration: none;
+  border: 0.125rem solid transparent;
+  outline: none;
+  transition: border-color 110ms;
+  -webkit-user-select: none;
+  user-select: none;
+}

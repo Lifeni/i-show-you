@@ -182,7 +182,6 @@ const App = () => {
     window.addEventListener('resize', checkWidth)
 
     return () => {
-      console.log('leave')
       window.removeEventListener('resize', checkWidth)
     }
   }, [id])

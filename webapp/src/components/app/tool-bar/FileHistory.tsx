@@ -48,7 +48,10 @@ const FileHistory = () => {
           open: true,
           kind: 'info',
           title: 'No History',
-          subtitle: 'Try to change this file.',
+          subtitle:
+            store.namespace(pageId).get('authentication') === 'owner'
+              ? 'Try to change this file.'
+              : 'The file has not changed recently.',
         })
       } else if (res.status === 400) {
         setNotice({

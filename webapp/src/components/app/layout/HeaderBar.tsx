@@ -26,9 +26,12 @@ const StyledHeader = styled(Header)`
 
 const HeaderNameWrapper = styled.div`
   white-space: nowrap;
-  text-decoration: none;
   display: flex;
   align-items: center;
+
+  a {
+    text-decoration: none;
+  }
 `
 
 const StyledHeaderMenuButton = styled(HeaderMenuButton)`
@@ -56,14 +59,14 @@ const HeaderBar = (props: {
             />
           )}
           <HeaderNameWrapper>
-            <HeaderName prefix={prefix || 'I Show'}>
-              {title || 'You'}
-            </HeaderName>
-            <Link to="/new" key="add-file">
+            <Link to="/new">
               <HeaderGlobalAction
                 aria-label="New File"
-                className="fix-icon-position"
+                className="fix-icon-position add-file"
               >
+                <HeaderName element="span" prefix={prefix || 'I Show'}>
+                  {title || 'You'}
+                </HeaderName>
                 <Add20 />
               </HeaderGlobalAction>
             </Link>
