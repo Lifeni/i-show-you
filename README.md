@@ -8,43 +8,110 @@
 
 ## Introduction
 
-**The application is in the testing stage, and the data structure and API design may change. Please do not store important data. **
+This is a web application for sharing text, code ~~and other data~~, similar to Gist.
 
-- [x] 💻 Modern UI, based on IBM's Carbon design system.
-- [x] 🚀 Self-hosted, use docker-compose to build your own application.
-- [ ] 📱 Mobile friendly, responsive UI interface and PWA support.
-- [ ] 🌐 Internationalization support, support Chinese, English and Emoji.
-- [ ] // TODO
+- [x] 🔮 Many features, support code highlighting, file preview, history, auto save, auto update and other functions.
+- [x] 💻 Modern interface, based on IBM's Carbon design system, only supports modern browsers.
+- [x] 🚀 Self-hosted, use docker-compose to build your own application, no need to configure the database.
+- [x] 🔒 Safety (possible), which can prevent XSS attacks and enumerate administrator passwords.
+- [x] 🧱 Customizable, and all files can be managed through the background management page.
+- [ ] 📱 Friendly mobile interface, support responsive design and progressive web application (PWA).
+- [ ] 🌐 Support internationalization, currently supports Chinese, English and Emoji.
+
+The application is implemented using React / TypeScript and Echo / Golang. The database uses MongoDB. IE 11 and other outdated browsers are not supported.
+
+**The application is in the testing stage, and the data structure and API design may change. Please do not store important data.**
 
 ## Quick Start
 
 It is recommended to use Docker Compose for deployment.
 
-1. Download the `docker-compose.yml` file in the repo to your own machine. It is best to choose a separate folder, because the application configuration file will be stored in the `folder/configs/main.yml`.
+Before performing the following steps, please make sure that the newer Docker and Docker Compose are installed on the machine. Currently the image only supports the amd64 version of Linux. The main program running occupies less than 100 MB of memory, and the database occupancy is related to the amount of data, so please reserve at least 200 MB of memory for the entire application.
 
-2. Create a new `main.yml` file and place it in the `folder/configs/main.yml` with the following content.
+1. Download the [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) file in the warehouse to your own machine. Good to create a separate `folder`.
 
-    ```yml
-    server:
-      jwt-secret:
-        file: golang
-        admin: password
-    
-    admin:
-      password: 1234
-    ```
+   <details>
+     <summary>docker-compose.yml</summary>
 
-    For detailed configuration, please see [Configuration | I Show You](https://lifeni.github.io/i-show-you/config/) .
+   ```yml
+   version: "3"
 
-3. Execute the following command in the folder to start the container.
+   services:
+     mongo:
+       image: mongo:latest
+       container_name: i-show-you-mongo
+       restart: always
+       # ports:
+       #   - 27017:27017
+       volumes:
+         - data:/data/db
+       networks:
+         - network
 
-    ```shell
-    docker-compose up -d
-    ```
+     app:
+       image: lifeni/i-show-you:latest
+       container_name: i-show-you-app
+       restart: always
+       ports:
+         - 8080:8080
+       volumes:
+         - ./configs:/app/configs
+       networks:
+         - network
+       depends_on:
+         - mongo
 
-    The `-d` command stands for background execution, and you can view real-time output if you remove it.
+   volumes:
+     data:
 
-> Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file yourself.
+   networks:
+     network:
+   ```
+
+   </details>
+
+2. Create a new [main.yml](https://github.com/Lifeni/i-show-you/blob/master/configs/main.yml) file and place it in the `folder/configs/main.yml`, The content is as follows.
+
+   ```yml
+   database:
+     host: mongo
+     port: 27017
+
+   app:
+     history:
+       enable: true
+       save_period: 60
+
+     admin:
+       enable: true
+       try_count: 3
+       ban_period: 120
+
+   secret:
+     jwt_key:
+       file: # your_file_key
+       admin: # your_admin_key
+
+     admin: # your_admin_password
+   ```
+
+   By default, only three configurations in secret need to be added:
+
+   - `jwt_key.file` is used to encrypt the JWT key of the file owner
+   - `jwt_key.admin` is used to encrypt the JWT key of the administrator page
+   - `admin` administrator page login password
+
+   For detailed configuration, please refer to the document [Configuration | I Show You](https://lifeni.github.io/i-show-you/config/).
+
+3. Execute the following command under the `folder` to start the container.
+
+   ```shell
+   docker-compose up -d
+   ```
+
+   The `-d` command stands for background execution, and you can view real-time output if you remove it.
+
+   > Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file by yourself.
 
 ## Documentation
 
@@ -68,42 +135,47 @@ For more information about Monaco Editor, you can view [microsoft/monaco-editor:
 
 ## Development Setup
 
-// TODO
-
 ### Prerequisites
 
-- Frontend: Node 14+, Yarn
-- Backend: Go 1.15+, MongoDB
+- Front-end: Node 14+, Yarn
+- Back end: Go 1.15+
+- Database: MongoDB
+- Optional: Nginx, Docker
+
+The application uses Echo (Golang framework) to host front-end files (port 8080). By default (production), the generated static files need to be placed in the /public directory of the /server folder, but this is not suitable for the development environment because of the development of React server uses port 3000 by default instead of generating static files.
+
+Therefore, during development, it is recommended to use Nginx as a reverse proxy server, proxy the `/` path to `/` on port 3000, proxy the `/api` path to `/api` on port 8080, and then set `/websocket ` Route proxy to `/websocket` on port 8080, bypassing Echo hosting. The [nginx.conf](configs/nginx.conf) I used can be found in the /configs folder of the project. It hosts port 80 by default and is for reference only.
+
+In addition, under the development environment, you need to start a MongoDB by yourself. Here, Docker is recommended for installation.
+
+```shell
+docker run -d -p 27017:27017 mongo
+```
 
 ### Setting Up
 
-#### Frontend
+1. Clone the project and enter the project folder.
 
-Enter the folder and install dependencies:
+   ```shell
+   git clone https://github.com/Lifeni/i-show-you.git
+   cd i-show-you
+   ```
 
-```shell script
-cd webapp && yarn
-```
+2. Install front-end dependencies.
 
-Start the development server:
+   ```shell
+   cd webapp
+   yarn
+   ```
 
-```shell script
-yarn start
-```
+3. After configuring Nginx and MongoDB, run the Go program.
 
-#### Docs
+   ```shell
+   cd ../server
+   go run.
+   ```
 
-Enter the folder and install dependencies:
-
-```shell script
-cd docs && yarn
-```
-
-Start the development server:
-
-```shell script
-yarn docs:dev
-```
+   Don’t forget the dot at the end of the command. If it can run normally, there will be an Echo character drawing Logo and the words `Connected to database`. Then open the address set in the Nginx configuration (if you use the configuration file I provided, the default address is http://localhost, which is the local port 80).
 
 ## License
 
