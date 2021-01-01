@@ -14,5 +14,9 @@ module.exports = {
       { text: "API", link: "/api/" },
       { text: "GitHub", link: "https://github.com/Lifeni/i-show-you" },
     ],
+    sidebar: {
+      "/guide/": ["", "troubleshooting"],
+    },
+    displayAllHeaders: true,
   },
 };

@@ -15,10 +15,10 @@ This is a web application for sharing text, code ~~and other data~~, similar to 
 - [x] 🚀 Self-hosted, use docker-compose to build your own application, no need to configure the database.
 - [x] 🔒 Safety (possible), which can prevent XSS attacks and enumerate administrator passwords.
 - [x] 🧱 Customizable, and all files can be managed through the background management page.
-- [ ] 📱 Friendly mobile interface, support responsive design and progressive web application (PWA).
+- [ ] 📱 Mobile friendly, support responsive design and progressive web application (PWA).
 - [ ] 🌐 Support internationalization, currently supports Chinese, English and Emoji.
 
-The application is implemented using React / TypeScript and Echo / Golang. The database uses MongoDB. IE 11 and other outdated browsers are not supported.
+The application uses React / TypeScript and Echo / Golang. The database uses MongoDB. IE 11 and other outdated browsers are not supported.
 
 **The application is in the testing stage, and the data structure and API design may change. Please do not store important data.**
 
@@ -28,7 +28,7 @@ It is recommended to use Docker Compose for deployment.
 
 Before performing the following steps, please make sure that the newer Docker and Docker Compose are installed on the machine. Currently the image only supports the amd64 version of Linux. The main program running occupies less than 100 MB of memory, and the database occupancy is related to the amount of data, so please reserve at least 200 MB of memory for the entire application.
 
-1. Download the [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) file in the warehouse to your own machine. Good to create a separate `folder`.
+1. Download the [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) file in the repo to your own machine. Good to create a separate `folder`.
 
    <details>
      <summary>docker-compose.yml</summary>
@@ -132,6 +132,10 @@ See https://i-show-you.dev.lifeni.life .
 The application uses [Monaco Editor](https://microsoft.github.io/monaco-editor/) as the editor, and this editor currently does not support mobile browser and mobile frameworks. If you still want to edit, there may be problems such as failure to delete and text loss.
 
 For more information about Monaco Editor, you can view [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor).
+
+### Words will be missed when inputting Chinese on PC
+
+If you are using QQ Pinyin input method, this problem may occur. Switch to Sogou input method or Microsoft input method to solve it.
 
 ## Development Setup
 

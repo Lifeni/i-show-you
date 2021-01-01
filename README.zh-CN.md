@@ -133,6 +133,10 @@
 
 关于 Monaco Editor 的更多信息，可以查看 [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor) 。
 
+### PC 上输入中文的时候会漏字
+
+如果你用的是 QQ 拼音输入法，则可能会出现这个问题，切换到搜狗输入法或者微软输入法即可解决。
+
 ## 开发配置
 
 ### 前提
