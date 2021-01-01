@@ -10,7 +10,7 @@
 
 ## 安装与运行
 
-1. 下载仓库中的 [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) 文件到你自己的机器，最好新建一个单独的 `文件夹`。
+1. 下载仓库中的 [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) 文件到你自己的机器，最好新建一个单独的 `文件夹` 然后把文件放进去。
 
    <details>
      <summary>docker-compose.yml</summary>

@@ -28,7 +28,7 @@ It is recommended to use Docker Compose for deployment.
 
 Before performing the following steps, please make sure that the newer Docker and Docker Compose are installed on the machine. Currently the image only supports the amd64 version of Linux. The main program running occupies less than 100 MB of memory, and the database occupancy is related to the amount of data, so please reserve at least 200 MB of memory for the entire application.
 
-1. Download the [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) file in the repo to your own machine. Good to create a separate `folder`.
+1. Download the [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) file in the repo to your own machine. It is best to create a separate `folder` and put the files in it.
 
    <details>
      <summary>docker-compose.yml</summary>
@@ -176,7 +176,7 @@ docker run -d -p 27017:27017 mongo
 
    ```shell
    cd ../server
-   go run.
+   go run .
    ```
 
    Don’t forget the dot at the end of the command. If it can run normally, there will be an Echo character drawing Logo and the words `Connected to database`. Then open the address set in the Nginx configuration (if you use the configuration file I provided, the default address is http://localhost, which is the local port 80).

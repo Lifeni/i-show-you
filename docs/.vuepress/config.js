@@ -5,7 +5,6 @@ module.exports = {
   port: "3030",
   head: [["link", { rel: "icon", href: "/favicon.ico" }]],
   themeConfig: {
-    logo: "/logo.png",
     nav: [
       { text: "主页", link: "/" },
       { text: "指南", link: "/guide/" },

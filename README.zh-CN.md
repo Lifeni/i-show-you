@@ -28,7 +28,7 @@
 
 在执行下面的步骤之前请确保机器上装有比较新的 Docker 以及 Docker Compose，目前镜像仅支持 Linux 的 amd64 版本。主程序运行占用少于 100 MB 内存，数据库占用内存与数据量相关，所以请为整个应用程序预留至少 200 MB 的内存空间。
 
-1. 下载仓库中的 [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) 文件到你自己的机器，最好新建一个单独的 `文件夹`。
+1. 下载仓库中的 [docker-compose.yml](https://github.com/Lifeni/i-show-you/blob/master/build/docker-compose.yml) 文件到你自己的机器，最好新建一个单独的 `文件夹` 然后把文件放进去。
 
    <details>
      <summary>docker-compose.yml</summary>
