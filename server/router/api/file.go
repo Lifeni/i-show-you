@@ -362,7 +362,16 @@ func RemoveFile(c echo.Context) error {
 
 		log.Println(err)
 		res := new(router.ResponseError)
-		res.Message = "Database Error"
+		res.Message = "Database Error (File)"
+		res.Documentation = "https://lifeni.github.io/i-show-you/api"
+		return c.JSON(http.StatusInternalServerError, &res)
+	}
+
+	_, err = router.HistoryCollection.DeleteMany(context.TODO(), QueryData{Id: id})
+	if err != nil {
+		log.Println(err)
+		res := new(router.ResponseError)
+		res.Message = "Database Error (History)"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
 		return c.JSON(http.StatusInternalServerError, &res)
 	}
