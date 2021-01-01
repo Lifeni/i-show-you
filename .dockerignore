@@ -1,5 +1,5 @@
 docs
-scripts
+build/scripts
 node_modules
 .github
 .git
