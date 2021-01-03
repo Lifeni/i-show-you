@@ -135,7 +135,7 @@ func RemoveFileAdmin(c echo.Context) error {
 		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusUnauthorized, &res)
+		return c.JSON(http.StatusForbidden, &res)
 	}
 
 	type QueryData struct {
@@ -174,7 +174,7 @@ func RemoveMultipleFilesAdmin(c echo.Context) error {
 		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusUnauthorized, &res)
+		return c.JSON(http.StatusForbidden, &res)
 	}
 
 	type RemoveData struct {

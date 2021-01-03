@@ -137,7 +137,7 @@ func UpdateFile(c echo.Context) error {
 		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusUnauthorized, &res)
+		return c.JSON(http.StatusForbidden, &res)
 	}
 
 	type QueryData struct {
@@ -213,7 +213,7 @@ func UpdateFilePatch(c echo.Context) error {
 		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusUnauthorized, &res)
+		return c.JSON(http.StatusForbidden, &res)
 	}
 
 	type QueryData struct {
@@ -343,7 +343,7 @@ func RemoveFile(c echo.Context) error {
 		res := new(router.ResponseError)
 		res.Message = "Permission Denied"
 		res.Documentation = "https://lifeni.github.io/i-show-you/api"
-		return c.JSON(http.StatusUnauthorized, &res)
+		return c.JSON(http.StatusForbidden, &res)
 	}
 
 	type QueryData struct {
