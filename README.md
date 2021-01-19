@@ -142,13 +142,13 @@ If you are using QQ Pinyin input method, this problem may occur. Switch to Sogou
 ### Prerequisites
 
 - Front-end: Node 14+, Yarn
-- Back end: Go 1.15+
+- Back-end: Go 1.15+
 - Database: MongoDB
 - Optional: Nginx, Docker
 
 The application uses Echo (Golang framework) to host front-end files (port 8080). By default (production), the generated static files need to be placed in the /public directory of the /server folder, but this is not suitable for the development environment because of the development of React server uses port 3000 by default instead of generating static files.
 
-Therefore, during development, it is recommended to use Nginx as a reverse proxy server, proxy the `/` path to `/` on port 3000, proxy the `/api` path to `/api` on port 8080, and then set `/websocket ` Route proxy to `/websocket` on port 8080, bypassing Echo hosting. The [nginx.conf](configs/nginx.conf) I used can be found in the /configs folder of the project. It hosts port 80 by default and is for reference only.
+Therefore, during development, it is recommended to use Nginx as a reverse proxy server, proxy the `/` path to `/` on port 3000, proxy the `/api` path to `/api` on port 8080, and then set `/websocket` Route proxy to `/websocket` on port 8080, bypassing Echo hosting. The [nginx.conf](configs/nginx.conf) I used can be found in the /configs folder of the project. It hosts port 80 by default and is for reference only.
 
 In addition, under the development environment, you need to start a MongoDB by yourself. Here, Docker is recommended for installation.
 
