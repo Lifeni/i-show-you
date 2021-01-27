@@ -6,21 +6,109 @@
 <p align="center">一个关于数据展示与分享的 Web 应用，可自行部署</p>
 <p align="center"><a href="README.md">English</a> | 中文</p>
 
+- [介绍](#介绍)
+- [演示](#演示)
+- [截图](#截图)
+- [快速开始](#快速开始)
+- [文档](#文档)
+- [遇到问题](#遇到问题)
+  - [你的设备可能不支持编辑（Your device may not support editing）](#你的设备可能不支持编辑your-device-may-not-support-editing)
+  - [PC 上输入中文的时候会漏字](#pc-上输入中文的时候会漏字)
+- [开发配置](#开发配置)
+  - [前提](#前提)
+  - [配置](#配置)
+- [开源协议](#开源协议)
+
 ## 介绍
 
 这是一个用于分享文本、代码等数据的 Web 应用，类似 Gist。
 
-- [x] 🔮 完善的功能，支持代码高亮、文件预览、历史记录、自动保存、自动更新等功能。
-- [x] 💻 现代化的界面，基于 IBM 的 Carbon 设计系统，仅支持现代浏览器。
-- [x] 🚀 可以自托管，使用 docker-compose 构建自己的应用，无需配置数据库。
-- [x] 🔒 较为完善的权限与安全系统，可阻止 XSS 攻击和枚举管理员密码。
-- [x] 🧱 部分配置可以自定义，同时可以通过后台管理页面管理所有文件。
-- [ ] 📱 移动界面友好，支持响应式设计和渐进式 Web 应用（PWA）。
-- [ ] 🌐 支持国际化，目前支持中文、英文以及 Emoji。
+- **🍺 还算好用的功能**
+
+  为现代浏览器设计，支持多标签页切换、代码高亮、文件预览、历史记录、自动保存、自动更新文件内容等功能。
+
+- **🎨 好看的界面**
+
+  细节讲究，使用 IBM 的 Carbon 设计系统，同时适配移动端界面。
+
+- **🚀 可以自己部署**
+
+  使用 Docker Compose 进行部署和统一管理，只需根据文档编写好配置文件即可运行，同时提供部分自定义选项。
 
 应用使用 React / TypeScript 与 Echo / Golang 实现，数据库使用的是 MongoDB，不支持 IE 11 及其他过时浏览器。
 
 **应用处于测试阶段，数据结构与 API 设计可能会发生变动，请不要储存重要数据。**
+
+## 演示
+
+应用还处于开发状态，数据可能会被随时删除，**请不要在演示网站上储存重要数据或者将网站用于违法用途**。
+
+演示在 https://i-show-you.dev.lifeni.life 。
+
+## 截图
+
+<details>
+  <summary>主页</summary>
+
+![主页](https://file.lifeni.life/dashboard/i-show-you/0.webp)
+
+</details>
+
+<details>
+  <summary>文件编辑页</summary>
+
+![文件编辑页](https://file.lifeni.life/dashboard/i-show-you/1.webp)
+
+</details>
+
+<details>
+  <summary>文件分享页面</summary>
+
+![文件分享页面](https://file.lifeni.life/dashboard/i-show-you/2.webp)
+
+</details>
+
+<details>
+  <summary>文件设置</summary>
+
+![文件设置](https://file.lifeni.life/dashboard/i-show-you/3.webp)
+
+</details>
+
+<details>
+  <summary>文件历史</summary>
+
+![文件历史](https://file.lifeni.life/dashboard/i-show-you/4.webp)
+
+</details>
+
+<details>
+  <summary>删除文件的确认</summary>
+
+![删除文件的确认](https://file.lifeni.life/dashboard/i-show-you/5.webp)
+
+</details>
+
+<details>
+  <summary>文件预览</summary>
+
+![文件预览](https://file.lifeni.life/dashboard/i-show-you/6.webp)
+
+</details>
+
+<details>
+  <summary>登录管理页面</summary>
+
+![登录管理页面](https://file.lifeni.life/dashboard/i-show-you/7.webp)
+
+</details>
+
+<details>
+  <summary>管理页面</summary>
+
+![管理页面](https://file.lifeni.life/dashboard/i-show-you/8.webp)
+
+</details>
 
 ## 快速开始
 
@@ -34,7 +122,7 @@
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: "3"
+   version: '3'
 
    services:
      mongo:
@@ -72,6 +160,9 @@
 
 2. 新建 [main.yml](https://github.com/Lifeni/i-show-you/blob/master/configs/main.yml) 文件，放在 `文件夹/configs/main.yml` ，内容如下。
 
+   <details>
+     <summary>main.yml 及字段说明</summary>
+
    ```yml
    database:
      host: mongo
@@ -101,6 +192,8 @@
    - `jwt_key.admin` 用于加密管理员页面的 JWT 的秘钥
    - `admin` 管理员页面登录密码
 
+   </details>
+
    详细配置请查看文档 [配置 | I Show You](https://lifeni.github.io/i-show-you/config/) 。
 
 3. 在 `文件夹` 下执行下面的命令启动容器。
@@ -118,12 +211,6 @@
 文档正在编写中。
 
 文档在 https://lifeni.github.io/i-show-you 。
-
-## 演示
-
-应用还处于开发状态，数据可能会被随时删除，**请不要在演示网站上储存重要数据或者将网站用于违法用途**。
-
-演示在 https://i-show-you.dev.lifeni.life 。
 
 ## 遇到问题
 

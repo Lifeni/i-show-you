@@ -54,6 +54,9 @@
 
 2. 新建 [main.yml](https://github.com/Lifeni/i-show-you/blob/master/configs/main.yml) 文件，放在 `文件夹/configs/main.yml` ，内容如下。
 
+   <details>
+     <summary>main.yml 及字段说明</summary>
+
    ```yml
    database:
      host: mongo
@@ -82,6 +85,8 @@
    - `jwt_key.file` 用于加密文件所有者的 JWT 的秘钥
    - `jwt_key.admin` 用于加密管理员页面的 JWT 的秘钥
    - `admin` 管理员页面登录密码
+
+   </details>
 
    详细配置请查看文档 [配置 | I Show You](https://lifeni.github.io/i-show-you/config/) 。
 

@@ -6,21 +6,109 @@
 <p align="center">A self-hosted web application for data presentation and sharing</p>
 <p align="center">English | <a href="README.zh-CN.md">中文</a></p>
 
+- [Introduction](#introduction)
+- [Demo](#demo)
+- [Screenshot](#screenshot)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Troubleshooting](#troubleshooting)
+  - [Your device may not support editing](#your-device-may-not-support-editing)
+  - [Words will be missed when inputting Chinese on PC](#words-will-be-missed-when-inputting-chinese-on-pc)
+- [Development Setup](#development-setup)
+  - [Prerequisites](#prerequisites)
+  - [Setting Up](#setting-up)
+- [License](#license)
+
 ## Introduction
 
 This is a web application for sharing text, code ~~and other data~~, similar to Gist.
 
-- [x] 🔮 Many features, support code highlighting, file preview, history, auto save, auto update and other functions.
-- [x] 💻 Modern interface, based on IBM's Carbon design system, only supports modern browsers.
-- [x] 🚀 Self-hosted, use docker-compose to build your own application, no need to configure the database.
-- [x] 🔒 Safety (possible), which can prevent XSS attacks and enumerate administrator passwords.
-- [x] 🧱 Customizable, and all files can be managed through the background management page.
-- [ ] 📱 Mobile friendly, support responsive design and progressive web application (PWA).
-- [ ] 🌐 Support internationalization, currently supports Chinese, English and Emoji.
+- **🍺 Reasonable Feature**
+
+  Designed for modern browsers, it supports features such as multi-tab page switching, code highlighting, file preview, history, automatic saving, and automatic update of file content.
+
+- **🎨 Nice interface**
+
+  Pay attention to details, using IBM's Carbon design system, while adapting to the mobile interface.
+
+- **🚀 Self-hosted and custom configuration**
+
+  Use Docker Compose for deployment and unified management. You only need to write a configuration file according to the document to run, and provide some customization options.
 
 The application uses React / TypeScript and Echo / Golang. The database uses MongoDB. IE 11 and other outdated browsers are not supported.
 
 **The application is in the testing stage, and the data structure and API design may change. Please do not store important data.**
+
+## Demo
+
+The application is currently under development, and the data may be cleared at any time.
+
+See https://i-show-you.dev.lifeni.life .
+
+## Screenshot
+
+<details>
+  <summary>Homepage</summary>
+
+![Homepage](https://file.lifeni.life/dashboard/i-show-you/0.webp)
+
+</details>
+
+<details>
+  <summary>document editing page</summary>
+
+![File edit page](https://file.lifeni.life/dashboard/i-show-you/1.webp)
+
+</details>
+
+<details>
+  <summary>File sharing page</summary>
+
+![File Sharing Page](https://file.lifeni.life/dashboard/i-show-you/2.webp)
+
+</details>
+
+<details>
+  <summary>File settings</summary>
+
+![File Settings](https://file.lifeni.life/dashboard/i-show-you/3.webp)
+
+</details>
+
+<details>
+  <summary>File history</summary>
+
+![FILE HISTORY](https://file.lifeni.life/dashboard/i-show-you/4.webp)
+
+</details>
+
+<details>
+  <summary>Confirmation of deleting files</summary>
+
+![Confirm to delete file](https://file.lifeni.life/dashboard/i-show-you/5.webp)
+
+</details>
+
+<details>
+  <summary>File preview</summary>
+
+![File Preview](https://file.lifeni.life/dashboard/i-show-you/6.webp)
+
+</details>
+
+<details>
+  <summary>Login admin page</summary>
+
+![Login admin page](https://file.lifeni.life/dashboard/i-show-you/7.webp)
+
+</details>
+
+<details>
+  <summary>Admin page</summary>
+
+![Admin page](https://file.lifeni.life/dashboard/i-show-you/8.webp)
+
+</details>
 
 ## Quick Start
 
@@ -34,7 +122,7 @@ Before performing the following steps, please make sure that the newer Docker an
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: "3"
+   version: '3'
 
    services:
      mongo:
@@ -72,6 +160,9 @@ Before performing the following steps, please make sure that the newer Docker an
 
 2. Create a new [main.yml](https://github.com/Lifeni/i-show-you/blob/master/configs/main.yml) file and place it in the `folder/configs/main.yml`, The content is as follows.
 
+   <details>
+     <summary>main.yml and field description</summary>
+
    ```yml
    database:
      host: mongo
@@ -101,6 +192,8 @@ Before performing the following steps, please make sure that the newer Docker an
    - `jwt_key.admin` is used to encrypt the JWT key of the administrator page
    - `admin` administrator page login password
 
+   </details>
+
    For detailed configuration, please refer to the document [Configuration | I Show You](https://lifeni.github.io/i-show-you/config/).
 
 3. Execute the following command under the `folder` to start the container.
@@ -118,12 +211,6 @@ Before performing the following steps, please make sure that the newer Docker an
 The documentation is being written. (Currently only available in Chinese)
 
 See https://lifeni.github.io/i-show-you .
-
-## Demo
-
-The application is currently under development, and the data may be cleared at any time.
-
-See https://i-show-you.dev.lifeni.life .
 
 ## Troubleshooting
 
