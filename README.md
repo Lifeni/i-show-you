@@ -55,7 +55,7 @@ See https://i-show-you.dev.lifeni.life .
 </details>
 
 <details>
-  <summary>document editing page</summary>
+  <summary>Document editing page</summary>
 
 ![File edit page](https://file.lifeni.life/dashboard/i-show-you/1.webp)
 
@@ -228,8 +228,8 @@ If you are using QQ Pinyin input method, this problem may occur. Switch to Sogou
 
 ### Prerequisites
 
-- Front-end: Node 14+, Yarn
-- Back-end: Go 1.15+
+- Frontend: Node 14+, Yarn
+- Backend: Go 1.15+
 - Database: MongoDB
 - Optional: Nginx, Docker
 
