@@ -204,6 +204,8 @@ Before performing the following steps, please make sure that the newer Docker an
 
    The `-d` command stands for background execution, and you can view real-time output if you remove it.
 
+4. Open [http://localhost:8080](http://localhost:8080) or use Nginx reverse proxy port 8080 to view the front-end page.
+   
    > Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file by yourself.
 
 ## Documentation
@@ -228,10 +230,12 @@ If you are using QQ Pinyin input method, this problem may occur. Switch to Sogou
 
 ### Prerequisites
 
-- Frontend: Node 14+, Yarn
-- Backend: Go 1.15+
-- Database: MongoDB
-- Optional: Nginx, Docker
+| Type      | Prerequisites  |
+| --------- | -------------- |
+| Front-end | Node 14+, Yarn |
+| Back-end  | Go 1.15+       |
+| Database  | MongoDB        |
+| Optional  | Nginx, Docker  |
 
 The application uses Echo (Golang framework) to host front-end files (port 8080). By default (production), the generated static files need to be placed in the /public directory of the /server folder, but this is not suitable for the development environment because of the development of React server uses port 3000 by default instead of generating static files.
 
