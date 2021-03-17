@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "web",
   "version": "0.4.2",
   "private": true,
   "description": "The frontend of i-show-you",
@@ -40,7 +40,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:dev": "powershell.exe ..\\scripts\\webapp-build.ps1",
+    "build:dev": "powershell.exe ..\\scripts\\web-build.ps1",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write ."

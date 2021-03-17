@@ -249,7 +249,7 @@ docker run -d -p 27017:27017 mongo
 2. Install front-end dependencies.
 
    ```shell
-   cd webapp
+   cd web
    yarn
    ```
 

@@ -29,7 +29,7 @@ docker run -d -p 27017:27017 mongo
 2. 安装前端依赖。
 
    ```shell
-   cd webapp
+   cd web
    yarn
    ```
 

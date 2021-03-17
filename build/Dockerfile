@@ -1,7 +1,7 @@
-# Build Webapp
-FROM node:lts-alpine as webapp
+# Build Web
+FROM node:lts-alpine as web
 WORKDIR /web
-COPY ./webapp .
+COPY ./web .
 RUN yarn && yarn build
 
 # Build Server
@@ -12,7 +12,7 @@ RUN go install -v ./... && go get -d -v ./...
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=webapp /web/build ./public
+COPY --from=web /web/build ./public
 COPY --from=server /go/bin/server .
 COPY ./configs/main.yml ./configs/
 RUN apk update && apk --no-cache add ca-certificates && rm -rf /var/cache/apk/*
