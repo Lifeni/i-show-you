@@ -8,12 +8,10 @@
 
 - [介绍](#介绍)
 - [演示](#演示)
-- [截图](#截图)
 - [快速开始](#快速开始)
 - [文档](#文档)
+- [截图](#截图)
 - [遇到问题](#遇到问题)
-  - [你的设备可能不支持编辑（Your device may not support editing）](#你的设备可能不支持编辑your-device-may-not-support-editing)
-  - [PC 上输入中文的时候会漏字](#pc-上输入中文的时候会漏字)
 - [开发配置](#开发配置)
   - [前提](#前提)
   - [配置](#配置)
@@ -41,74 +39,9 @@
 
 ## 演示
 
-应用还处于开发状态，数据可能会被随时删除，**请不要在演示网站上储存重要数据或者将网站用于违法用途**。
-
 演示在 https://i-show-you.dev.lifeni.life 。
 
-## 截图
-
-<details>
-  <summary>主页</summary>
-
-![主页](https://file.lifeni.life/dashboard/i-show-you/0.webp)
-
-</details>
-
-<details>
-  <summary>文件编辑页</summary>
-
-![文件编辑页](https://file.lifeni.life/dashboard/i-show-you/1.webp)
-
-</details>
-
-<details>
-  <summary>文件分享页面</summary>
-
-![文件分享页面](https://file.lifeni.life/dashboard/i-show-you/2.webp)
-
-</details>
-
-<details>
-  <summary>文件设置</summary>
-
-![文件设置](https://file.lifeni.life/dashboard/i-show-you/3.webp)
-
-</details>
-
-<details>
-  <summary>文件历史</summary>
-
-![文件历史](https://file.lifeni.life/dashboard/i-show-you/4.webp)
-
-</details>
-
-<details>
-  <summary>删除文件的确认</summary>
-
-![删除文件的确认](https://file.lifeni.life/dashboard/i-show-you/5.webp)
-
-</details>
-
-<details>
-  <summary>文件预览</summary>
-
-![文件预览](https://file.lifeni.life/dashboard/i-show-you/6.webp)
-
-</details>
-
-<details>
-  <summary>登录管理页面</summary>
-
-![登录管理页面](https://file.lifeni.life/dashboard/i-show-you/7.webp)
-
-</details>
-
-<details>
-  <summary>管理页面</summary>
-
-![管理页面](https://file.lifeni.life/dashboard/i-show-you/8.webp)
-
-</details>
+应用还处于开发状态，数据可能会被随时删除，**请不要在演示网站上储存重要数据或者将网站用于违法用途**。
 
 ## 快速开始
 
@@ -122,7 +55,7 @@
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: '3'
+   version: "3"
 
    services:
      mongo:
@@ -203,10 +136,10 @@
    ```
 
    `-d` 命令代表后台执行，去掉可以查看实时输出。
-   
+
 4. 打开 [http://localhost:8080](http://localhost:8080) 或者使用 Nginx 反向代理 8080 端口，查看前端页面。
 
-    > 注意：应用默认暴露 8080 端口，如果出现端口冲突，或者你想使用自己的 MongoDB，可以自行修改 yml 文件来更换端口。
+   > 注意：应用默认暴露 8080 端口，如果出现端口冲突，或者你想使用自己的 MongoDB，可以自行修改 yml 文件来更换端口。
 
 ## 文档
 
@@ -214,17 +147,74 @@
 
 文档在 https://lifeni.github.io/i-show-you 。
 
+## 截图
+
+<details>
+  <summary>主页</summary>
+
+![主页](https://file.lifeni.life/dashboard/i-show-you/0.webp)
+
+</details>
+
+<details>
+  <summary>文件编辑页</summary>
+
+![文件编辑页](https://file.lifeni.life/dashboard/i-show-you/1.webp)
+
+</details>
+
+<details>
+  <summary>文件分享页面</summary>
+
+![文件分享页面](https://file.lifeni.life/dashboard/i-show-you/2.webp)
+
+</details>
+
+<details>
+  <summary>文件设置</summary>
+
+![文件设置](https://file.lifeni.life/dashboard/i-show-you/3.webp)
+
+</details>
+
+<details>
+  <summary>文件历史</summary>
+
+![文件历史](https://file.lifeni.life/dashboard/i-show-you/4.webp)
+
+</details>
+
+<details>
+  <summary>删除文件的确认</summary>
+
+![删除文件的确认](https://file.lifeni.life/dashboard/i-show-you/5.webp)
+
+</details>
+
+<details>
+  <summary>文件预览</summary>
+
+![文件预览](https://file.lifeni.life/dashboard/i-show-you/6.webp)
+
+</details>
+
+<details>
+  <summary>登录管理页面</summary>
+
+![登录管理页面](https://file.lifeni.life/dashboard/i-show-you/7.webp)
+
+</details>
+
+<details>
+  <summary>管理页面</summary>
+
+![管理页面](https://file.lifeni.life/dashboard/i-show-you/8.webp)
+
+</details>
+
 ## 遇到问题
 
-### 你的设备可能不支持编辑（Your device may not support editing）
-
-应用使用 [Monaco Editor](https://microsoft.github.io/monaco-editor/) 作为编辑器，而这个编辑器目前并不支持移动浏览器和移动框架。如果仍要进行编辑，可能会出现无法删除、文字丢失等问题。
-
-关于 Monaco Editor 的更多信息，可以查看 [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor) 。
-
-### PC 上输入中文的时候会漏字
-
-如果你用的是 QQ 拼音输入法，则可能会出现这个问题，切换到搜狗输入法或者微软输入法即可解决。
+参见：[问题解决 · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3) 。
 
 ## 开发配置
 

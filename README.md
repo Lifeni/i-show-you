@@ -8,12 +8,10 @@
 
 - [Introduction](#introduction)
 - [Demo](#demo)
-- [Screenshot](#screenshot)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Screenshot](#screenshot)
 - [Troubleshooting](#troubleshooting)
-  - [Your device may not support editing](#your-device-may-not-support-editing)
-  - [Words will be missed when inputting Chinese on PC](#words-will-be-missed-when-inputting-chinese-on-pc)
 - [Development Setup](#development-setup)
   - [Prerequisites](#prerequisites)
   - [Setting Up](#setting-up)
@@ -21,7 +19,7 @@
 
 ## Introduction
 
-This is a web application for sharing text, code ~~and other data~~, similar to Gist.
+This is a web application for sharing text, code and other data, similar to Gist.
 
 - **🍺 Reasonable Feature**
 
@@ -41,74 +39,9 @@ The application uses React / TypeScript and Echo / Golang. The database uses Mon
 
 ## Demo
 
-The application is currently under development, and the data may be cleared at any time.
-
 See https://i-show-you.dev.lifeni.life .
 
-## Screenshot
-
-<details>
-  <summary>Homepage</summary>
-
-![Homepage](https://file.lifeni.life/dashboard/i-show-you/0.webp)
-
-</details>
-
-<details>
-  <summary>Document editing page</summary>
-
-![File edit page](https://file.lifeni.life/dashboard/i-show-you/1.webp)
-
-</details>
-
-<details>
-  <summary>File sharing page</summary>
-
-![File Sharing Page](https://file.lifeni.life/dashboard/i-show-you/2.webp)
-
-</details>
-
-<details>
-  <summary>File settings</summary>
-
-![File Settings](https://file.lifeni.life/dashboard/i-show-you/3.webp)
-
-</details>
-
-<details>
-  <summary>File history</summary>
-
-![FILE HISTORY](https://file.lifeni.life/dashboard/i-show-you/4.webp)
-
-</details>
-
-<details>
-  <summary>Confirmation of deleting files</summary>
-
-![Confirm to delete file](https://file.lifeni.life/dashboard/i-show-you/5.webp)
-
-</details>
-
-<details>
-  <summary>File preview</summary>
-
-![File Preview](https://file.lifeni.life/dashboard/i-show-you/6.webp)
-
-</details>
-
-<details>
-  <summary>Login admin page</summary>
-
-![Login admin page](https://file.lifeni.life/dashboard/i-show-you/7.webp)
-
-</details>
-
-<details>
-  <summary>Admin page</summary>
-
-![Admin page](https://file.lifeni.life/dashboard/i-show-you/8.webp)
-
-</details>
+The application is currently under development, and the data may be cleared at any time.
 
 ## Quick Start
 
@@ -122,7 +55,7 @@ Before performing the following steps, please make sure that the newer Docker an
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: '3'
+   version: "3"
 
    services:
      mongo:
@@ -205,7 +138,7 @@ Before performing the following steps, please make sure that the newer Docker an
    The `-d` command stands for background execution, and you can view real-time output if you remove it.
 
 4. Open [http://localhost:8080](http://localhost:8080) or use Nginx reverse proxy port 8080 to view the front-end page.
-   
+
    > Note: The application exposes port 8080 by default. If there is a port conflict or you want to use your own MongoDB, you can modify the yml file by yourself.
 
 ## Documentation
@@ -214,17 +147,74 @@ The documentation is being written. (Currently only available in Chinese)
 
 See https://lifeni.github.io/i-show-you .
 
+## Screenshot
+
+<details>
+  <summary>Homepage</summary>
+
+![Homepage](https://file.lifeni.life/dashboard/i-show-you/0.webp)
+
+</details>
+
+<details>
+  <summary>Document editing page</summary>
+
+![File edit page](https://file.lifeni.life/dashboard/i-show-you/1.webp)
+
+</details>
+
+<details>
+  <summary>File sharing page</summary>
+
+![File Sharing Page](https://file.lifeni.life/dashboard/i-show-you/2.webp)
+
+</details>
+
+<details>
+  <summary>File settings</summary>
+
+![File Settings](https://file.lifeni.life/dashboard/i-show-you/3.webp)
+
+</details>
+
+<details>
+  <summary>File history</summary>
+
+![FILE HISTORY](https://file.lifeni.life/dashboard/i-show-you/4.webp)
+
+</details>
+
+<details>
+  <summary>Confirmation of deleting files</summary>
+
+![Confirm to delete file](https://file.lifeni.life/dashboard/i-show-you/5.webp)
+
+</details>
+
+<details>
+  <summary>File preview</summary>
+
+![File Preview](https://file.lifeni.life/dashboard/i-show-you/6.webp)
+
+</details>
+
+<details>
+  <summary>Login admin page</summary>
+
+![Login admin page](https://file.lifeni.life/dashboard/i-show-you/7.webp)
+
+</details>
+
+<details>
+  <summary>Admin page</summary>
+
+![Admin page](https://file.lifeni.life/dashboard/i-show-you/8.webp)
+
+</details>
+
 ## Troubleshooting
 
-### Your device may not support editing
-
-The application uses [Monaco Editor](https://microsoft.github.io/monaco-editor/) as the editor, and this editor currently does not support mobile browser and mobile frameworks. If you still want to edit, there may be problems such as failure to delete and text loss.
-
-For more information about Monaco Editor, you can view [microsoft/monaco-editor: A browser based code editor](https://github.com/Microsoft/monaco-editor#monaco-editor).
-
-### Words will be missed when inputting Chinese on PC
-
-If you are using QQ Pinyin input method, this problem may occur. Switch to Sogou input method or Microsoft input method to solve it.
+See [Troubleshooting · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/Troubleshooting).
 
 ## Development Setup
 

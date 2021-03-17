@@ -18,4 +18,9 @@ module.exports = {
     },
     displayAllHeaders: true,
   },
+  markdown: {
+    extendMarkdown: (md) => {
+      md.use(require("markdown-it-task-lists"), { enabled: true });
+    },
+  },
 };
