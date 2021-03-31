@@ -10,11 +10,9 @@
 - [Demo](#demo)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
-- [Screenshot](#screenshot)
 - [Troubleshooting](#troubleshooting)
-- [Development Setup](#development-setup)
-  - [Prerequisites](#prerequisites)
-  - [Setting Up](#setting-up)
+- [Screenshot](#screenshot)
+- [Development](#development)
 - [License](#license)
 
 ## Introduction
@@ -55,7 +53,7 @@ Before performing the following steps, please make sure that the newer Docker an
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: "3"
+   version: '3'
 
    services:
      mongo:
@@ -147,6 +145,10 @@ The documentation is being written. (Currently only available in Chinese)
 
 See https://lifeni.github.io/i-show-you .
 
+## Troubleshooting
+
+See [Troubleshooting · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/Troubleshooting).
+
 ## Screenshot
 
 <details>
@@ -212,13 +214,9 @@ See https://lifeni.github.io/i-show-you .
 
 </details>
 
-## Troubleshooting
+## Development
 
-See [Troubleshooting · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/Troubleshooting).
-
-## Development Setup
-
-### Prerequisites
+Before development, you need to configure the development environment:
 
 | Type      | Prerequisites  |
 | --------- | -------------- |
@@ -237,7 +235,7 @@ In addition, under the development environment, you need to start a MongoDB by y
 docker run -d -p 27017:27017 mongo
 ```
 
-### Setting Up
+After that you can start the project:
 
 1. Clone the project and enter the project folder.
 

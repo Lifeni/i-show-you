@@ -10,11 +10,9 @@
 - [演示](#演示)
 - [快速开始](#快速开始)
 - [文档](#文档)
-- [截图](#截图)
 - [遇到问题](#遇到问题)
+- [截图](#截图)
 - [开发配置](#开发配置)
-  - [前提](#前提)
-  - [配置](#配置)
 - [开源协议](#开源协议)
 
 ## 介绍
@@ -55,7 +53,7 @@
      <summary>docker-compose.yml</summary>
 
    ```yml
-   version: "3"
+   version: '3'
 
    services:
      mongo:
@@ -147,6 +145,10 @@
 
 文档在 https://lifeni.github.io/i-show-you 。
 
+## 遇到问题
+
+参见：[问题解决 · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3) 。
+
 ## 截图
 
 <details>
@@ -212,13 +214,9 @@
 
 </details>
 
-## 遇到问题
-
-参见：[问题解决 · Lifeni/i-show-you Wiki](https://github.com/Lifeni/i-show-you/wiki/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3) 。
-
 ## 开发配置
 
-### 前提
+开发之前，你需要先配置开发环境：
 
 | 类型   | 要求           |
 | ------ | -------------- |
@@ -237,7 +235,7 @@
 docker run -d -p 27017:27017 mongo
 ```
 
-### 配置
+之后你可以启动项目：
 
 1. 克隆项目，进入项目文件夹。
 
