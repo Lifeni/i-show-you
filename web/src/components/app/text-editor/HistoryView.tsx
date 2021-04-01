@@ -39,7 +39,7 @@ const HistoryView = (props: { type: string; data: string }) => {
               scale: 1,
               maxColumn: 150,
             },
-            readOnly: 'true',
+            readOnly: true,
           }}
         />
       </Container>

@@ -1,18 +1,15 @@
-import Editor from '@monaco-editor/react'
-import { InlineLoading, NotificationKind } from 'carbon-components-react'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import store from 'store2'
-import styled from 'styled-components'
-import { useDebounce } from 'use-debounce'
-import {
-  defaultFileOptions,
-  defaultNoticeOptions,
-} from '../../../utils/global-variable'
-import { GlobalContext } from '../../App'
-import GlobalNotification from '../../global/GlobalNotification'
-import MarkdownPreview from '../text-editor/MarkdownPreview'
-import WebBrowser from '../text-editor/WebBrowser'
-import ToolBar from './ToolBar'
+import Editor from "@monaco-editor/react";
+import { InlineLoading, NotificationKind } from "carbon-components-react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import store from "store2";
+import styled from "styled-components";
+import { useDebounce } from "use-debounce";
+import { defaultFileOptions, defaultNoticeOptions } from "../../../utils/global-variable";
+import { GlobalContext } from "../../App";
+import GlobalNotification from "../../global/GlobalNotification";
+import MarkdownPreview from "../text-editor/MarkdownPreview";
+import WebBrowser from "../text-editor/WebBrowser";
+import ToolBar from "./ToolBar";
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -40,7 +37,7 @@ const TextEditor = () => {
   const [value, setValue] = useState(currentPage.get('content') || '')
   const [debouncedValue] = useDebounce(value, 300)
 
-  const editorRef = useRef()
+  // const editorRef = useRef()
 
   const [options, setOptions] = useState(
     currentPage.get('options') || defaultFileOptions
@@ -109,14 +106,28 @@ const TextEditor = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 
-  function handleEditorDidMount(_valueGetter: any, editor: any) {
-    editorRef.current = editor
-    // @ts-ignore
-    editorRef.current.onDidChangeModelContent(() => {
-      // @ts-ignore
-      setValue(editorRef.current.getValue())
-    })
+  const editorRef = useRef();
+
+  // @ts-ignore
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
   }
+
+  // @ts-ignore
+  function handleEditorChange(value, event) {
+    // @ts-ignore
+    setValue(editorRef.current.getValue())
+  }
+
+
+  // function handleEditorDidMount(_valueGetter: any, editor: any) {
+  //   editorRef.current = editor
+  //   // @ts-ignore
+  //   editorRef.current.onDidChangeModelContent(() => {
+  //     // @ts-ignore
+  //     setValue(editorRef.current.getValue())
+  //   })
+  // }
 
   const [notice, setNotice] = useState(defaultNoticeOptions)
 
@@ -212,7 +223,8 @@ const TextEditor = () => {
             },
             readOnly: currentPage.get('authentication') !== 'owner',
           }}
-          editorDidMount={handleEditorDidMount}
+          onMount={handleEditorDidMount}
+          onChange={handleEditorChange}
           key={pageId}
         />
 

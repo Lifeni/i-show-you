@@ -17,6 +17,8 @@
 
 ## Introduction
 
+> **The application is in the testing stage, and the data structure and API design may change. Please do not store important data.**
+
 This is a web application for sharing text, code and other data, similar to Gist.
 
 - **🍺 Reasonable Feature**
@@ -32,8 +34,6 @@ This is a web application for sharing text, code and other data, similar to Gist
   Use Docker Compose for deployment and unified management. You only need to write a configuration file according to the document to run, and provide some customization options.
 
 The application uses React / TypeScript and Echo / Golang. The database uses MongoDB. IE 11 and other outdated browsers are not supported.
-
-**The application is in the testing stage, and the data structure and API design may change. Please do not store important data.**
 
 ## Demo
 
