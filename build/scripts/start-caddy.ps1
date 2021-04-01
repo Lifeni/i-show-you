@@ -1,0 +1,1 @@
+caddy start --config=./configs/Caddyfile --watch
