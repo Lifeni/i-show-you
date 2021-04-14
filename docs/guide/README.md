@@ -6,7 +6,7 @@
 
 推荐使用 Docker Compose 进行部署。
 
-在执行下面的步骤之前请确保机器上装有比较新的 Docker 以及 Docker Compose，目前镜像仅支持 Linux 的 amd64 版本。主程序运行占用少于 100 MB 内存，数据库占用内存与数据量相关，所以请为整个应用程序预留至少 200 MB 的内存空间。
+在执行下面的步骤之前请确保机器上装有比较新的 Docker 以及 Docker Compose，目前镜像仅支持 Linux 的 amd64 版本。
 
 ## 安装与运行
 
@@ -15,8 +15,12 @@
    <details>
      <summary>docker-compose.yml</summary>
 
+   <br/>
+
+   [点这里下载](https://raw.githubusercontent.com/Lifeni/i-show-you/master/build/docker-compose.yml)。
+
    ```yml
-   version: "3"
+   version: '3'
 
    services:
      mongo:
@@ -50,12 +54,16 @@
      network:
    ```
 
+   <br/>
+
    </details>
 
 2. 新建 [main.yml](https://github.com/Lifeni/i-show-you/blob/master/configs/main.yml) 文件，放在 `文件夹/configs/main.yml` ，内容如下。
 
    <details>
      <summary>main.yml 及字段说明</summary>
+
+   <br/>
 
    ```yml
    database:
@@ -86,6 +94,8 @@
    - `jwt_key.admin` 用于加密管理员页面的 JWT 的秘钥
    - `admin` 管理员页面登录密码
 
+   <br/>
+
    </details>
 
    详细配置请查看文档 [配置 | I Show You](https://lifeni.github.io/i-show-you/config/) 。
@@ -98,6 +108,6 @@
 
    `-d` 命令代表后台执行，去掉可以查看实时输出。
 
-4. 打开 [http://localhost:8080](http://localhost:8080) 或者使用 Nginx 反向代理 8080 端口，查看前端页面。
+4. 打开 [http://localhost:8080](http://localhost:8080) 或者反向代理 8080 端口，查看前端页面。
 
    > 注意：应用默认暴露 8080 端口，如果出现端口冲突，或者你想使用自己的 MongoDB，可以自行修改 yml 文件来更换端口。

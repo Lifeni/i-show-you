@@ -36,4 +36,6 @@
 
 ![登录管理页面](https://file.lifeni.life/dashboard/i-show-you/7.webp)
 
+- 管理页面
+
 ![管理页面](https://file.lifeni.life/dashboard/i-show-you/8.webp)
